@@ -18,8 +18,10 @@ selected_papers: true # includes a list of papers marked as "selected={true}"
 social: true # includes social icons at the bottom of the page
 ---
 
-Write your biography here. Tell the world about yourself. Link to your favorite [subreddit](http://reddit.com). You can put a picture in, too. The code is already in, just name your picture `prof_pic.jpg` and put it in the `img/` folder.
+Hello! My name is Imade Bouftini, and I am a driven and innovative Engineering student in the fields of Applied Machine Learning and Signal Processing. I study at Centrale Nantes in France.
 
-Put your address / P.O. box / other info right below your picture. You can also disable any of these elements by editing `profile` property of the YAML header of your `_pages/about.md`. Edit `_bibliography/papers.bib` and Jekyll will render your [publications page](/al-folio/publications/) automatically.
+In addition to my technical pursuits, I enjoy sharing knowledge through tutorials and guides, fostering growth and learning within the community.
 
-Link to your social media connections, too. This theme is set up to use [Font Awesome icons](https://fontawesome.com/) and [Academicons](https://jpswalsh.github.io/academicons/), like the ones below. Add your Facebook, Twitter, LinkedIn, Google Scholar, or just disable all of them.
+This portfolio is a reflection of my journey, featuring my CV, tutorials, project showcases, and internship debriefs. 
+
+Feel free to explore my portfolio, and don’t hesitate to reach out if you’d like to connect or collaborate!
