@@ -5,7 +5,7 @@
 .landing-hero {
   text-align: center;
   padding: 3rem 0;
-  background: linear-gradient(135deg, var(--global-link-color) 0%, var(--global-link-color-hover) 100%);
+  background: linear-gradient(135deg, #52adc8 0%, #2f7f93 100%);
   color: white;
   margin: -2rem -1rem 3rem -1rem;
   border-radius: 0 0 2rem 2rem;
@@ -75,7 +75,7 @@
 }
 
 .landing-portfolio {
-  background: var(--global-footer-bg-color);
+  background: var(--global-bg-color);
   padding: 3rem 1rem;
   margin: 3rem -1rem;
   border-radius: 2rem;
@@ -174,7 +174,7 @@
       align-items: center;
       gap: 0.5rem;
       padding: 0.8rem 1.5rem;
-      background: var(--global-link-color);
+      background: #52adc8;
       color: white;
       text-decoration: none;
       border-radius: 48px;
@@ -182,7 +182,7 @@
       font-weight: 500;
 
       &:hover {
-        background: var(--global-link-color-hover);
+        background: #2f7f93;
         transform: translateY(-2px);
         color: white;
         text-decoration: none;
