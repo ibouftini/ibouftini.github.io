@@ -1,91 +1,82 @@
 ---
 permalink: /
-title: "AI Research Engineer | Transforming Research into Real-World Impact"
+title: "Welcome"
 author_profile: true
 redirect_from: 
   - /about/
   - /about.html
 ---
 
-## Bridging AI Research with Industrial Innovation
+<link rel="stylesheet" href="{{ '/assets/css/landing.css' | relative_url }}">
 
-I'm **Imade Bouftini**, an AI Research Engineer and Generalist Engineering Student at **École Centrale de Nantes** (GPA: 3.98/4.0), specializing in developing cutting-edge AI solutions that deliver measurable business impact.
+<div class="landing-hero">
+  <h1>Hello, I'm Imade Bouftini</h1>
+  <p class="subtitle">AI Research Engineer & Engineering Student</p>
+  <a href="/cv/" class="cta-button">View My CV</a>
+  <a href="/portfolio/" class="cta-button">Explore My Work</a>
+</div>
 
-### 🎯 **What I Deliver**
-- **Medical AI Systems**: Achieved **9.5% improvement** in breast cancer detection accuracy over industry baselines
-- **Industrial Monitoring**: Developed AI solutions with **24% RMSE improvement** for real-time health estimation
-- **Research Translation**: Converting theoretical breakthroughs into production-ready applications
+<div class="landing-intro">
+  <h2>About Me</h2>
+  <p>
+    I'm a <span class="highlight">Generalist Engineering Student</span> at École Centrale de Nantes, 
+    passionate about <span class="highlight">artificial intelligence</span> and its real-world applications. 
+    My research focuses on developing innovative AI solutions for healthcare and industrial systems.
+  </p>
+  <p>
+    This portfolio showcases my journey through cutting-edge research projects, academic achievements, 
+    and the exploration of how AI can solve complex problems across different domains.
+  </p>
+</div>
 
----
+<div class="landing-portfolio">
+  <h2>What You'll Find Here</h2>
+  <div class="portfolio-grid">
+    <div class="portfolio-card">
+      <span class="icon">🎓</span>
+      <h3>Academic Journey</h3>
+      <p>My educational background, coursework, and academic achievements at École Centrale de Nantes.</p>
+      <a href="/cv/" class="card-link">View Academic Background →</a>
+    </div>
+    
+    <div class="portfolio-card">
+      <span class="icon">🔬</span>
+      <h3>Research Projects</h3>
+      <p>Cutting-edge AI research in medical imaging, industrial monitoring, and multi-agent systems.</p>
+      <a href="/portfolio/" class="card-link">Explore Research →</a>
+    </div>
+    
+    <div class="portfolio-card">
+      <span class="icon">📚</span>
+      <h3>Publications & Talks</h3>
+      <p>Academic papers, conference presentations, and contributions to the research community.</p>
+      <a href="/publications/" class="card-link">View Publications →</a>
+    </div>
+    
+    <div class="portfolio-card">
+      <span class="icon">💡</span>
+      <h3>Blog & Insights</h3>
+      <p>Thoughts on AI developments, technical tutorials, and insights from my research experience.</p>
+      <a href="/year-archive/" class="card-link">Read Posts →</a>
+    </div>
+  </div>
+</div>
 
-## 🚀 **Key Achievements**
-
-### **AI Research Impact**
-- **Medical Imaging Excellence**: Enhanced multi-view breast cancer detection, outperforming MaskRCNN, DETR, and YOLO baselines by 9.5%
-- **Industrial AI Innovation**: Built Physics-Informed Neural Networks for fuel cell monitoring with 24% performance improvement
-- **Multi-Agent Systems**: Developed novel masking techniques achieving 27% faster convergence in complex environments
-
-### **Technical Leadership**
-- **Research Portfolio**: 3+ active research projects spanning healthcare, industrial systems, and reinforcement learning
-- **Publication Pipeline**: Contributing to academic publications in top-tier AI conferences
-- **International Experience**: Research internship at AI Movement (Morocco), collaboration with LS2N Laboratory (France)
-
-### **Academic Excellence**
-- **École Centrale de Nantes**: Dual specialization in Data Science & Signal Processing + Mathematics & Applications
-- **Top Academic Performance**: 3.98/4.0 GPA in highly competitive engineering program
-- **Advanced Coursework**: Deep Learning, Computer Vision, Reinforcement Learning, NLP, Optimization
-
----
-
-## 💼 **Professional Value Proposition**
-
-### **For Tech Companies**
-- **Production-Ready AI**: Experience with PyTorch, TensorFlow, OpenCV, and cloud deployment (AWS SageMaker)
-- **End-to-End Development**: From research ideation to industrial implementation
-- **Performance Optimization**: Proven track record of achieving measurable improvements in complex systems
-
-### **For Research Organizations**
-- **Cutting-Edge Research**: Contributing to advancements in medical AI, physics-informed ML, and multi-agent systems
-- **Collaborative Skills**: Experience working with international research teams and academic-industry partnerships
-- **Innovation Mindset**: Bridging the gap between theoretical research and practical applications
-
-### **For Startups**
-- **Rapid Prototyping**: Ability to quickly validate AI concepts and build MVP solutions
-- **Versatile Expertise**: Cross-domain experience in healthcare, industrial systems, and autonomous systems
-- **Leadership Experience**: Led student council (15+ members), teaching experience, proven team collaboration
-
----
-
-## 🛠 **Technical Expertise**
-
-**AI/ML Frameworks**: PyTorch • TensorFlow • scikit-learn • Langchain • Langgraph  
-**Computer Vision**: OpenCV • Detectron2 • Medical Imaging • Object Detection  
-**Specialized**: Physics-Informed Neural Networks • Multi-Agent RL • Graph Neural Networks  
-**MLOps**: W&B • SLURM • Docker • Git • AWS SageMaker  
-**Languages**: Python • MATLAB • R  
-
----
-
-## 📈 **Current Focus & Future Impact**
-
-I'm actively working on:
-- **Advanced Medical AI**: Pushing the boundaries of diagnostic accuracy in healthcare applications
-- **Industrial 4.0**: Developing AI solutions for predictive maintenance and system optimization  
-- **Federated Learning**: Exploring privacy-preserving AI for sensitive applications
-
-**Looking for opportunities to**: Apply my research expertise to solve real-world challenges, collaborate with innovative teams, and drive AI adoption in impactful applications.
-
----
-
-## 📞 **Let's Connect**
-
-**Ready to discuss how AI can drive your next breakthrough?**
-
-- 📧 **Email**: [imadebouftini@gmail.com](mailto:imadebouftini@gmail.com)
-- 💼 **LinkedIn**: [imade-bouftini](https://linkedin.com/in/imade-bouftini)
-- 👨‍💻 **GitHub**: [ibouftini](https://github.com/ibouftini)
-- 📄 **[Download My CV](/cv/)** | **[View My Research Projects](/portfolio/)**
-
----
-
-*"Transforming cutting-edge AI research into solutions that matter"*
+<div class="landing-connect">
+  <h2>Let's Connect</h2>
+  <p>
+    Interested in discussing AI research, potential collaborations, or just want to say hello? 
+    I'd love to hear from you!
+  </p>
+  <div class="social-links">
+    <a href="mailto:imadebouftini@gmail.com" class="social-link">
+      <i class="fas fa-envelope"></i> Email
+    </a>
+    <a href="https://linkedin.com/in/imade-bouftini" class="social-link" target="_blank">
+      <i class="fab fa-linkedin"></i> LinkedIn
+    </a>
+    <a href="https://github.com/ibouftini" class="social-link" target="_blank">
+      <i class="fab fa-github"></i> GitHub
+    </a>
+  </div>
+</div>
