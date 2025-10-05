@@ -1,30 +1,28 @@
 ---
 ---
 
-// Simplified landing page styles that work with GitHub Pages
+// Theme-responsive landing page styles using CSS custom properties
 .landing-hero {
   text-align: center;
   padding: 3rem 0;
-  background: linear-gradient(135deg, #52adc8 0%, #2f7f93 100%);
+  background: linear-gradient(135deg, var(--global-link-color) 0%, var(--global-link-color-hover) 100%);
   color: white;
   margin: -2rem -1rem 3rem -1rem;
   border-radius: 0 0 2rem 2rem;
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.125);
 
   h1 {
-    font-size: 1.953em; // ~31.248px
+    font-size: 1.953em;
     font-weight: 300;
     margin-bottom: 1rem;
     letter-spacing: -1px;
-    font-family: -apple-system, ".SFNSText-Regular", "San Francisco", "Roboto", "Segoe UI", "Helvetica Neue", "Lucida Grande", Arial, sans-serif;
   }
 
   .subtitle {
-    font-size: 1.25em; // ~20px
+    font-size: 1.25em;
     opacity: 0.9;
     margin-bottom: 2rem;
     font-weight: 300;
-    font-family: -apple-system, ".SFNSText-Regular", "San Francisco", "Roboto", "Segoe UI", "Helvetica Neue", "Lucida Grande", Arial, sans-serif;
   }
 
   .cta-button {
@@ -38,7 +36,6 @@
     transition: all 0.2s ease-in-out;
     font-weight: 500;
     margin: 0 0.5rem;
-    font-family: -apple-system, ".SFNSText-Regular", "San Francisco", "Roboto", "Segoe UI", "Helvetica Neue", "Lucida Grande", Arial, sans-serif;
 
     &:hover {
       background: rgba(255, 255, 255, 0.3);
@@ -56,42 +53,39 @@
   padding: 2rem 1rem;
 
   h2 {
-    font-size: 1.953em; // ~31.248px
+    font-size: 1.953em;
     font-weight: 300;
-    color: #7a8288;
+    color: var(--global-text-color);
     margin-bottom: 1.5rem;
     text-align: center;
-    font-family: -apple-system, ".SFNSText-Regular", "San Francisco", "Roboto", "Segoe UI", "Helvetica Neue", "Lucida Grande", Arial, sans-serif;
   }
 
   p {
-    font-size: 1.25em; // ~20px
+    font-size: 1.25em;
     line-height: 1.8;
-    color: #7a8288;
+    color: var(--global-text-color);
     margin-bottom: 1.3em;
     text-align: center;
-    font-family: -apple-system, ".SFNSText-Regular", "San Francisco", "Roboto", "Segoe UI", "Helvetica Neue", "Lucida Grande", Arial, sans-serif;
   }
 
   .highlight {
-    color: #52adc8;
+    color: var(--global-link-color);
     font-weight: 600;
   }
 }
 
 .landing-portfolio {
-  background: #f2f3f3;
+  background: var(--global-footer-bg-color);
   padding: 3rem 1rem;
   margin: 3rem -1rem;
   border-radius: 2rem;
 
   h2 {
-    font-size: 1.953em; // ~31.248px
+    font-size: 1.953em;
     font-weight: 400;
-    color: #7a8288;
+    color: var(--global-text-color);
     margin-bottom: 2rem;
     text-align: center;
-    font-family: -apple-system, ".SFNSText-Regular", "San Francisco", "Roboto", "Segoe UI", "Helvetica Neue", "Lucida Grande", Arial, sans-serif;
   }
 
   .portfolio-grid {
@@ -103,13 +97,13 @@
   }
 
   .portfolio-card {
-    background: #fff;
+    background: var(--global-bg-color);
     padding: 2rem;
     border-radius: 16px;
     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.125);
     transition: all 0.2s ease-in-out;
     text-align: center;
-    border: 1px solid #d6dee4;
+    border: 1px solid var(--global-border-color);
 
     &:hover {
       transform: translateY(-5px);
@@ -117,35 +111,32 @@
     }
 
     .icon {
-      font-size: 1.953em; // ~31.248px
+      font-size: 1.953em;
       margin-bottom: 1rem;
       display: block;
     }
 
     h3 {
-      font-size: 1.25em; // ~20px
-      color: #7a8288;
+      font-size: 1.25em;
+      color: var(--global-text-color);
       margin-bottom: 1rem;
       font-weight: 600;
-      font-family: -apple-system, ".SFNSText-Regular", "San Francisco", "Roboto", "Segoe UI", "Helvetica Neue", "Lucida Grande", Arial, sans-serif;
     }
 
     p {
-      color: #9a9ea3;
+      color: var(--global-text-color-light);
       line-height: 1.6;
       margin-bottom: 1.5rem;
-      font-family: -apple-system, ".SFNSText-Regular", "San Francisco", "Roboto", "Segoe UI", "Helvetica Neue", "Lucida Grande", Arial, sans-serif;
     }
 
     .card-link {
-      color: #52adc8;
+      color: var(--global-link-color);
       text-decoration: none;
       font-weight: 500;
       transition: all 0.2s ease-in-out;
-      font-family: -apple-system, ".SFNSText-Regular", "San Francisco", "Roboto", "Segoe UI", "Helvetica Neue", "Lucida Grande", Arial, sans-serif;
 
       &:hover {
-        color: #2f7f93;
+        color: var(--global-link-color-hover);
         text-decoration: none;
       }
     }
@@ -157,21 +148,19 @@
   padding: 2rem 0;
 
   h2 {
-    font-size: 1.563em; // ~25.008px
-    color: #7a8288;
+    font-size: 1.563em;
+    color: var(--global-text-color);
     margin-bottom: 1.5rem;
     font-weight: 400;
-    font-family: -apple-system, ".SFNSText-Regular", "San Francisco", "Roboto", "Segoe UI", "Helvetica Neue", "Lucida Grande", Arial, sans-serif;
   }
 
   p {
-    font-size: 1em; // ~16px
-    color: #9a9ea3;
+    font-size: 1em;
+    color: var(--global-text-color-light);
     margin-bottom: 2rem;
     max-width: 600px;
     margin-left: auto;
     margin-right: auto;
-    font-family: -apple-system, ".SFNSText-Regular", "San Francisco", "Roboto", "Segoe UI", "Helvetica Neue", "Lucida Grande", Arial, sans-serif;
   }
 
   .social-links {
@@ -185,23 +174,22 @@
       align-items: center;
       gap: 0.5rem;
       padding: 0.8rem 1.5rem;
-      background: #52adc8;
+      background: var(--global-link-color);
       color: white;
       text-decoration: none;
       border-radius: 48px;
       transition: all 0.2s ease-in-out;
       font-weight: 500;
-      font-family: -apple-system, ".SFNSText-Regular", "San Francisco", "Roboto", "Segoe UI", "Helvetica Neue", "Lucida Grande", Arial, sans-serif;
 
       &:hover {
-        background: #2f7f93;
+        background: var(--global-link-color-hover);
         transform: translateY(-2px);
         color: white;
         text-decoration: none;
       }
 
       i {
-        font-size: 1em; // ~16px
+        font-size: 1em;
       }
     }
   }
@@ -213,7 +201,7 @@
     margin: -1rem -1rem 2rem -1rem;
 
     h1 {
-      font-size: 1.953em; // Keep same size for mobile
+      font-size: 1.953em;
     }
 
     .subtitle {
