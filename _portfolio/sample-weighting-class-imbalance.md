@@ -10,9 +10,14 @@ date: 2024-06-01
 
 ---
 
-**Contributors:** [Imade Bouftini](github.com/ibouftini) • [Ilyas Bounoua](https://ilyasbounoua.github.io) • [Sacha Bouchez-Delotte](mailto:Sacha.bouchez-delotte@hera-mi.com)
+<p><strong>Contributors:</strong><br>
+<a href="https://github.com/ibouftini">Imade Bouftini</a> • 
+<a href="https://ilyasbounoua.github.io">Ilyas Bounoua</a> • 
+<a href="mailto:Sacha.bouchez-delotte@hera-mi.com">Sacha Bouchez-Delotte</a></p>
 
-**Institutions:** [Ecole Centrale de Nantes](https://www.ec-nantes.fr/)   &   [Hera-Mi](https://www.hera-mi.com/)
+<p><strong>Institutions:</strong><br>
+<a href="https://www.ec-nantes.fr/">Ecole Centrale de Nantes</a> & 
+<a href="https://www.hera-mi.com/">Hera-Mi</a></p>
 
 ---
 
