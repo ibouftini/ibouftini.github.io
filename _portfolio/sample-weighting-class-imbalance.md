@@ -97,19 +97,19 @@ The model incorporates **CBAM (Convolutional Block Attention Module)** to enhanc
 
 To enhance model's focus on critical regions, we employ an adaptive weighting mechanism informed by AUC Reshaping principles. This is mathematically formulated as follows:
 
-Let $y_i \in \\{0, 1\\}$ denote the true label and $p_i$ the predicted probability for sample $i$. The reshaped loss function is:
+Let $y_i \in \{0, 1\}$ denote the true label and $p_i$ the predicted probability for sample $i$. The reshaped loss function is:
 
 $$\mathcal{L} = - \sum_{i=1}^N \left[ y_i \log(p_i - b_i) + (1 - y_i) \log(1 - p_i + b_i) \right]$$
 
 where $b_i$ represents the boosting value, defined as:
 
-$$b_i = \\begin\\{cases\\}
-n, & \\text\\{if \\} y_i = 1 \\text\\{ and \\} p_i < \\theta_{\\text\\{max\\}} \\\\
-0, & \\text\\{otherwise\\}
-\\end\\{cases\\}$$
+$$b_i = \begin{cases}
+n, & \text{if } y_i = 1 \text{ and } p_i < \theta_{\text{max}} \\
+0, & \text{otherwise}
+\end{cases}$$
 
 **Parameters:**
-- $\theta_{\\text{max}}$: High-specificity threshold
+- $\theta_{\text{max}}$: High-specificity threshold
 - $n$: Boosting factor, modulating emphasis on misclassified positive samples
 
 > **Key Insight**: The AUC Reshaping function selectively modifies the ROC curve within a *Region of Interest (ROI)*, typically at high-specificity thresholds (e.g., 0.95 or 0.98). By iteratively boosting sample weights, it reduces false negatives without significantly increasing false positives.
