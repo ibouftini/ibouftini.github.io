@@ -4,11 +4,11 @@ excerpt: "Advanced breast cancer classification using ResNet22 + CBAM with AUC R
 collection: portfolio
 permalink: /portfolio/sample-weighting-class-imbalance/
 date: 2024-06-01
-venue: 'Hera MI, Medical AI Research'
 ---
 
 <div align="center">
-<h1>SamWeight: Optimizing Breast Cancer Detection with AUC Reshaping Techniques</h1>
+
+---
 
 **Contributors:** [Imade Bouftini](github.com/ibouftini) • [Ilyas Bounoua](https://ilyasbounoua.github.io) • [Sacha Bouchez-Delotte](mailto:Sacha.bouchez-delotte@hera-mi.com)
 
@@ -115,7 +115,7 @@ We systematically evaluated different threshold updating methods:
 - **Epoch-level updates**: Recalculation at each epoch boundary
 - **Batch-level updates**: Dynamic adjustment during training
 
-> **🔍 Experimental Finding**: Batch-level threshold updates yielded superior performance.
+> **Experimental Finding**: Batch-level threshold updates yielded superior performance.
 
 #### Hardware Optimization
 
@@ -130,7 +130,7 @@ For effective AUC Reshaping, fine-tuning should be carried out over 1,000-2,000 
 | Gradient Processing | Loss scaling with `LossScaleOptimizer` | Prevents underflow in FP16, maintains numerical stability |
 | GPU Optimized Libraries | TensorFlow native operations, CuPy instead of NumPy | Enhanced performance |
 
-> **⚡ Impact**: Optimization reduced training time from 200s to 122s per epoch
+> **Impact**: Optimization reduced training time from 200s to 122s per epoch
 
 ---
 
@@ -147,9 +147,9 @@ For effective AUC Reshaping, fine-tuning should be carried out over 1,000-2,000 
 
 ### Key Achievements
 
-✅ **Significant Performance Improvement**: Demonstrated +11% improvement in specificity at 90% sensitivity  
-✅ **Practical Implementation**: Efficient GPU optimization with real-world applicability  
-✅ **Robust Methodology**: Systematic evaluation of threshold updating strategies  
+**Performance Improvement**: Demonstrated +11% improvement in specificity at 90% sensitivity  
+**Practical Implementation**: Efficient GPU optimization with real-world applicability  
+**Robust Methodology**: Systematic evaluation of threshold updating strategies 
 
 ---
 
@@ -161,17 +161,10 @@ For effective AUC Reshaping, fine-tuning should be carried out over 1,000-2,000 
 - **Class Imbalance Handling**: Addresses the fundamental challenge in medical datasets
 - **Robust Optimization**: Ensures stable training despite data imbalance
 
-### Medical AI Impact
-
-#### Clinical Significance
+### Clinical Significance
 - **Early Detection**: Improved sensitivity for early-stage cancer detection
 - **Reduced False Positives**: Higher specificity reduces unnecessary procedures
 - **Clinical Decision Support**: Assists radiologists in diagnostic decisions
-
-#### Healthcare Applications
-- **Screening Programs**: Automated mass screening capabilities
-- **Second Opinion**: Independent validation of radiologist assessments
-- **Resource Optimization**: Efficient use of medical imaging resources
 
 ### Future Work
 
@@ -193,9 +186,3 @@ For effective AUC Reshaping, fine-tuning should be carried out over 1,000-2,000 
 [4] [William Lotter, Greg Sorensen, and David Cox. "A Multi-Scale CNN and Curriculum Learning Strategy for Mammogram Classification"](https://arxiv.org/abs/1707.06978)
 
 ---
-
-**Duration**: 2024  
-**Collaboration**: Hera MI Medical AI Research  
-**Domain**: Medical Artificial Intelligence  
-**Repository**: [SamWeight2024](https://github.com/ibouftini/SamWeight2024)  
-**Impact**: Advancement in automated breast cancer detection and medical AI optimization
