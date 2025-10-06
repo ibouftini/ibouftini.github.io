@@ -49,17 +49,34 @@ This project addresses these issues using a *Sample Weighting* technique to impr
 
 ### State-of-the-Art Sample Weighting Approaches
 
-The standard methodology for mammography treatment involves:
-1. **Bounding box detection** identifies suspicious areas
-2. **Classification model** determines malignancy probability ← *AUC Reshaping applied here*
+<div align="center">
+  <img src="https://raw.githubusercontent.com/ibouftini/SamWeight2024/main/Assets/sota.png" alt="SOTA Sample Weighting Approaches" width="70%">
+  <p><em>Sample weighting classification strategies for imbalanced data</em></p>
+</div>
 
 **Key Differences:**
 - **Static**: Fixed weights throughout training
 - **Dynamic**: Weights change based on model performance
 
+### Two-Stage Mammography Classification Approach
+
+The standard methodology for mammography treatment involves:
+1. **Bounding box detection** identifies suspicious areas
+2. **Classification model** determines malignancy probability ← *AUC Reshaping applied here*
+
+<div align="center">
+  <img src="https://raw.githubusercontent.com/ibouftini/SamWeight2024/main/Assets/detection+classification.png" alt="Two-stage approach" width="60%">
+  <p><em>Two-stage approach: Region detection followed by malignancy classification</em></p>
+</div>
+
 ### Classification Model Architecture
 
 Our model uses a state-of-the-art ResNet-22 with CBAM attention layers. Patches (small portions of a mammogram) containing masses and calcifications are used to train this model.
+
+<div align="center">
+  <img src="https://raw.githubusercontent.com/ibouftini/SamWeight2024/main/Assets/model.png" alt="Classification model architecture" width="65%">
+  <p><em>ResNet-22 with CBAM attention mechanism</em></p>
+</div>
 
 #### CBAM Attention Mechanism
 
@@ -67,6 +84,11 @@ The model incorporates **CBAM (Convolutional Block Attention Module)** to enhanc
 
 - **Channel Attention**: Focuses on the **"what"** aspect of features by selectively emphasizing informative feature channels
 - **Spatial Attention**: Focuses on the **"where"** aspect of features by identifying important regions in the feature maps
+
+<div align="center">
+  <img src="https://raw.githubusercontent.com/ibouftini/SamWeight2024/main/Assets/cbam.png" alt="CBAM attention mechanism" width="55%">
+  <p><em>Convolutional Block Attention Module</em></p>
+</div>
 
 ### AUC Reshaping Theory
 
@@ -89,11 +111,24 @@ n, & \text{if } y_i = 1 \text{ and } p_i < \theta_{\text{max}} \\
 
 > **Key Insight**: The AUC Reshaping function selectively modifies the ROC curve within a *Region of Interest (ROI)*, typically at high-specificity thresholds (e.g., 0.95 or 0.98). By iteratively boosting sample weights, it reduces false negatives without significantly increasing false positives.
 
+### Training Workflow
+
+<div align="center">
+  <img src="https://raw.githubusercontent.com/ibouftini/SamWeight2024/main/Assets/method.png" alt="AUC Reshaping training workflow" width="75%">
+  <p><em>AUC Reshaping training pipeline with batch-level threshold updates</em></p>
+</div>
+
 ---
 
 ## 🛠️ Implementation & Experimental Setup
 
 ### Dataset Configuration
+
+<div align="center">
+  <img src="https://raw.githubusercontent.com/ibouftini/SamWeight2024/main/Assets/train.png" alt="Training dataset distribution" width="45%" style="margin-right: 2%;">
+  <img src="https://raw.githubusercontent.com/ibouftini/SamWeight2024/main/Assets/test.png" alt="Validation dataset distribution" width="45%;">
+  <p><em>Left: Training dataset distribution | Right: Validation dataset distribution</em></p>
+</div>
 
 #### Training Data
 - **CBIS-DDSM**: 1,349 UIDs
@@ -144,6 +179,24 @@ For effective AUC Reshaping, fine-tuning should be carried out over 1,000-2,000 
 | **Specificity@90% Sensitivity** | 70.3% | **81.2%** | **+10.9%** |
 | **PRAUC** | 88.3% | **92.2%** | +4.4% |
 | **F1-Score** | 78.1% | **84.1%** | +7.7% |
+
+### Training Evolution
+
+<div align="center">
+  <img src="https://raw.githubusercontent.com/ibouftini/SamWeight2024/main/Assets/loss_final.png" alt="Loss evolution" width="45%" style="margin-right: 2%;">
+  <img src="https://raw.githubusercontent.com/ibouftini/SamWeight2024/main/Assets/metrics_final.png" alt="Metrics evolution" width="45%;">
+  <p><em>Left: Loss evolution over epochs | Right: Metrics evolution over epochs</em></p>
+</div>
+
+- We notice the high variability of loss/metrics likely due to the high penalty values and the diversity of training data (samples from VinDr, DDSM, MIAS and an In-house artificial dataset).
+- The fixed metric (sensitivity) has some spikes due to the quantization of thresholds in ROC curve. The thresholds are chosen such that sensitivity is greater or equal to 90%.
+
+### Final Model Performance
+
+<div align="center">
+  <img src="https://raw.githubusercontent.com/ibouftini/SamWeight2024/main/Assets/roc_final.png" alt="Final ROC curve comparison" width="60%">
+  <p><em>ROC curve comparison: Baseline vs AUC Reshaped model</em></p>
+</div>
 
 ### Key Achievements
 
