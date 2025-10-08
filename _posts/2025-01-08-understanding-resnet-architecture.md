@@ -27,7 +27,6 @@ In 2015, researchers introduced **ResNet (Residual Networks)**, which addresses 
 
 The key innovation of ResNet is the introduction of **skip connections** (also called shortcut connections) that allow the gradient to flow directly to earlier layers:
 
-<center>
 <script type="text/tikz">
 \begin{tikzpicture}[node distance=2cm, auto, thick]
   % Define styles
@@ -68,7 +67,6 @@ The key innovation of ResNet is the introduction of **skip connections** (also c
   \node [below of=Fk, node distance=1.5cm] {Residual Block k};
 \end{tikzpicture}
 </script>
-</center>
 
 *Figure: ResNet Architecture with Skip Connections*
 

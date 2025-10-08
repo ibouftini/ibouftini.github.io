@@ -21,42 +21,20 @@
 
 <meta http-equiv="cleartype" content="on">
 
-<!-- MathJax Configuration -->
+<!-- TikZJax for rendering TikZ diagrams -->
+<link rel="stylesheet" type="text/css" href="https://tikzjax.com/v1/fonts.css">
+<script src="https://tikzjax.com/v1/tikzjax.js"></script>
+
+<!-- MathJax Configuration (separate from TikZJax) -->
 <script>
 window.MathJax = {
   tex: {
     inlineMath: [['$', '$'], ['\\(', '\\)']],
-    displayMath: [['$$', '$$'], ['\\[', '\\]']],
-    packages: {'[+]': ['tikz-cd']}
+    displayMath: [['$$', '$$'], ['\\[', '\\]']]
   },
   svg: {
     fontCache: 'global'
-  },
-  startup: {
-    ready: () => {
-      MathJax.startup.defaultReady();
-      MathJax.startup.promise.then(() => {
-        // Initialize TikZJax after MathJax is ready
-        if (window.tikzjax) {
-          tikzjax.install();
-        }
-      });
-    }
   }
 };
 </script>
-<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
 <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-
-<!-- TikZJax - Load after MathJax -->
-<link rel="stylesheet" type="text/css" href="https://tikzjax.com/v1/fonts.css">
-<script>
-window.addEventListener('load', function() {
-  const script = document.createElement('script');
-  script.src = 'https://tikzjax.com/v1/tikzjax.js';
-  script.onload = function() {
-    console.log('TikZJax loaded successfully');
-  };
-  document.head.appendChild(script);
-});
-</script>
