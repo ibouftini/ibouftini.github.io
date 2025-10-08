@@ -50,21 +50,56 @@ redirect_from:
       <span class="icon">🎓</span>
       <h3>Academic Journey</h3>
       <p>My educational background, coursework, and academic achievements at École Centrale de Nantes.</p>
-      <a href="/cv/" class="card-link">View Academic Background →</a>
+      <a href="/cv/" class="card-link">View Academic Background <i class="fas fa-arrow-right"></i></a>
     </div>
     
     <div class="portfolio-card">
       <span class="icon">🔬</span>
       <h3>Research Projects</h3>
       <p>Cutting-edge AI research in medical imaging, industrial monitoring, and multi-agent systems.</p>
-      <a href="/portfolio/" class="card-link">Explore Research →</a>
+      <a href="/portfolio/" class="card-link">Explore Research <i class="fas fa-arrow-right"></i></a>
     </div>
     
     <div class="portfolio-card">
       <span class="icon">💡</span>
       <h3>Blog & Insights</h3>
       <p>Thoughts on AI developments, technical tutorials, and insights from my research experience.</p>
-      <a href="/year-archive/" class="card-link">Read Posts →</a>
+      <a href="/year-archive/" class="card-link">Read Posts <i class="fas fa-arrow-right"></i></a>
+    </div>
+  </div>
+</div>
+
+<div class="landing-follow">
+  <div class="follow-content">
+    <div class="author-info">
+      <div class="author-avatar">
+        <img src="{{ '/images/profile.png' | relative_url }}" alt="Imade Bouftini">
+      </div>
+      <h3>Imade Bouftini</h3>
+      <p class="bio">AI Research Engineer | École Centrale de Nantes | Developing cutting-edge AI solutions for healthcare and industrial applications</p>
+      <div class="location">
+        <i class="fas fa-location-dot"></i>
+        <span>Nantes, France</span>
+      </div>
+      <div class="employer">
+        <i class="fas fa-building-columns"></i>
+        <span>École Centrale de Nantes</span>
+      </div>
+    </div>
+    
+    <div class="follow-links">
+      <a href="mailto:imadebouftini@gmail.com" class="follow-link">
+        <i class="fas fa-envelope"></i>
+        Email
+      </a>
+      <a href="https://linkedin.com/in/imade-bouftini" class="follow-link" target="_blank">
+        <i class="fab fa-linkedin"></i>
+        LinkedIn
+      </a>
+      <a href="https://github.com/ibouftini" class="follow-link" target="_blank">
+        <i class="fab fa-github"></i>
+        GitHub
+      </a>
     </div>
   </div>
 </div>

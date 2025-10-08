@@ -16,14 +16,16 @@
   --shadow-heavy: 0 12px 40px rgba(0, 0, 0, 0.15);
 }
 
-// Main layout container with proper spacing for author profile
+// Remove sidebar layout - full width content
 .page__content {
-  margin-left: 0;
-  
-  @media (min-width: 80em) {
-    margin-left: 300px; // Leave space for author profile on desktop
-    padding-left: 2rem;
-  }
+  margin-left: 0 !important;
+  padding-left: 0 !important;
+  width: 100% !important;
+}
+
+// Hide author profile sidebar completely
+.sidebar {
+  display: none !important;
 }
 
 // Modern hero section with gradient and animations
@@ -232,7 +234,7 @@
 // Portfolio section with modern grid
 .landing-portfolio {
   padding: var(--section-spacing) 2rem;
-  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  background: linear-gradient(135deg, rgba(248, 249, 250, 0.8) 0%, rgba(233, 236, 239, 0.8) 100%);
   margin: 0 -2rem;
   
   h2 {
@@ -264,13 +266,13 @@
     margin: 0 auto;
     
     .portfolio-card {
-      background: white;
+      background: var(--global-bg-color);
       padding: 2.5rem;
       border-radius: var(--card-border-radius);
       box-shadow: var(--shadow-light);
       transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
       text-align: center;
-      border: 1px solid rgba(0, 0, 0, 0.05);
+      border: 1px solid var(--global-border-color);
       position: relative;
       overflow: hidden;
       
@@ -303,9 +305,10 @@
         font-size: clamp(2rem, 6vw, 3rem);
         margin-bottom: 1.5rem;
         display: block;
-        text-align: center;
+        text-align: center !important;
         transition: transform 0.3s ease;
         filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
+        width: 100%;
       }
       
       h3 {
@@ -339,13 +342,144 @@
           transform: translateX(5px);
         }
         
-        &::after {
-          content: '→';
+        i {
           transition: transform 0.3s ease;
+          font-size: 0.9rem;
         }
         
-        &:hover::after {
+        &:hover i {
           transform: translateX(3px);
+        }
+      }
+    }
+  }
+}
+
+// Follow section (replacing sidebar)
+.landing-follow {
+  padding: var(--section-spacing) 2rem;
+  background: var(--global-bg-color);
+  text-align: center;
+  max-width: 1000px;
+  margin: 0 auto;
+  
+  .follow-content {
+    background: linear-gradient(135deg, var(--hero-gradient-start) 0%, var(--hero-gradient-end) 100%);
+    padding: 3rem;
+    border-radius: var(--card-border-radius);
+    color: white;
+    position: relative;
+    overflow: hidden;
+    
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="30" cy="30" r="1.5" fill="rgba(255,255,255,0.1)"/><circle cx="70" cy="20" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="20" cy="70" r="1.2" fill="rgba(255,255,255,0.1)"/></svg>');
+      opacity: 0.3;
+    }
+    
+    .author-info {
+      position: relative;
+      z-index: 2;
+      margin-bottom: 2rem;
+      
+      .author-avatar {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        margin: 0 auto 1.5rem;
+        border: 4px solid rgba(255, 255, 255, 0.3);
+        overflow: hidden;
+        
+        img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
+      }
+      
+      h3 {
+        font-size: 1.8rem;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+        color: white;
+      }
+      
+      .bio {
+        font-size: 1.1rem;
+        opacity: 0.9;
+        line-height: 1.6;
+        margin-bottom: 1.5rem;
+        max-width: 600px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+      
+      .location {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        font-size: 1rem;
+        opacity: 0.8;
+        margin-bottom: 1rem;
+        
+        i {
+          font-size: 1rem;
+        }
+      }
+      
+      .employer {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        font-size: 1rem;
+        opacity: 0.8;
+        
+        i {
+          font-size: 1rem;
+        }
+      }
+    }
+    
+    .follow-links {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+      position: relative;
+      z-index: 2;
+      
+      .follow-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.8rem 1.5rem;
+        background: rgba(255, 255, 255, 0.15);
+        backdrop-filter: blur(10px);
+        color: white;
+        text-decoration: none;
+        border-radius: var(--button-border-radius);
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        font-weight: 500;
+        font-size: 0.9rem;
+        transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        
+        &:hover {
+          background: rgba(255, 255, 255, 0.25);
+          border-color: rgba(255, 255, 255, 0.6);
+          transform: translateY(-2px);
+          color: white;
+          text-decoration: none;
+        }
+        
+        i {
+          font-size: 1rem;
         }
       }
     }
@@ -467,13 +601,6 @@
 }
 
 // Responsive breakpoints
-@media (max-width: 1200px) {
-  .page__content {
-    margin-left: 0;
-    padding-left: 0;
-  }
-}
-
 @media (max-width: 768px) {
   :root {
     --section-spacing: 3rem;
@@ -503,7 +630,8 @@
   }
   
   .landing-intro,
-  .landing-connect {
+  .landing-connect,
+  .landing-follow {
     padding: var(--section-spacing) 1.5rem;
     
     .intro-card {
@@ -521,6 +649,25 @@
       
       .portfolio-card {
         padding: 2rem 1.5rem;
+        
+        .icon {
+          text-align: center !important;
+        }
+      }
+    }
+  }
+  
+  .landing-follow {
+    .follow-content {
+      padding: 2rem 1.5rem;
+      
+      .follow-links {
+        gap: 0.75rem;
+        
+        .follow-link {
+          padding: 0.7rem 1.2rem;
+          font-size: 0.85rem;
+        }
       }
     }
   }
@@ -555,8 +702,16 @@
   }
   
   .landing-intro .intro-card,
-  .landing-portfolio .portfolio-card {
+  .landing-portfolio .portfolio-card,
+  .landing-follow .follow-content {
     padding: 1.5rem;
+  }
+  
+  .landing-follow {
+    .follow-content .author-info .author-avatar {
+      width: 100px;
+      height: 100px;
+    }
   }
   
   .social-links {
