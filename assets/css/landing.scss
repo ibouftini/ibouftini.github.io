@@ -37,7 +37,8 @@
   justify-content: center;
   background: linear-gradient(135deg, var(--hero-gradient-start) 0%, var(--hero-gradient-end) 100%);
   color: white;
-  margin: -2rem -2rem 0 -2rem;
+  margin: -2rem -100vw 0 -100vw;
+  padding: 0 100vw;
   overflow: hidden;
   
   // Animated background particles
@@ -66,13 +67,23 @@
       animation: fadeInUp 1s ease-out 0.5s forwards;
       
       .profile-avatar {
-        width: 140px;
-        height: 140px;
+        width: 100px;
+        height: 100px;
         border-radius: 50%;
         margin: 0 auto 1.5rem;
-        border: 4px solid rgba(255, 255, 255, 0.3);
+        border: 3px solid rgba(255, 255, 255, 0.4);
         overflow: hidden;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+        position: relative;
+        
+        &::before {
+          content: '';
+          position: absolute;
+          inset: -3px;
+          border-radius: 50%;
+          background: linear-gradient(45deg, rgba(255,255,255,0.3), rgba(255,255,255,0.1), rgba(255,255,255,0.3));
+          z-index: -1;
+        }
         
         img {
           width: 100%;
@@ -100,31 +111,12 @@
       .bio {
         font-size: clamp(1rem, 3vw, 1.2rem);
         font-weight: 400;
-        margin-bottom: 1.5rem;
+        margin-bottom: 2rem;
         opacity: 0.9;
         line-height: 1.5;
-        max-width: 700px;
+        max-width: 400px;
         margin-left: auto;
         margin-right: auto;
-      }
-      
-      .location-info {
-        display: flex;
-        justify-content: center;
-        gap: 2rem;
-        flex-wrap: wrap;
-        
-        .location, .employer {
-          display: flex;
-          align-items: center;
-          gap: 0.5rem;
-          font-size: 1rem;
-          opacity: 0.8;
-          
-          i {
-            font-size: 1rem;
-          }
-        }
       }
     }
     
@@ -566,7 +558,8 @@
   
   .landing-hero {
     min-height: 90vh;
-    margin: -1rem -1rem 0 -1rem;
+    margin: -1rem -100vw 0 -100vw;
+    padding: 0 100vw;
     
     .hero-content {
       padding: 2rem 1rem;
@@ -575,34 +568,33 @@
         margin-bottom: 2rem;
         
         .profile-avatar {
-          width: 100px;
-          height: 100px;
+          width: 80px;
+          height: 80px;
         }
         
         .bio {
           font-size: 1rem;
         }
-        
-        .location-info {
-          gap: 1rem;
-          
-          .location, .employer {
-            font-size: 0.9rem;
-          }
-        }
       }
       
       .cta-buttons {
-        flex-direction: column;
-        align-items: center;
+        display: grid !important;
+        grid-template-columns: 1fr 1fr;
         gap: 1rem;
+        max-width: 400px;
+        margin: 0 auto;
+        
+        .cta-button:nth-child(3) {
+          grid-column: 1 / -1;
+          justify-self: center;
+          max-width: 200px;
+          width: 100%;
+        }
         
         .cta-button {
-          width: 100%;
-          max-width: 280px;
           justify-content: center;
-          padding: 1rem 2rem;
-          font-size: 1rem;
+          padding: 1rem 1.5rem;
+          font-size: 0.9rem;
         }
       }
     }
@@ -665,13 +657,17 @@
       
       .hero-profile {
         .profile-avatar {
-          width: 80px;
-          height: 80px;
+          width: 70px;
+          height: 70px;
         }
+      }
+      
+      .cta-buttons {
+        grid-template-columns: 1fr;
+        max-width: 250px;
         
-        .location-info {
-          flex-direction: column;
-          gap: 0.5rem;
+        .cta-button:nth-child(3) {
+          grid-column: 1;
         }
       }
     }

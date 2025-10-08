@@ -16,17 +16,7 @@ redirect_from:
       </div>
       <h1>Hello, I'm Imade Bouftini</h1>
       <p class="subtitle">Generalist Engineering Student</p>
-      <p class="bio">AI Research Engineer | École Centrale de Nantes | Developing cutting-edge AI solutions for healthcare and industrial applications</p>
-      <div class="location-info">
-        <span class="location">
-          <i class="fas fa-location-dot"></i>
-          Nantes, France
-        </span>
-        <span class="employer">
-          <i class="fas fa-building-columns"></i>
-          École Centrale de Nantes
-        </span>
-      </div>
+      <p class="bio">Passionate about AI and innovation</p>
     </div>
     <div class="cta-buttons">
       <a href="/cv/" class="cta-button">
