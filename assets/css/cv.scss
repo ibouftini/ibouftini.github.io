@@ -456,7 +456,7 @@
 }
 
 .cv-tag {
-  background: linear-gradient(135deg, var(--global-footer-bg-color), var(--global-border-color));
+  background: var(--global-footer-bg-color);
   color: var(--global-text-color);
   padding: 0.5rem 1rem;
   border-radius: 25px;
