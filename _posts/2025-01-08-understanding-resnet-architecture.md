@@ -28,53 +28,51 @@ In 2015, researchers introduced **ResNet (Residual Networks)**, which addresses 
 The key innovation of ResNet is the introduction of **skip connections** (also called shortcut connections) that allow the gradient to flow directly to earlier layers:
 
 <script type="text/tikz">
-\begin{tikzpicture}[node distance=2.5cm, auto]
-    % Define styles
-    \tikzstyle{block} = [rectangle, draw, fill=blue!20, 
-                        text width=1cm, text centered, rounded corners, minimum height=1cm]
-    \tikzstyle{sum} = [draw, fill=blue!20, circle, node distance=1.2cm, minimum size=0.6cm]
-    \tikzstyle{junction} = [draw, fill=black, circle, minimum size=0.1cm]
+\begin{tikzpicture}
+    % First block
+    \node[circle, fill=black, minimum size=0.1cm] (j0) at (0,0) {};
+    \node[rectangle, draw, fill=blue!20, minimum height=1cm, minimum width=1.5cm] (F1) at (2,0) {$F_1$};
+    \node[circle, draw, fill=blue!20, minimum size=0.8cm] (sum1) at (4,0) {$+$};
     
-    % Input junction nodes
-    \node [junction,scale=0.5] (j0) {};
-    \node [block, right of=j0, node distance=1.2cm] (F1) {$F_1$};
-    \node [sum, right of=F1, node distance=1.2cm] (sum1) {$+$};
-    \node [right of=sum1, node distance=1.8cm] (dots1) {$\cdots$};
-    \node [junction, right of=dots1, node distance=1.5cm,scale=0.5] (j1) {};
-    \node [block, right of=j1, node distance=1.2cm] (Fk) {$F_k$};
-    \node [sum, right of=Fk, node distance=1.2cm] (sumk) {$+$};
-    \node [right of=sumk, node distance=1.8cm] (dots2) {$\cdots$};
-    \node [junction, right of=dots2, node distance=1.5cm,scale=0.5] (j2) {};
-    \node [block, right of=j2, node distance=1.2cm] (Fn) {$F_n$};
-    \node [sum, right of=Fn, node distance=1.2cm] (sumn) {$+$};
+    % Second block
+    \node at (6,0) {$\cdots$};
+    \node[circle, fill=black, minimum size=0.1cm] (j1) at (8,0) {};
+    \node[rectangle, draw, fill=blue!20, minimum height=1cm, minimum width=1.5cm] (Fk) at (10,0) {$F_k$};
+    \node[circle, draw, fill=blue!20, minimum size=0.8cm] (sumk) at (12,0) {$+$};
     
-    % Input and output points
-    \coordinate [left of=j0, node distance=1.5cm] (input);
-    \coordinate [right of=sumn, node distance=1.5cm] (output);
+    % Third block
+    \node at (14,0) {$\cdots$};
+    \node[circle, fill=black, minimum size=0.1cm] (j2) at (16,0) {};
+    \node[rectangle, draw, fill=blue!20, minimum height=1cm, minimum width=1.5cm] (Fn) at (18,0) {$F_n$};
+    \node[circle, draw, fill=blue!20, minimum size=0.8cm] (sumn) at (20,0) {$+$};
+    
+    % Input and output
+    \coordinate (input) at (-2,0);
+    \coordinate (output) at (22,0);
     
     % Main flow connections
-    \draw [-] (input) -- node [above] {$x_0$} (j0);
-    \draw [->] (j0) -- (F1);
-    \draw [->] (F1) -- (sum1);
-    \draw [->] (sum1) -- node [above] {$x_1$} (dots1);
-    \draw [-] (dots1) -- (j1);
-    \draw [->] (j1) -- (Fk);
-    \draw [->] (Fk) -- (sumk);
-    \draw [->] (sumk) -- node [above] {$x_k$} (dots2);
-    \draw [-] (dots2) -- (j2);
-    \draw [->] (j2) -- (Fn);
-    \draw [->] (Fn) -- (sumn);
-    \draw [->] (sumn) -- node [above] {$x_n$} (output);
+    \draw[->] (input) -- node[above] {$x_0$} (j0);
+    \draw[->] (j0) -- (F1);
+    \draw[->] (F1) -- (sum1);
+    \draw[->] (sum1) -- node[above] {$x_1$} (6,0);
+    \draw[->] (6,0) -- (j1);
+    \draw[->] (j1) -- (Fk);
+    \draw[->] (Fk) -- (sumk);
+    \draw[->] (sumk) -- node[above] {$x_k$} (14,0);
+    \draw[->] (14,0) -- (j2);
+    \draw[->] (j2) -- (Fn);
+    \draw[->] (Fn) -- (sumn);
+    \draw[->] (sumn) -- node[above] {$x_n$} (output);
     
-    % Skip connections with curves
-    \draw [->] (j0) to [out=-90, in=-90] (sum1);
-    \draw [->] (j1) to [out=-90, in=-90] (sumk);
-    \draw [->] (j2) to [out=-90, in=-90] (sumn);
+    % Skip connections
+    \draw[->] (j0) .. controls (1,-1.5) and (3,-1.5) .. (sum1);
+    \draw[->] (j1) .. controls (9,-1.5) and (11,-1.5) .. (sumk);
+    \draw[->] (j2) .. controls (17,-1.5) and (19,-1.5) .. (sumn);
     
     % Block labels
-    \node [below of=F1, node distance=1.8cm] {Block 1};
-    \node [below of=Fk, node distance=1.8cm] {Block $k$};
-    \node [below of=Fn, node distance=1.8cm] {Block $n$};
+    \node at (2,-2.5) {Block 1};
+    \node at (10,-2.5) {Block $k$};
+    \node at (18,-2.5) {Block $n$};
 \end{tikzpicture}
 </script>
 
