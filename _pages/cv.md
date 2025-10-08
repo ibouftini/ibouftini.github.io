@@ -245,20 +245,3 @@ redirect_from:
   </div>
 </div>
 
-<div class="cv-section">
-  <h2><i class="fas fa-scroll"></i> Publications</h2>
-  <ul>
-    {% for post in site.publications reversed %}
-      {% include archive-single-cv.html %}
-    {% endfor %}
-  </ul>
-</div>
-
-<div class="cv-section">
-  <h2><i class="fas fa-microphone"></i> Talks & Presentations</h2>
-  <ul>
-    {% for post in site.talks reversed %}
-      {% include archive-single-talk-cv.html %}
-    {% endfor %}
-  </ul>
-</div>
