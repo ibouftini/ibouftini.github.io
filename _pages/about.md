@@ -10,8 +10,24 @@ redirect_from:
 
 <div class="landing-hero">
   <div class="hero-content">
-    <h1>Hello, I'm Imade Bouftini</h1>
-    <p class="subtitle">Generalist Engineering Student</p>
+    <div class="hero-profile">
+      <div class="profile-avatar">
+        <img src="{{ '/images/profile.png' | relative_url }}" alt="Imade Bouftini">
+      </div>
+      <h1>Hello, I'm Imade Bouftini</h1>
+      <p class="subtitle">Generalist Engineering Student</p>
+      <p class="bio">AI Research Engineer | École Centrale de Nantes | Developing cutting-edge AI solutions for healthcare and industrial applications</p>
+      <div class="location-info">
+        <span class="location">
+          <i class="fas fa-location-dot"></i>
+          Nantes, France
+        </span>
+        <span class="employer">
+          <i class="fas fa-building-columns"></i>
+          École Centrale de Nantes
+        </span>
+      </div>
+    </div>
     <div class="cta-buttons">
       <a href="/cv/" class="cta-button">
         <i class="fas fa-file-alt"></i>
@@ -21,12 +37,26 @@ redirect_from:
         <i class="fas fa-briefcase"></i>
         Explore My Work
       </a>
+      <a href="#connect" class="cta-button cta-connect" onclick="scrollToConnect(event)">
+        <i class="fas fa-handshake"></i>
+        Let's Connect
+      </a>
     </div>
   </div>
   <div class="scroll-indicator">
     <i class="fas fa-chevron-down"></i>
   </div>
 </div>
+
+<script>
+function scrollToConnect(event) {
+  event.preventDefault();
+  document.querySelector('.landing-connect').scrollIntoView({
+    behavior: 'smooth',
+    block: 'start'
+  });
+}
+</script>
 
 <div class="landing-intro">
   <div class="intro-card">
@@ -69,40 +99,6 @@ redirect_from:
   </div>
 </div>
 
-<div class="landing-follow">
-  <div class="follow-content">
-    <div class="author-info">
-      <div class="author-avatar">
-        <img src="{{ '/images/profile.png' | relative_url }}" alt="Imade Bouftini">
-      </div>
-      <h3>Imade Bouftini</h3>
-      <p class="bio">AI Research Engineer | École Centrale de Nantes | Developing cutting-edge AI solutions for healthcare and industrial applications</p>
-      <div class="location">
-        <i class="fas fa-location-dot"></i>
-        <span>Nantes, France</span>
-      </div>
-      <div class="employer">
-        <i class="fas fa-building-columns"></i>
-        <span>École Centrale de Nantes</span>
-      </div>
-    </div>
-    
-    <div class="follow-links">
-      <a href="mailto:imadebouftini@gmail.com" class="follow-link">
-        <i class="fas fa-envelope"></i>
-        Email
-      </a>
-      <a href="https://linkedin.com/in/imade-bouftini" class="follow-link" target="_blank">
-        <i class="fab fa-linkedin"></i>
-        LinkedIn
-      </a>
-      <a href="https://github.com/ibouftini" class="follow-link" target="_blank">
-        <i class="fab fa-github"></i>
-        GitHub
-      </a>
-    </div>
-  </div>
-</div>
 
 <div class="landing-connect">
   <h2>Let's Connect</h2>
