@@ -28,43 +28,20 @@ In 2015, researchers introduced **ResNet (Residual Networks)**, which addresses 
 The key innovation of ResNet is the introduction of **skip connections** (also called shortcut connections) that allow the gradient to flow directly to earlier layers:
 
 <script type="text/tikz">
-\begin{tikzpicture}[node distance=2cm, auto, thick]
-  % Define styles
-  \tikzstyle{block} = [rectangle, draw, fill=blue!20, 
-                      text width=1.2cm, text centered, rounded corners, minimum height=1cm]
-  \tikzstyle{sum} = [draw, fill=blue!20, circle, minimum size=0.8cm]
-  \tikzstyle{junction} = [draw, fill=black, circle, minimum size=0.15cm]
-  
-  % Main nodes
-  \node [junction] (j0) at (0,0) {};
-  \node [block, right of=j0] (F1) {$F_1$};
-  \node [sum, right of=F1] (sum1) {$+$};
-  \node [right of=sum1, node distance=1.5cm] (dots1) {$\cdots$};
-  \node [junction, right of=dots1] (j1) {};
-  \node [block, right of=j1] (Fk) {$F_k$};
-  \node [sum, right of=Fk] (sumk) {$+$};
-  
-  % Input and output
-  \coordinate [left of=j0, node distance=1.5cm] (input);
-  \coordinate [right of=sumk, node distance=1.5cm] (output);
-  
-  % Main connections
-  \draw [->] (input) -- node [above] {$x_0$} (j0);
-  \draw [->] (j0) -- (F1);
-  \draw [->] (F1) -- (sum1);
-  \draw [->] (sum1) -- node [above] {$x_1$} (dots1);
-  \draw [->] (dots1) -- (j1);
-  \draw [->] (j1) -- (Fk);
-  \draw [->] (Fk) -- (sumk);
-  \draw [->] (sumk) -- node [above] {$x_k$} (output);
-  
-  % Skip connections
-  \draw [->] (j0) to [out=-60, in=-120] (sum1);
-  \draw [->] (j1) to [out=-60, in=-120] (sumk);
-  
-  % Labels
-  \node [below of=F1, node distance=1.5cm] {Residual Block 1};
-  \node [below of=Fk, node distance=1.5cm] {Residual Block k};
+\begin{tikzpicture}
+\node[rectangle, draw, fill=blue!20] (F) at (0,0) {F};
+\node[circle, draw] (sum) at (3,0) {+};
+\coordinate (input) at (-2,0);
+\coordinate (output) at (5,0);
+
+\draw[->] (input) -- (F);
+\draw[->] (F) -- (sum);
+\draw[->] (sum) -- (output);
+\draw[->] (input) to[out=-30, in=-150] (sum);
+
+\node[below] at (F.south) {Residual Block};
+\node[above] at (-2,0.3) {$x_k$};
+\node[above] at (5,0.3) {$x_{k+1}$};
 \end{tikzpicture}
 </script>
 
