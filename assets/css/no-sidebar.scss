@@ -114,3 +114,14 @@
   margin-left: 0 !important;
   margin-right: 0 !important;
 }
+
+/* Prevent horizontal scrolling */
+html, body {
+  overflow-x: hidden !important;
+}
+
+/* Ensure main wrapper doesn't create horizontal scroll */
+.wrapper {
+  max-width: none !important;
+  width: 100% !important;
+}
