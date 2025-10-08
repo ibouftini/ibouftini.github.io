@@ -457,7 +457,7 @@
 
 .cv-tag {
   background: var(--global-footer-bg-color);
-  color: var(--global-link-color);
+  color: var(--global-text-color);
   padding: 0.5rem 1rem;
   border-radius: 25px;
   font-size: 0.9rem;
@@ -471,8 +471,8 @@
   }
   
   &:hover {
-    background: linear-gradient(135deg, var(--global-link-color), var(--global-link-color-hover));
-    color: white;
+    background: var(--global-footer-bg-color);
+    color: var(--global-link-color);
     border-color: var(--global-link-color);
     transform: translateY(-2px);
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
