@@ -16,7 +16,7 @@
 
 // Header section with profile
 .cv-header {
-  background: linear-gradient(135deg, var(--global-link-color) 0%, var(--global-link-color-hover) 100%);
+  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%) !important;
   margin: -2rem -1rem 3rem -1rem;
   padding: 3rem 1rem;
   border-radius: 0 0 30px 30px;
@@ -87,14 +87,14 @@
 }
 
 .cv-profile-info {
-  color: white;
+  color: white !important;
 }
 
 .cv-name {
   font-size: 3rem;
   font-weight: 700;
   margin: 0 0 0.5rem 0;
-  color: white;
+  color: white !important;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
   
   @media (max-width: 768px) {
@@ -110,7 +110,7 @@
   font-size: 1.3rem;
   font-weight: 300;
   margin-bottom: 1.5rem;
-  color: rgba(255, 255, 255, 0.9);
+  color: rgba(255, 255, 255, 0.9) !important;
   
   @media (max-width: 768px) {
     font-size: 1.1rem;
@@ -144,12 +144,12 @@
   }
   
   a, span {
-    color: white;
+    color: white !important;
     text-decoration: none;
     transition: color 0.2s ease;
     
     &:hover {
-      color: rgba(255, 255, 255, 0.8);
+      color: rgba(255, 255, 255, 0.8) !important;
     }
   }
 }
@@ -171,7 +171,7 @@
   height: 45px;
   background: rgba(255, 255, 255, 0.2);
   border-radius: 50%;
-  color: white;
+  color: white !important;
   font-size: 1.2rem;
   text-decoration: none;
   transition: all 0.3s ease;
@@ -181,6 +181,7 @@
     background: rgba(255, 255, 255, 0.3);
     transform: translateY(-2px);
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    color: white !important;
   }
 }
 
@@ -328,14 +329,14 @@
   color: var(--global-text-color-light);
   font-weight: 500;
   white-space: nowrap;
-  background: linear-gradient(135deg, var(--global-link-color), var(--global-link-color-hover));
-  color: white;
+  background: var(--global-footer-bg-color);
   padding: 0.5rem 1rem;
   border-radius: 25px;
   font-size: 0.9rem;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.5px;
+  border: 2px solid var(--global-border-color);
   
   @media (max-width: 768px) {
     font-size: 0.8rem;
@@ -348,16 +349,8 @@
   color: var(--global-text-color-light);
   margin-bottom: 1rem;
   font-style: italic;
-  display: flex;
-  align-items: center;
-  
-  &::before {
-    content: '\f3c5';
-    font-family: 'Font Awesome 5 Free';
-    font-weight: 900;
-    margin-right: 0.5rem;
-    color: var(--global-link-color);
-  }
+  padding-left: 1.5rem;
+  position: relative;
 }
 
 .cv-entry-description {
@@ -365,7 +358,7 @@
   
   ul {
     margin: 0.75rem 0;
-    padding-left: 0;
+    padding-left: 1.5rem;
     list-style: none;
     
     li {
@@ -373,17 +366,15 @@
       color: var(--global-text-color);
       line-height: 1.7;
       position: relative;
-      padding-left: 1.5rem;
       
       &::before {
-        content: '\f138';
-        font-family: 'Font Awesome 5 Free';
-        font-weight: 900;
+        content: '•';
         position: absolute;
-        left: 0;
-        top: 0.1rem;
+        left: -1rem;
+        top: 0;
         color: var(--global-link-color);
-        font-size: 0.8rem;
+        font-weight: bold;
+        font-size: 1.2rem;
       }
       
       strong {
