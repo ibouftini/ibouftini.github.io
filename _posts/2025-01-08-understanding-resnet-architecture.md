@@ -29,35 +29,29 @@ The key innovation of ResNet is the introduction of **skip connections** (also c
 
 <script type="text/tikz">
 \begin{tikzpicture}
-% Add styling step by step
-\node[rectangle, draw, fill=blue!20] (F1) at (0,0) {$F_1$};
+% Test: add only draw, no fill
+\node[rectangle, draw] (F1) at (0,0) {$F_1$};
 \node[circle, draw] (sum1) at (3,0) {$+$};
 \node at (5,0) {$\cdots$};
-\node[rectangle, draw, fill=blue!20] (F2) at (7,0) {$F_k$};
+\node[rectangle, draw] (F2) at (7,0) {$F_k$};
 \node[circle, draw] (sum2) at (10,0) {$+$};
 \node at (12,0) {$\cdots$};
-\node[rectangle, draw, fill=blue!20] (F3) at (14,0) {$F_n$};
+\node[rectangle, draw] (F3) at (14,0) {$F_n$};
 \node[circle, draw] (sum3) at (17,0) {$+$};
 
-% Add junction points
-\coordinate (j0) at (-1,0);
-\coordinate (j1) at (5,0);
-\coordinate (j2) at (12,0);
-
-\draw[->] (-2,0) -- node[above] {$x_0$} (j0);
-\draw[->] (j0) -- (F1);
+\draw[->] (-2,0) -- node[above] {$x_0$} (F1);
 \draw[->] (F1) -- (sum1);
-\draw[->] (sum1) -- node[above] {$x_1$} (j1);
-\draw[->] (j1) -- (F2);
+\draw[->] (sum1) -- node[above] {$x_1$} (5,0);
+\draw[->] (5,0) -- (F2);
 \draw[->] (F2) -- (sum2);
-\draw[->] (sum2) -- node[above] {$x_k$} (j2);
-\draw[->] (j2) -- (F3);
+\draw[->] (sum2) -- node[above] {$x_k$} (12,0);
+\draw[->] (12,0) -- (F3);
 \draw[->] (F3) -- (sum3);
 \draw[->] (sum3) -- node[above] {$x_n$} (19,0);
 
-\draw[->] (j0) to[out=-30, in=-150] (sum1);
-\draw[->] (j1) to[out=-30, in=-150] (sum2);
-\draw[->] (j2) to[out=-30, in=-150] (sum3);
+\draw[->] (-2,0) to[out=-30, in=-150] (sum1);
+\draw[->] (5,0) to[out=-30, in=-150] (sum2);
+\draw[->] (12,0) to[out=-30, in=-150] (sum3);
 
 \node at (0,-1.5) {Block 1};
 \node at (7,-1.5) {Block $k$};
