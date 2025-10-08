@@ -1,6 +1,6 @@
 ---
 permalink: /
-title: "Welcome"
+title: "Home"
 author_profile: true
 redirect_from: 
   - /about/
@@ -11,7 +11,7 @@ redirect_from:
 
 <div class="landing-hero">
   <h1>Hello, I'm Imade Bouftini</h1>
-  <p class="subtitle">AI Research Engineer & Engineering Student</p>
+  <p class="subtitle">Generalist Engineering Student</p>
   <a href="/cv/" class="cta-button">View My CV</a>
   <a href="/portfolio/" class="cta-button">Explore My Work</a>
 </div>
@@ -44,13 +44,6 @@ redirect_from:
       <h3>Research Projects</h3>
       <p>Cutting-edge AI research in medical imaging, industrial monitoring, and multi-agent systems.</p>
       <a href="/portfolio/" class="card-link">Explore Research →</a>
-    </div>
-    
-    <div class="portfolio-card">
-      <span class="icon">📚</span>
-      <h3>Publications & Talks</h3>
-      <p>Academic papers, conference presentations, and contributions to the research community.</p>
-      <a href="/publications/" class="card-link">View Publications →</a>
     </div>
     
     <div class="portfolio-card">
