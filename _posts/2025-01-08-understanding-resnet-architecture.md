@@ -30,28 +30,24 @@ The key innovation of ResNet is the introduction of **skip connections** (also c
 <script type="text/tikz">
 \begin{tikzpicture}
     % First block
-    \node[circle, fill=black, minimum size=0.1cm] (j0) at (0,0) {};
-    \node[rectangle, draw, fill=blue!20, minimum height=1cm, minimum width=1.5cm] (F1) at (2,0) {$F_1$};
-    \node[circle, draw, fill=blue!20, minimum size=0.8cm] (sum1) at (4,0) {$+$};
+    \node[circle, fill=black] (j0) at (0,0) {};
+    \node[rectangle, draw] (F1) at (2,0) {$F_1$};
+    \node[circle, draw] (sum1) at (4,0) {$+$};
     
     % Second block
     \node at (6,0) {$\cdots$};
-    \node[circle, fill=black, minimum size=0.1cm] (j1) at (8,0) {};
-    \node[rectangle, draw, fill=blue!20, minimum height=1cm, minimum width=1.5cm] (Fk) at (10,0) {$F_k$};
-    \node[circle, draw, fill=blue!20, minimum size=0.8cm] (sumk) at (12,0) {$+$};
+    \node[circle, fill=black] (j1) at (8,0) {};
+    \node[rectangle, draw] (Fk) at (10,0) {$F_k$};
+    \node[circle, draw] (sumk) at (12,0) {$+$};
     
     % Third block
     \node at (14,0) {$\cdots$};
-    \node[circle, fill=black, minimum size=0.1cm] (j2) at (16,0) {};
-    \node[rectangle, draw, fill=blue!20, minimum height=1cm, minimum width=1.5cm] (Fn) at (18,0) {$F_n$};
-    \node[circle, draw, fill=blue!20, minimum size=0.8cm] (sumn) at (20,0) {$+$};
-    
-    % Input and output
-    \coordinate (input) at (-2,0);
-    \coordinate (output) at (22,0);
+    \node[circle, fill=black] (j2) at (16,0) {};
+    \node[rectangle, draw] (Fn) at (18,0) {$F_n$};
+    \node[circle, draw] (sumn) at (20,0) {$+$};
     
     % Main flow connections
-    \draw[->] (input) -- node[above] {$x_0$} (j0);
+    \draw[->] (-2,0) -- node[above] {$x_0$} (j0);
     \draw[->] (j0) -- (F1);
     \draw[->] (F1) -- (sum1);
     \draw[->] (sum1) -- node[above] {$x_1$} (6,0);
@@ -62,17 +58,17 @@ The key innovation of ResNet is the introduction of **skip connections** (also c
     \draw[->] (14,0) -- (j2);
     \draw[->] (j2) -- (Fn);
     \draw[->] (Fn) -- (sumn);
-    \draw[->] (sumn) -- node[above] {$x_n$} (output);
+    \draw[->] (sumn) -- node[above] {$x_n$} (22,0);
     
     % Skip connections
-    \draw[->] (j0) .. controls (1,-1.5) and (3,-1.5) .. (sum1);
-    \draw[->] (j1) .. controls (9,-1.5) and (11,-1.5) .. (sumk);
-    \draw[->] (j2) .. controls (17,-1.5) and (19,-1.5) .. (sumn);
+    \draw[->] (j0) to[out=-45, in=-135] (sum1);
+    \draw[->] (j1) to[out=-45, in=-135] (sumk);
+    \draw[->] (j2) to[out=-45, in=-135] (sumn);
     
     % Block labels
-    \node at (2,-2.5) {Block 1};
-    \node at (10,-2.5) {Block $k$};
-    \node at (18,-2.5) {Block $n$};
+    \node at (2,-1.5) {Block 1};
+    \node at (10,-1.5) {Block $k$};
+    \node at (18,-1.5) {Block $n$};
 \end{tikzpicture}
 </script>
 
