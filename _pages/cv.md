@@ -2,7 +2,7 @@
 layout: single
 title: "Curriculum Vitae"
 permalink: /cv/
-author_profile: true
+author_profile: false
 classes: wide cv-page
 redirect_from:
   - /resume
@@ -10,16 +10,38 @@ redirect_from:
 
 <link rel="stylesheet" href="{{ '/assets/css/cv.css' | relative_url }}">
 
-<div class="cv-contact-info">
-  <h2>Imade Bouftini</h2>
-  <p>Generalist Engineering Student | AI Research Engineer</p>
-  <div class="contact-links">
-    <a href="mailto:imadebouftini@gmail.com"><i class="fas fa-envelope"></i> imadebouftini@gmail.com</a>
-    <a href="tel:+33778041481"><i class="fas fa-phone"></i> +33 7 78 04 14 81</a>
-    <a href="https://linkedin.com/in/imade-bouftini" target="_blank"><i class="fab fa-linkedin"></i> LinkedIn</a>
-    <a href="https://github.com/ibouftini" target="_blank"><i class="fab fa-github"></i> GitHub</a>
+<div class="cv-header">
+  <div class="cv-profile-section">
+    <div class="cv-profile-image">
+      <img src="{{ '/images/profile.png' | relative_url }}" alt="Imade Bouftini" />
+    </div>
+    <div class="cv-profile-info">
+      <h1 class="cv-name">Imade Bouftini</h1>
+      <p class="cv-title">Generalist Engineering Student | AI Research Engineer</p>
+      <div class="cv-contact">
+        <div class="contact-item">
+          <i class="fas fa-envelope"></i>
+          <a href="mailto:imadebouftini@gmail.com">imadebouftini@gmail.com</a>
+        </div>
+        <div class="contact-item">
+          <i class="fas fa-phone"></i>
+          <a href="tel:+33778041481">+33 7 78 04 14 81</a>
+        </div>
+        <div class="contact-item">
+          <i class="fas fa-map-marker-alt"></i>
+          <span>Nantes, France</span>
+        </div>
+      </div>
+      <div class="cv-social">
+        <a href="https://linkedin.com/in/imade-bouftini" target="_blank" class="social-link">
+          <i class="fab fa-linkedin"></i>
+        </a>
+        <a href="https://github.com/ibouftini" target="_blank" class="social-link">
+          <i class="fab fa-github"></i>
+        </a>
+      </div>
+    </div>
   </div>
-  <p><i class="fas fa-map-marker-alt"></i> Nantes, France</p>
 </div>
 
 <div class="cv-section">
