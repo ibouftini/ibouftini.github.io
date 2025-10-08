@@ -49,65 +49,71 @@ function scrollToConnect(event) {
 </script>
 
 <div class="landing-intro">
-  <div class="intro-card">
-    <h2>About Me</h2>
-    <p>
-      I'm a <span class="highlight">Generalist Engineering Student</span> at École Centrale de Nantes, 
-      passionate about <span class="highlight">artificial intelligence</span> and its real-world applications. 
-      My research focuses on developing innovative AI solutions for healthcare and industrial systems.
-    </p>
-    <p>
-      This portfolio showcases my journey through cutting-edge research projects, academic achievements, 
-      and the exploration of how AI can solve complex problems across different domains.
-    </p>
+  <div class="content-container">
+    <div class="intro-card">
+      <h2>About Me</h2>
+      <p>
+        I'm a <span class="highlight">Generalist Engineering Student</span> at École Centrale de Nantes, 
+        passionate about <span class="highlight">artificial intelligence</span> and its real-world applications. 
+        My research focuses on developing innovative AI solutions for healthcare and industrial systems.
+      </p>
+      <p>
+        This portfolio showcases my journey through cutting-edge research projects, academic achievements, 
+        and the exploration of how AI can solve complex problems across different domains.
+      </p>
+    </div>
   </div>
 </div>
 
 <div class="landing-portfolio">
-  <h2>What You'll Find Here</h2>
-  <div class="portfolio-grid">
-    <div class="portfolio-card">
-      <span class="icon">🎓</span>
-      <h3>Academic Journey</h3>
-      <p>My educational background, coursework, and academic achievements at École Centrale de Nantes.</p>
-      <a href="/cv/" class="card-link">View Academic Background <i class="fas fa-arrow-right"></i></a>
-    </div>
-    
-    <div class="portfolio-card">
-      <span class="icon">🔬</span>
-      <h3>Research Projects</h3>
-      <p>Cutting-edge AI research in medical imaging, industrial monitoring, and multi-agent systems.</p>
-      <a href="/portfolio/" class="card-link">Explore Research <i class="fas fa-arrow-right"></i></a>
-    </div>
-    
-    <div class="portfolio-card">
-      <span class="icon">💡</span>
-      <h3>Blog & Insights</h3>
-      <p>Thoughts on AI developments, technical tutorials, and insights from my research experience.</p>
-      <a href="/year-archive/" class="card-link">Read Posts <i class="fas fa-arrow-right"></i></a>
+  <div class="content-container">
+    <h2>What You'll Find Here</h2>
+    <div class="portfolio-grid">
+      <div class="portfolio-card">
+        <span class="icon">🎓</span>
+        <h3>Academic Journey</h3>
+        <p>My educational background, coursework, and academic achievements at École Centrale de Nantes.</p>
+        <a href="/cv/" class="card-link">View Academic Background <i class="fas fa-arrow-right"></i></a>
+      </div>
+      
+      <div class="portfolio-card">
+        <span class="icon">🔬</span>
+        <h3>Research Projects</h3>
+        <p>Cutting-edge AI research in medical imaging, industrial monitoring, and multi-agent systems.</p>
+        <a href="/portfolio/" class="card-link">Explore Research <i class="fas fa-arrow-right"></i></a>
+      </div>
+      
+      <div class="portfolio-card">
+        <span class="icon">💡</span>
+        <h3>Blog & Insights</h3>
+        <p>Thoughts on AI developments, technical tutorials, and insights from my research experience.</p>
+        <a href="/year-archive/" class="card-link">Read Posts <i class="fas fa-arrow-right"></i></a>
+      </div>
     </div>
   </div>
 </div>
 
 
 <div class="landing-connect">
-  <h2>Let's Connect</h2>
-  <p class="connect-description">
-    Interested in discussing AI research, potential collaborations, or just want to say hello? 
-    I'd love to hear from you!
-  </p>
-  <div class="social-links">
-    <a href="mailto:imadebouftini@gmail.com" class="social-link">
-      <i class="fas fa-envelope"></i>
-      Email
-    </a>
-    <a href="https://linkedin.com/in/imade-bouftini" class="social-link" target="_blank">
-      <i class="fab fa-linkedin"></i>
-      LinkedIn
-    </a>
-    <a href="https://github.com/ibouftini" class="social-link" target="_blank">
-      <i class="fab fa-github"></i>
-      GitHub
-    </a>
+  <div class="content-container">
+    <h2>Let's Connect</h2>
+    <p class="connect-description">
+      Interested in discussing AI research, potential collaborations, or just want to say hello? 
+      I'd love to hear from you!
+    </p>
+    <div class="social-links">
+      <a href="mailto:imadebouftini@gmail.com" class="social-link">
+        <i class="fas fa-envelope"></i>
+        Email
+      </a>
+      <a href="https://linkedin.com/in/imade-bouftini" class="social-link" target="_blank">
+        <i class="fab fa-linkedin"></i>
+        LinkedIn
+      </a>
+      <a href="https://github.com/ibouftini" class="social-link" target="_blank">
+        <i class="fab fa-github"></i>
+        GitHub
+      </a>
+    </div>
   </div>
 </div>

@@ -1,220 +1,268 @@
 ---
 ---
 
-// Modern, professional landing page with full responsiveness
-// Variables for consistent spacing and colors
+/* ========================================================================
+   MODERN LANDING PAGE - CLEAN & ORGANIZED
+   ======================================================================== */
+
+/* CSS Custom Properties for consistent theming */
 :root {
-  --hero-gradient-start: #0ea1c5;
-  --hero-gradient-end: #0b7994;
+  --hero-primary: #0ea1c5;
+  --hero-secondary: #0b7994;
   --accent-color: #0ea1c5;
   --accent-hover: #0b7994;
-  --section-spacing: 4rem;
-  --card-border-radius: 20px;
-  --button-border-radius: 50px;
-  --shadow-light: 0 4px 20px rgba(0, 0, 0, 0.08);
-  --shadow-medium: 0 8px 30px rgba(0, 0, 0, 0.12);
-  --shadow-heavy: 0 12px 40px rgba(0, 0, 0, 0.15);
+  --section-spacing: 5rem;
+  --container-max-width: 1200px;
+  --border-radius-sm: 12px;
+  --border-radius-md: 20px;
+  --border-radius-lg: 50px;
+  --shadow-sm: 0 2px 10px rgba(0, 0, 0, 0.08);
+  --shadow-md: 0 8px 25px rgba(0, 0, 0, 0.12);
+  --shadow-lg: 0 15px 40px rgba(0, 0, 0, 0.15);
+  --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-// Modern hero section with gradient and animations
+/* ========================================================================
+   LAYOUT FOUNDATION
+   ======================================================================== */
+
+/* Main page container - ensures full width without sidebar constraints */
+.page {
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.page__content {
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* Prevent horizontal scroll and ensure clean layout */
+html, body {
+  overflow-x: hidden;
+}
+
+/* ========================================================================
+   HERO SECTION - FULL WIDTH WITH PERFECT ALIGNMENT
+   ======================================================================== */
+
 .landing-hero {
+  /* Full viewport coverage */
   position: relative;
+  width: 100vw;
   min-height: 100vh;
+  
+  /* Positioning to escape container constraints */
+  margin-left: 50%;
+  transform: translateX(-50%);
+  
+  /* Visual styling */
+  background: linear-gradient(135deg, var(--hero-primary), var(--hero-secondary));
+  color: white;
+  
+  /* Layout */
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, var(--hero-gradient-start) 0%, var(--hero-gradient-end) 100%);
-  color: white;
-  margin: -2rem 0 0 0;
-  width: 110vw;
-  margin-left: calc(-55vw + 50%);
   overflow: hidden;
   
-  // Animated background particles
+  /* Animated background */
   &::before {
     content: '';
     position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
+    inset: 0;
     background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="20" cy="20" r="2" fill="rgba(255,255,255,0.1)"/><circle cx="80" cy="40" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="40" cy="80" r="1.5" fill="rgba(255,255,255,0.1)"/></svg>');
     animation: float 20s infinite linear;
+    pointer-events: none;
   }
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  max-width: 800px;
+  padding: 2rem;
   
-  .hero-content {
-    text-align: center;
-    max-width: 900px;
-    padding: 2rem;
+  /* Smooth entrance animation */
+  opacity: 0;
+  transform: translateY(30px);
+  animation: fadeInUp 1s ease-out 0.5s forwards;
+}
+
+.hero-profile {
+  margin-bottom: 3rem;
+  
+  .profile-avatar {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    margin: 0 auto 1.5rem;
+    border: 3px solid rgba(255, 255, 255, 0.4);
+    overflow: hidden;
+    box-shadow: var(--shadow-lg);
     position: relative;
-    z-index: 2;
-    margin-left: 10vw;
     
-    .hero-profile {
-      margin-bottom: 3rem;
-      opacity: 0;
-      transform: translateY(30px);
-      animation: fadeInUp 1s ease-out 0.5s forwards;
-      
-      .profile-avatar {
-        width: 100px;
-        height: 100px;
-        border-radius: 50%;
-        margin: 0 auto 1.5rem;
-        border: 3px solid rgba(255, 255, 255, 0.4);
-        overflow: hidden;
-        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
-        position: relative;
-        
-        &::before {
-          content: '';
-          position: absolute;
-          inset: -3px;
-          border-radius: 50%;
-          background: linear-gradient(45deg, rgba(255,255,255,0.3), rgba(255,255,255,0.1), rgba(255,255,255,0.3));
-          z-index: -1;
-        }
-        
-        img {
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
-        }
-      }
-      
-      h1 {
-        font-size: clamp(2.5rem, 8vw, 4rem);
-        font-weight: 700;
-        margin-bottom: 1rem;
-        letter-spacing: -2px;
-        line-height: 1.1;
-      }
-      
-      .subtitle {
-        font-size: clamp(1.2rem, 4vw, 1.8rem);
-        font-weight: 300;
-        margin-bottom: 1rem;
-        opacity: 0.95;
-        line-height: 1.4;
-      }
-      
-      .bio {
-        font-size: clamp(1rem, 3vw, 1.2rem);
-        font-weight: 400;
-        margin-bottom: 2rem;
-        opacity: 0.9;
-        line-height: 1.5;
-        max-width: 400px;
-        margin-left: auto;
-        margin-right: auto;
-      }
+    /* Gradient border effect */
+    &::before {
+      content: '';
+      position: absolute;
+      inset: -3px;
+      border-radius: 50%;
+      background: linear-gradient(45deg, rgba(255,255,255,0.3), rgba(255,255,255,0.1));
+      z-index: -1;
     }
     
-    .cta-buttons {
-      display: flex;
-      gap: 1.5rem;
-      justify-content: center;
-      flex-wrap: wrap;
-      opacity: 0;
-      transform: translateY(30px);
-      animation: fadeInUp 1s ease-out 1.1s forwards;
-      
-      .cta-button {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.5rem;
-        padding: 1rem 2.5rem;
-        background: rgba(255, 255, 255, 0.15);
-        backdrop-filter: blur(10px);
-        color: white;
-        text-decoration: none;
-        border-radius: var(--button-border-radius);
-        border: 2px solid rgba(255, 255, 255, 0.3);
-        font-weight: 600;
-        font-size: 1.1rem;
-        transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        position: relative;
-        overflow: hidden;
-        cursor: pointer;
-        
-        &::before {
-          content: '';
-          position: absolute;
-          top: 0;
-          left: -100%;
-          width: 100%;
-          height: 100%;
-          background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-          transition: left 0.6s;
-        }
-        
-        &:hover {
-          background: rgba(255, 255, 255, 0.25);
-          border-color: rgba(255, 255, 255, 0.6);
-          transform: translateY(-3px);
-          box-shadow: var(--shadow-medium);
-          color: white;
-          text-decoration: none;
-          
-          &::before {
-            left: 100%;
-          }
-        }
-        
-        &.cta-connect {
-          background: rgba(255, 255, 255, 0.2);
-          border-color: rgba(255, 255, 255, 0.4);
-          
-          &:hover {
-            background: rgba(255, 255, 255, 0.3);
-            border-color: rgba(255, 255, 255, 0.7);
-            transform: translateY(-3px) scale(1.02);
-          }
-          
-          i {
-            animation: pulse 2s infinite;
-          }
-        }
-        
-        i {
-          font-size: 1rem;
-        }
-      }
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
     }
   }
   
-  // Scroll indicator
-  .scroll-indicator {
-    position: absolute;
-    bottom: 2rem;
-    left: 50%;
-    transform: translateX(-50%);
+  h1 {
+    font-size: clamp(2.5rem, 8vw, 4rem);
+    font-weight: 700;
+    margin-bottom: 1rem;
+    letter-spacing: -2px;
+    line-height: 1.1;
+  }
+  
+  .subtitle {
+    font-size: clamp(1.2rem, 4vw, 1.8rem);
+    font-weight: 300;
+    margin-bottom: 1rem;
+    opacity: 0.95;
+  }
+  
+  .bio {
+    font-size: clamp(1rem, 3vw, 1.2rem);
+    font-weight: 400;
+    margin-bottom: 2rem;
+    opacity: 0.9;
+    max-width: 400px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+.cta-buttons {
+  display: flex;
+  gap: 1.5rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  
+  .cta-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 1rem 2.5rem;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
     color: white;
-    opacity: 0.7;
-    animation: bounce 2s infinite;
+    text-decoration: none;
+    border-radius: var(--border-radius-lg);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    font-weight: 600;
+    font-size: 1.1rem;
+    transition: var(--transition-smooth);
+    position: relative;
+    overflow: hidden;
+    
+    /* Shine effect on hover */
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+      transition: left 0.6s;
+    }
+    
+    &:hover {
+      background: rgba(255, 255, 255, 0.25);
+      border-color: rgba(255, 255, 255, 0.6);
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-md);
+      color: white;
+      text-decoration: none;
+      
+      &::before {
+        left: 100%;
+      }
+    }
+    
+    /* Special styling for connect button */
+    &.cta-connect {
+      background: rgba(255, 255, 255, 0.2);
+      border-color: rgba(255, 255, 255, 0.4);
+      
+      &:hover {
+        background: rgba(255, 255, 255, 0.3);
+        border-color: rgba(255, 255, 255, 0.7);
+        transform: translateY(-3px) scale(1.02);
+      }
+      
+      i {
+        animation: pulse 2s infinite;
+      }
+    }
     
     i {
-      font-size: 2rem;
+      font-size: 1rem;
     }
   }
 }
 
-// About section with modern card design
-.landing-intro {
-  padding: var(--section-spacing) 2rem;
-  max-width: 1200px;
+/* Scroll indicator */
+.scroll-indicator {
+  position: absolute;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  color: white;
+  opacity: 0.7;
+  animation: bounce 2s infinite;
+  
+  i {
+    font-size: 2rem;
+  }
+}
+
+/* ========================================================================
+   CONTENT SECTIONS - CONSISTENT CONTAINER LAYOUT
+   ======================================================================== */
+
+/* Standard container for all content sections */
+.content-container {
+  max-width: var(--container-max-width);
   margin: 0 auto;
-  margin-left: 10vw;
+  padding: 0 2rem;
+}
+
+/* ========================================================================
+   INTRO SECTION
+   ======================================================================== */
+
+.landing-intro {
+  padding: var(--section-spacing) 0;
   
   .intro-card {
     background: var(--global-bg-color);
     padding: 3rem;
-    border-radius: var(--card-border-radius);
-    box-shadow: var(--shadow-light);
+    border-radius: var(--border-radius-md);
+    box-shadow: var(--shadow-sm);
     border: 1px solid var(--global-border-color);
     position: relative;
     overflow: hidden;
     
+    /* Top accent border */
     &::before {
       content: '';
       position: absolute;
@@ -222,7 +270,7 @@
       left: 0;
       right: 0;
       height: 4px;
-      background: linear-gradient(90deg, var(--hero-gradient-start), var(--hero-gradient-end));
+      background: linear-gradient(90deg, var(--hero-primary), var(--hero-secondary));
     }
     
     h2 {
@@ -233,6 +281,7 @@
       text-align: center;
       position: relative;
       
+      /* Decorative underline */
       &::after {
         content: '';
         position: absolute;
@@ -263,6 +312,7 @@
       font-weight: 600;
       position: relative;
       
+      /* Subtle underline effect */
       &::after {
         content: '';
         position: absolute;
@@ -277,23 +327,22 @@
   }
 }
 
-// Portfolio section with modern grid
+/* ========================================================================
+   PORTFOLIO SECTION
+   ======================================================================== */
+
 .landing-portfolio {
-  padding: var(--section-spacing) 2rem;
+  padding: var(--section-spacing) 0;
   background: var(--global-bg-color);
-  margin: 0 0;
   position: relative;
   
+  /* Subtle background pattern */
   &::before {
     content: '';
     position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
+    inset: 0;
     background: linear-gradient(135deg, var(--global-border-color) 0%, transparent 50%, var(--global-border-color) 100%);
-    opacity: 0.1;
-    z-index: 0;
+    opacity: 0.05;
   }
   
   h2 {
@@ -304,8 +353,8 @@
     text-align: center;
     position: relative;
     z-index: 1;
-    margin-left: 10vw;
     
+    /* Decorative underline */
     &::after {
       content: '';
       position: absolute;
@@ -323,23 +372,21 @@
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
     gap: 2rem;
-    max-width: 1200px;
-    margin: 0 auto;
-    margin-left: 10vw;
     position: relative;
     z-index: 1;
     
     .portfolio-card {
       background: var(--global-bg-color);
       padding: 2.5rem;
-      border-radius: var(--card-border-radius);
-      box-shadow: var(--shadow-light);
-      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      border-radius: var(--border-radius-md);
+      box-shadow: var(--shadow-sm);
+      transition: var(--transition-smooth);
       text-align: center;
       border: 1px solid var(--global-border-color);
       position: relative;
       overflow: hidden;
       
+      /* Top accent that appears on hover */
       &::before {
         content: '';
         position: absolute;
@@ -347,14 +394,14 @@
         left: 0;
         right: 0;
         height: 4px;
-        background: linear-gradient(90deg, var(--hero-gradient-start), var(--hero-gradient-end));
+        background: linear-gradient(90deg, var(--hero-primary), var(--hero-secondary));
         transform: scaleX(0);
         transition: transform 0.3s ease;
       }
       
       &:hover {
         transform: translateY(-10px);
-        box-shadow: var(--shadow-heavy);
+        box-shadow: var(--shadow-lg);
         
         &::before {
           transform: scaleX(1);
@@ -369,10 +416,9 @@
         font-size: clamp(2rem, 6vw, 3rem);
         margin-bottom: 1.5rem;
         display: block;
-        text-align: center !important;
+        text-align: center;
         transition: transform 0.3s ease;
         filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
-        width: 100%;
       }
       
       h3 {
@@ -398,7 +444,7 @@
         text-decoration: none;
         font-weight: 600;
         font-size: 1rem;
-        transition: all 0.3s ease;
+        transition: var(--transition-smooth);
         
         &:hover {
           color: var(--accent-hover);
@@ -419,14 +465,13 @@
   }
 }
 
+/* ========================================================================
+   CONNECT SECTION
+   ======================================================================== */
 
-// Modern social links section
 .landing-connect {
-  padding: var(--section-spacing) 2rem;
+  padding: var(--section-spacing) 0;
   text-align: center;
-  max-width: 1000px;
-  margin: 0 auto;
-  margin-left: 10vw;
   
   h2 {
     font-size: clamp(2rem, 5vw, 2.5rem);
@@ -435,6 +480,7 @@
     margin-bottom: 1.5rem;
     position: relative;
     
+    /* Decorative underline */
     &::after {
       content: '';
       position: absolute;
@@ -472,14 +518,15 @@
       background: var(--accent-color);
       color: white;
       text-decoration: none;
-      border-radius: var(--button-border-radius);
+      border-radius: var(--border-radius-lg);
       font-weight: 600;
       font-size: 1rem;
-      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-      box-shadow: var(--shadow-light);
+      transition: var(--transition-smooth);
+      box-shadow: var(--shadow-sm);
       position: relative;
       overflow: hidden;
       
+      /* Shine effect */
       &::before {
         content: '';
         position: absolute;
@@ -494,7 +541,7 @@
       &:hover {
         background: var(--accent-hover);
         transform: translateY(-3px);
-        box-shadow: var(--shadow-medium);
+        box-shadow: var(--shadow-md);
         color: white;
         text-decoration: none;
         
@@ -510,7 +557,10 @@
   }
 }
 
-// Animations
+/* ========================================================================
+   ANIMATIONS
+   ======================================================================== */
+
 @keyframes fadeInUp {
   to {
     opacity: 1;
@@ -536,45 +586,37 @@
 }
 
 @keyframes pulse {
-  0%, 100% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.1);
-  }
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
 }
 
-// Responsive breakpoints
+/* ========================================================================
+   RESPONSIVE DESIGN
+   ======================================================================== */
+
+/* Tablet breakpoint */
 @media (max-width: 768px) {
   :root {
-    --section-spacing: 3rem;
+    --section-spacing: 4rem;
+  }
+  
+  .content-container {
+    padding: 0 1.5rem;
   }
   
   .landing-hero {
     min-height: 90vh;
-    margin: -1rem 0 0 0;
-    width: 110vw;
-    margin-left: calc(-55vw + 50%);
     
     .hero-content {
       padding: 2rem 1rem;
-      margin-left: 5vw;
       
-      .hero-profile {
-        margin-bottom: 2rem;
-        
-        .profile-avatar {
-          width: 80px;
-          height: 80px;
-        }
-        
-        .bio {
-          font-size: 1rem;
-        }
+      .hero-profile .profile-avatar {
+        width: 80px;
+        height: 80px;
       }
       
       .cta-buttons {
-        display: grid !important;
+        display: grid;
         grid-template-columns: 1fr 1fr;
         gap: 1rem;
         max-width: 400px;
@@ -582,9 +624,8 @@
         
         .cta-button:nth-child(3) {
           grid-column: 1 / -1;
+          max-width: 250px;
           justify-self: center;
-          max-width: 200px;
-          width: 100%;
         }
         
         .cta-button {
@@ -596,72 +637,34 @@
     }
   }
   
-  .landing-intro,
-  .landing-connect {
-    padding: var(--section-spacing) 1.5rem;
-    margin-left: 5vw !important;
-    
-    .intro-card {
-      padding: 2rem 1.5rem;
-    }
+  .landing-intro .intro-card,
+  .landing-portfolio .portfolio-card {
+    padding: 2rem 1.5rem;
   }
   
-  .landing-portfolio {
-    padding: var(--section-spacing) 1.5rem;
-    margin: 0 0;
-    
-    h2 {
-      margin-left: 5vw !important;
-    }
-    
-    .portfolio-grid {
-      grid-template-columns: 1fr;
-      gap: 1.5rem;
-      margin-left: 5vw !important;
-      
-      .portfolio-card {
-        padding: 2rem 1.5rem;
-        
-        .icon {
-          text-align: center !important;
-        }
-      }
-    }
-  }
-  
-  
-  .social-links {
-    display: grid !important;
-    grid-template-columns: 1fr 1fr;
-    gap: 1rem;
-    max-width: 400px;
-    margin: 0 auto;
-    
-    .social-link:nth-child(3) {
-      grid-column: 1 / -1;
-      justify-self: center;
-      max-width: 200px;
-      width: 100%;
-    }
-    
-    .social-link {
-      justify-content: center;
-      padding: 1rem 1.5rem;
-      font-size: 0.9rem;
-    }
+  .landing-portfolio .portfolio-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
   }
 }
 
+/* Mobile breakpoint */
 @media (max-width: 480px) {
+  :root {
+    --section-spacing: 3rem;
+  }
+  
+  .content-container {
+    padding: 0 1rem;
+  }
+  
   .landing-hero {
     .hero-content {
       padding: 1.5rem 1rem;
       
-      .hero-profile {
-        .profile-avatar {
-          width: 70px;
-          height: 70px;
-        }
+      .hero-profile .profile-avatar {
+        width: 70px;
+        height: 70px;
       }
       
       .cta-buttons {
@@ -681,11 +684,8 @@
   }
   
   .social-links {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr !important;
     max-width: 250px;
-    
-    .social-link:nth-child(3) {
-      grid-column: 1;
-    }
+    margin: 0 auto;
   }
 }
