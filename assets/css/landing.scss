@@ -26,8 +26,8 @@
   background: linear-gradient(135deg, var(--hero-gradient-start) 0%, var(--hero-gradient-end) 100%);
   color: white;
   margin: -2rem 0 0 0;
-  width: calc(100vw + 20px);
-  margin-left: calc(-50vw + 50% - 10px);
+  width: 110vw;
+  margin-left: calc(-55vw + 50%);
   overflow: hidden;
   
   // Animated background particles
@@ -548,8 +548,8 @@
   .landing-hero {
     min-height: 90vh;
     margin: -1rem 0 0 0;
-    width: calc(100vw + 20px);
-    margin-left: calc(-50vw + 50% - 10px);
+    width: 110vw;
+    margin-left: calc(-55vw + 50%);
     
     .hero-content {
       padding: 2rem 1rem;
