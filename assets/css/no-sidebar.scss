@@ -125,3 +125,8 @@ html, body {
   max-width: none !important;
   width: 100% !important;
 }
+
+/* Calculate scrollbar width and adjust accordingly */
+:root {
+  --scrollbar-width: calc(100vw - 100%);
+}
