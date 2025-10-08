@@ -1,0 +1,97 @@
+---
+---
+
+// Global CSS to completely remove sidebar and use full width on all pages
+
+// Hide sidebar completely
+.sidebar {
+  display: none !important;
+}
+
+// Override main container constraints
+#main {
+  max-width: none !important;
+  padding-left: 1rem !important;
+  padding-right: 1rem !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+
+// Make page content use full width
+.page {
+  @include breakpoint($large) {
+    @include span(12 of 12); // Use full 12 columns instead of 10
+    @include prefix(0); // Remove left spacing
+    @include suffix(0); // Remove right spacing
+  }
+}
+
+// Override page content constraints
+.page__content {
+  margin-left: 0 !important;
+  padding-left: 0 !important;
+  width: 100% !important;
+  max-width: none !important;
+}
+
+// Override any sidebar-related spacing
+.page__inner-wrap {
+  width: 100% !important;
+  max-width: none !important;
+}
+
+// Ensure archive pages also use full width
+.archive {
+  @include breakpoint($large) {
+    @include span(12 of 12);
+    @include prefix(0);
+    @include suffix(0);
+  }
+}
+
+// Override any remaining grid constraints
+.layout--single,
+.layout--splash,
+.layout--archive,
+.layout--home {
+  .page {
+    @include breakpoint($large) {
+      @include span(12 of 12);
+      @include prefix(0);
+      @include suffix(0);
+    }
+  }
+}
+
+// For responsive behavior - ensure full width on all devices
+@media (min-width: 80em) {
+  .page__content {
+    margin-left: 0 !important;
+    padding-left: 0 !important;
+  }
+  
+  #main {
+    padding-left: 2rem !important;
+    padding-right: 2rem !important;
+  }
+}
+
+@media (max-width: 79.9em) {
+  .page__content {
+    margin-left: 0 !important;
+    padding-left: 0 !important;
+  }
+}
+
+// Override any author profile sidebars
+.author__urls-wrapper {
+  display: none !important;
+}
+
+.author__content {
+  display: none !important;
+}
+
+.author__avatar {
+  display: none !important;
+}

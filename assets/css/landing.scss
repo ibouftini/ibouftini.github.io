@@ -16,18 +16,6 @@
   --shadow-heavy: 0 12px 40px rgba(0, 0, 0, 0.15);
 }
 
-// Remove sidebar layout - full width content
-.page__content {
-  margin-left: 0 !important;
-  padding-left: 0 !important;
-  width: 100% !important;
-}
-
-// Hide author profile sidebar completely
-.sidebar {
-  display: none !important;
-}
-
 // Modern hero section with gradient and animations
 .landing-hero {
   position: relative;
