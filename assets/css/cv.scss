@@ -16,7 +16,7 @@
 
 // Header section with profile
 .cv-header {
-  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%) !important;
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%) !important;
   margin: -2rem -1rem 3rem -1rem;
   padding: 3rem 1rem;
   border-radius: 0 0 30px 30px;
@@ -326,7 +326,7 @@
 
 .cv-entry-date {
   font-size: 0.95rem;
-  color: var(--global-text-color-light);
+  color: var(--global-text-color);
   font-weight: 500;
   white-space: nowrap;
   background: var(--global-footer-bg-color);
