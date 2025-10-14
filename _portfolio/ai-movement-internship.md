@@ -59,22 +59,164 @@ The standard radiological approach for mammography analysis involves:
 3. **Multi-view fusion** for final diagnostic decision ← *Graph Neural Networks applied here*
 
 <div align="center">
-  <img src="https://raw.githubusercontent.com/ibouftini/ALR-portfolio/main/images/AGN.png" alt="AGN Architecture" width="70%">
+  <img src="/images/ALR-portfolio/AGN.png" alt="AGN Architecture" width="70%">
   <p><em>AGN overall architecture with BGN and IGN components</em></p>
 </div>
 
 ### Anatomy-aware Graph Neural Network (AGN)
 
-The Anatomy-aware Graph Neural Network (AGN) works by mimicking the natural reasoning ability that radiologists apply during diagnosis. AGN replicates the clinical process in which radiologists analyze numerous mammographic images to cross-validate results.
+The MaskRCNN architecture is thoroughly explained in [our previous blog post](link-to-maskrcnn-post) covering ResNet-50+FPN backbone, RPN, ROI Align, and detection/segmentation heads. Here we build upon this baseline to implement the "Act Like a Radiologist" framework.
 
-**Key Components:**
-- **Bipartite Graph Network (BGN)**: Models ipsilateral correspondences between CC and MLO views of the same breast
-- **Inception Graph Network (IGN)**: Exploits bilateral symmetry between left and right breasts  
-- **Pseudo-landmarks**: Anatomically consistent reference points (nipple, pectoral muscle, breast contour)
-- **Attention-based Fusion**: Residual mechanism to preserve and enhance features
+The Anatomy-aware Graph Neural Network (AGN) works by mimicking the natural reasoning ability that radiologists apply during diagnosis. AGN replicates the clinical process in which radiologists analyze numerous mammographic images to cross-validate results in contrast to traditional single-view detection.
+
+As illustrated in Figure below, AGN applies this reasoning through a dual-graph architecture that processes ipsilateral and bilateral view relationships simultaneously.
 
 <div align="center">
-  <img src="https://raw.githubusercontent.com/ibouftini/ALR-portfolio/main/images/maskrcnn_adaptation.png" alt="MaskRCNN Adaptation" width="75%">
+  <img src="/images/ALR-portfolio/AGN.png" alt="AGN Architecture" width="70%">
+  <p><em>AGN overall architecture. The overall architecture is formulated as a function f parameterized by two specialized graphs</em></p>
+</div>
+
+The overall architecture is formulated as a function $f$ parameterized by two specialized graphs:
+
+$$Y = f(F_{e}, F_{a}, F_{c}; \mathcal{G}_B, \mathcal{G}_I)$$
+
+where $F_{e}, F_{a}, F_{c} \in \mathbb{R}^{HW \times C}$ represent feature maps from the examined view, auxiliary view, and contralateral view respectively, $\mathcal{G}_B$ denotes the bipartite graph for ipsilateral reasoning, and $\mathcal{G}_I$ represents the inception graph for bilateral analysis.
+
+#### Pseudo-Landmarks: Anatomically Consistent Graph Nodes
+
+Finding consistent spatial correlations across mammography views is the first step in creating meaningful graph representations. AGN introduced the concept of Pseudo-landmarks which are anatomically informed reference points that are relatively consistent across various patients and imaging conditions. The nipple, pectoral muscle line, and breast contour are three important anatomical features that are used to strategically position these landmarks.
+
+Each landmark $v_i \in \mathcal{V}$ denotes an area with a generally uniform anatomical position across the patient group. The full set of pseudo-landmarks has three fundamental properties: individual landmarks correspond to unique anatomical regions, various landmarks indicate non-overlapping breast areas, and the collective landmark set covers the whole breast tissue.
+
+#### Graph Node Mapping: From Spatial Features to Anatomical Representations
+
+To use AGN, we should transform the visual features into graph representations using a consistent mapping mechanism. AGN employs a k-Nearest Neighbor (kNN) forward mapping function $\phi_k$ to project spatial features onto the discrete graph node domain.
+
+The kNN mapping process operates through the following assignment matrix:
+
+$$\phi_k(F, \mathcal{V}) = (Q^f)^T F$$
+
+$$Q^f = A(\Lambda^f)^{-1}$$
+
+$$A_{ij} = \begin{cases}
+1, & \text{if $j$-th node is kNN of $i$-th pixel} \\
+0, & \text{otherwise}
+\end{cases}$$
+
+where $A \in \mathbb{R}^{HW \times |\mathcal{V}|}$ establishes connections between image pixels and their nearest pseudo-landmark nodes, $\Lambda^f \in \mathbb{R}^{|\mathcal{V}| \times |\mathcal{V}|}$ is a diagonal normalization matrix with $\Lambda^f_{jj} = \sum_{i=1}^{HW} A_{ij}$, and $Q^f$ represents the normalized mapping matrix.
+
+#### Bipartite Graph Network (BGN): Modeling Ipsilateral Correspondences
+
+The Bipartite Graph Network constitutes the first component of AGN's dual-graph architecture, specifically designed to model the geometric and semantic relationships between ipsilateral mammographic views. The bipartite graph is characterized as $\mathcal{G}_B = (\mathcal{V}_{CC}, \mathcal{V}_{MLO}, \mathcal{E}_B)$.
+
+<div align="center">
+  <img src="/images/ALR-portfolio/bipartite.png" alt="Bipartite Graph Network" width="50%">
+  <p><em>Bipartite Graph Network structure modeling ipsilateral correspondences</em></p>
+</div>
+
+Node features are extracted using the kNN mapping for each view:
+
+$$X_e^B = \phi_k(F_{e}, \mathcal{V}_{l_{e}})$$
+$$X_a^B = \phi_k(F_{a}, \mathcal{V}_{l_{a}})$$
+
+The bipartite graph edge representation encapsulates the core innovation of BGN through a composite adjacency matrix that combines geometric and semantic relationship modeling:
+
+$$H = H^g \odot H^s$$
+
+where $H^g$ represents geometric constraints derived from anatomical knowledge, $H^s$ captures instance-specific semantic similarities, and $\odot$ denotes element-wise multiplication.
+
+**Geometric Constraint Modeling**: The geometric graph $H^g$ encodes statistical co-occurrence patterns of corresponding anatomical regions across ipsilateral views. The geometric constraints are formalized through a frequency statistics matrix $\epsilon$ that accumulates co-occurrence counts across the training set, then normalized using:
+
+$$H_{ij}^g = \frac{\epsilon_{ij}}{\sqrt{D_{i\cdot}D_{\cdot j}}}$$
+
+where $D_{i\cdot} = \sum_{k=1} \epsilon_{ik}$ and $D_{\cdot j} = \sum_{k=1} \epsilon_{kj}$.
+
+**Semantic Similarity Learning**: The semantic graph $H^s$ learns instance-specific correspondences based on visual feature similarities:
+
+$$H_{ij}^s = \sigma([(X_i^{CC})^T, (X_j^{MLO})^T] w_s)$$
+
+where $X_i^{CC}, X_j^{MLO} \in \mathbb{R}^C$ represent node features, $w_s \in \mathbb{R}^{2C}$ is the learnable fusion parameter, and $\sigma$ denotes the sigmoid activation function.
+
+**Bipartite Graph Convolution**: Information propagation within BGN follows an augmented bipartite structure:
+
+$$X^B = [(X^{CC})^T, (X^{MLO})^T]^T$$
+
+$$H^B = \begin{pmatrix}
+\mathbf{0} & H \\
+H^T & \mathbf{0}
+\end{pmatrix}$$
+
+$$Z^B = \sigma(H^B X^B W^B)$$
+
+where $W^B \in \mathbb{R}^{C \times C}$ represents learnable convolution parameters.
+
+#### Inception Graph Network (IGN): Leveraging Bilateral Symmetry
+
+The Inception Graph Network exploits bilateral symmetry by following the structure $\mathcal{G}_I = (\mathcal{V}_e \cup \mathcal{V}_c, \mathcal{E}_I)$, where $\mathcal{V}_e$ and $\mathcal{V}_c$ represent pseudo-landmark nodes from the examined and contralateral views.
+
+<div align="center">
+  <img src="/images/ALR-portfolio/ign.png" alt="Inception Graph Network" width="50%">
+  <p><em>Inception Graph Network structure leveraging bilateral symmetry</em></p>
+</div>
+
+Node representations are obtained similarly:
+
+$$X_e^I = \phi_k(F_e, \mathcal{V}_e)$$
+$$X_c^I = \phi_k(F_c, \mathcal{V}_c)$$
+$$X^I = [(X_e^I)^T, (X_c^I)^T]^T$$
+
+**Multi-branch Adjacency Construction**: IGN handles geometric distortions through multi-branch adjacency matrices. For $n = |\mathcal{V}_e| = |\mathcal{V}_c|$ nodes, the adjacency matrix is:
+
+$$\hat{J} = \begin{pmatrix}
+M & J \\
+J^T & M^T
+\end{pmatrix}$$
+
+where $M = I_n$ (identity matrix for self-loops) and $J_s$ connects each node to its top-$s$ nearest neighbors in the contralateral view.
+
+**Inception Graph Convolution**: The inception architecture processes multiple neighborhood scales through parallel branches:
+
+$$Z^I = \sigma\left(\begin{pmatrix}\hat{J}_{s_1} & \hat{J}_{s_2}\end{pmatrix} \begin{pmatrix}X^I & \mathbf{0} \\ \mathbf{0} & X^I\end{pmatrix} \begin{pmatrix}W^I_1 \\ W^I_2\end{pmatrix}\right)$$
+
+where $W^I_1, W^I_2 \in \mathbb{R}^{C \times C}$ are branch-specific parameters, and $s_1, s_2$ represent different neighborhood sizes.
+
+#### Correspondence Reasoning Enhancement and Feature Fusion
+
+The final stage integrates multi-view reasoning capabilities into enhanced spatial feature representations. This process employs kNN reverse mapping to project graph representations back to spatial domain:
+
+<div align="center">
+  <img src="/images/ALR-portfolio/fusion.png" alt="Feature Fusion" width="30%">
+  <p><em>Feature fusion mechanism combining BGN and IGN outputs</em></p>
+</div>
+
+**Reverse Mapping and Spatial Projection**: The kNN reverse mapping function transforms node features back to spatial features:
+
+$$\psi_k(Z, \mathcal{V}_e) = Q^r [Z]_e$$
+$$Q^r = (\Lambda^r)^{-1} A$$
+
+where $\Lambda^r \in \mathbb{R}^{HW \times HW}$ is a diagonal matrix with $\Lambda^r_{ii} = \sum_{j=1}^{|\mathcal{V}_e|} A_{ij}$, and $[Z]_e$ selects nodes from the examined view.
+
+The reverse mapping generates spatial features from both networks:
+
+$$F_B = \psi_k(Z^B, \mathcal{V}_e)$$
+$$F_I = \psi_k(Z^I, \mathcal{V}_e)$$
+
+**Attention on IGN and Final Fusion**: IGN generates spatial attention weights highlighting asymmetric regions:
+
+$$\hat{F}_I = \sigma(F_I w_I)$$
+
+where $w_I \in \mathbb{R}^C$ produces attention weights.
+
+The final enhanced features combine all information sources:
+
+$$Y = [\hat{F}_I  \odot F_e, F_B] W_f^T$$
+
+where $\hat{F}_I  \odot F_e$ represents attention-weighted examined view features, $F_B$ contains ipsilateral correspondence features, $\odot$ denotes element-wise product, and $W_f \in \mathbb{R}^{C \times 2C}$ is the learnable fusion parameter matrix.
+
+This enhanced feature representation $Y$ maintains spatial dimensions compatible with standard detection architectures while incorporating multi-view anatomical reasoning capabilities, enabling seamless integration with existing mammographic detection systems.
+
+<div align="center">
+  <img src="/images/ALR-portfolio/maskrcnn_adaptation.png" alt="MaskRCNN Adaptation" width="75%">
   <p><em>MaskRCNN adaptation for Multi-view breast cancer detection</em></p>
 </div>
 
@@ -157,7 +299,7 @@ $$A_{ij} = \begin{cases}
 \end{cases}$$
 
 <div align="center">
-  <img src="https://raw.githubusercontent.com/ibouftini/ALR-portfolio/main/images/pseudo.png" alt="Pseudo-landmarks" width="40%">
+  <img src="/images/ALR-portfolio/pseudo.png" alt="Pseudo-landmarks" width="40%">
   <p><em>Pseudo-landmark generation: (a) CC view with generated landmarks, (b) MLO view with generated landmarks</em></p>
 </div>
 
@@ -170,7 +312,7 @@ $$A_{ij} = \begin{cases}
 - **Detection/Mask Heads**: Binary classification (mass/background) + bounding box regression
 
 <div align="center">
-  <img src="https://raw.githubusercontent.com/ibouftini/ALR-portfolio/main/images/maskrcnn_architecture.png" alt="MaskRCNN Architecture" width="80%">
+  <img src="/images/ALR-portfolio/maskrcnn_architecture.png" alt="MaskRCNN Architecture" width="80%">
   <p><em>Mask R-CNN architecture overview with ResNet-50+FPN backbone</em></p>
 </div>
 
@@ -236,7 +378,7 @@ for each patient p in P:
 | **Our AGRCNN** | **78.4%** | **85.5%** | **90.1%** | **91.6%** | **92.5%** | CBIS-DDSM |
 
 <div align="center">
-  <img src="https://raw.githubusercontent.com/ibouftini/ALR-portfolio/main/images/agn_froc.png" alt="FROC Comparison" width="60%">
+  <img src="/images/ALR-portfolio/agn_froc.png" alt="FROC Comparison" width="60%">
   <p><em>Comparative FROC analysis: MaskRCNN, YOLO, DETR and AGRCNN on CBIS-DDSM test set</em></p>
 </div>
 
@@ -288,7 +430,7 @@ ign_spatial_features = ign_spatial_features + 0.2 * examined_features
 This transforms the effective attention range from [0,1] to [0.2,2.2], enabling both feature suppression (when attention < 0.5) and enhancement (when attention > 0.5).
 
 <div align="center">
-  <img src="https://raw.githubusercontent.com/ibouftini/ALR-portfolio/main/images/agn_results_2.png" alt="AGN Results" width="75%">
+  <img src="/images/ALR-portfolio/agn_results_2.png" alt="AGN Results" width="75%">
   <p><em>AGN Features after model adjustments: background/contour reduction, mass region enhancement</em></p>
 </div>
 
