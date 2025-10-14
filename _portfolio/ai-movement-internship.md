@@ -1,6 +1,6 @@
 ---
 title: "AI Research Intern - Multi-view Breast Cancer Detection"
-excerpt: "Advanced Deep Learning for Multi-View Structural Reasoning in Mammographic Analysis using Anatomy-aware Graph Networks, achieving 78.4%–92.5% Recall@[0.5,4.0]FPI"
+excerpt: "Implementation and refinement of 'Act Like a Radiologist' paper using Anatomy-aware Graph Networks, achieving 78.4%–92.5% Recall@[0.5,4.0]FPI compared to 68.9%–91.3% baseline"
 collection: portfolio
 permalink: /portfolio/ai-movement-internship/
 date: 2024-08-01
@@ -9,14 +9,14 @@ venue: 'AiMovement/UM6P, Rabat, Morocco'
 
 <div align="center">
 
-<p><strong>Research Period:</strong> Été 2024</p>
+<p><strong>Research Period:</strong> Summer 2024</p>
 
 <p><strong>Institution:</strong><br>
-<a href="https://www.aimovement.ma/">International Center for Artificial Intelligence of Morocco (AiMovement)</a><br>
+<a href="https://aim.um6p.ma/en/home/">International Center for Artificial Intelligence of Morocco (AiMovement)</a><br>
 <a href="https://www.um6p.ma/">Mohammed VI Polytechnic University (UM6P)</a>, Rabat, Morocco</p>
 
-<p><strong>Contexte:</strong><br>
-Première incursion du laboratoire dans l'imagerie médicale • Implémentation du papier "Act Like a Radiologist"</p>
+<p><strong>Context:</strong><br>
+First foray into medical imaging • Implementation of "Act Like a Radiologist" paper</p>
 
 <h3>📋 Table of Contents</h3>
 <p>
@@ -33,119 +33,119 @@ Première incursion du laboratoire dans l'imagerie médicale • Implémentation
 
 ## 📖 Introduction
 
-**Contexte médical**: Le cancer du sein est la pathologie néoplasique la plus répandue chez les femmes, représentant environ 2,3 millions de nouveaux cas en 2022. La mammographie demeure l'outil de dépistage de référence, mais l'analyse traditionnelle mono-vue limite souvent la détection précoce, particulièrement dans les tissus mammaires denses.
+Breast cancer is the most prevalent neoplastic pathology in women, accounting for an estimated 2.3 million new cases in 2022. This report concerns reviewing, implementing, and refining cutting-edge methods for multi-view breast cancer detection using advanced deep learning techniques conducted at the International Artificial Intelligence Center of Morocco (AiMovement).
 
-**Approche clinique**: Les radiologues analysent naturellement plusieurs vues mammographiques simultanément (crânio-caudale CC et médio-latérale oblique MLO) pour améliorer la précision diagnostique. Cette capacité de raisonnement multi-vue constitue un avantage diagnostique majeur.
+Our main focus was on the Anatomy-aware Graph Network (AGN) as it emulates radiologists' simultaneous analysis of mediolateral oblique (MLO) and craniocaudal (CC) views. The AGN architecture consists of an Inception Graph Network (IGN) to capture bilateral symmetry and a Bipartite Graph Network (BGN) to model intra-view correspondences.
 
-**Innovation technologique**: Ce stage de recherche s'est concentré sur l'implémentation et le raffinement du papier "Act Like a Radiologist", choisي pour son équilibre entre exigences de ressources et performances, ainsi que l'absence de code open-source disponible. Notre approche développe un système de fusion multi-vue sophistiqué utilisant les **Anatomy-aware Graph Networks (AGN)** qui émulent les patterns d'interprétation radiologique.
+This paper was chosen in particular thanks to its ability to balance resource requirements and performance as well as the fact that its code is not publicly accessible. This year represents the lab's first foray into medical imaging.
 
 ---
 
 ## 🎯 Objectives
 
-1. **Réviser, implémenter et affiner** les méthodes de pointe pour la détection mono-vue et multi-vue du cancer du sein
-2. **Développer un pipeline de préprocessing robuste** pour l'identification de données et de landmarks anatomiques
-3. **Implémenter l'architecture AGN** avec Bipartite Graph Network (BGN) pour les correspondances intra-vue et Inception Graph Network (IGN) pour la symétrie bilatérale
-4. **Optimiser les performances** sous contraintes de données limitées avec approche d'entraînement en deux étapes
-5. **Établir des benchmarks comparatifs** contre les frameworks établis (MaskRCNN, DETR, YOLO) sur le dataset CBIS-DDSM
+1. **Review, implement and refine** cutting-edge methods for single-view and multi-view breast cancer detection
+2. **Develop a robust preprocessing pipeline** for data cleaning and landmark identification
+3. **Implement AGN architecture** with resource-efficient training methods using a two-stage approach (training MaskRCNN first, then incorporating AGN)
+4. **Achieve architectural adaptation** of the AGN that focuses on augmenting or weakening features rather than the original feature removal strategy to handle small-sized datasets
+5. **Establish comparative benchmarks** against established frameworks (MaskRCNN, DETR, YOLO) on CBIS-DDSM dataset
 
 ---
 
 ## ⚙️ Methods
 
-### Architecture "Act Like a Radiologist" 
+### "Act Like a Radiologist" Framework
 
-L'approche radiologique standard pour l'analyse mammographique implique:
-1. **Analyse de vue individuelle** pour chaque projection mammographique
-2. **Corrélation inter-vues** pour identifier les lésions correspondantes  
-3. **Fusion multi-vue** pour la décision diagnostique finale ← *Réseaux de Neurones Graphiques appliqués ici*
+The standard radiological approach for mammography analysis involves:
+1. **Individual view analysis** for each mammographic projection
+2. **Cross-view correlation** to identify corresponding lesions
+3. **Multi-view fusion** for final diagnostic decision ← *Graph Neural Networks applied here*
 
 <div align="center">
   <img src="https://raw.githubusercontent.com/ibouftini/ALR-portfolio/main/images/AGN.png" alt="AGN Architecture" width="70%">
-  <p><em>Architecture générale AGN avec BGN et IGN</em></p>
+  <p><em>AGN overall architecture with BGN and IGN components</em></p>
 </div>
 
 ### Anatomy-aware Graph Neural Network (AGN)
 
-Notre implémentation s'appuie sur l'architecture AGN qui fonctionne en imitant la capacité de raisonnement naturel que les radiologues appliquent lors du diagnostic:
+The Anatomy-aware Graph Neural Network (AGN) works by mimicking the natural reasoning ability that radiologists apply during diagnosis. AGN replicates the clinical process in which radiologists analyze numerous mammographic images to cross-validate results.
 
-**Composants clés:**
-- **Bipartite Graph Network (BGN)**: Modélise les correspondances entre vues ipsilatérales (CC et MLO du même sein)
-- **Inception Graph Network (IGN)**: Exploite la symétrie bilatérale entre les seins gauche et droit
-- **Pseudo-landmarks**: Points de référence anatomiquement cohérents (mamelon, muscle pectoral, contour mammaire)
-- **Fusion par attention**: Mécanisme résiduel pour préserver et augmenter les caractéristiques
+**Key Components:**
+- **Bipartite Graph Network (BGN)**: Models ipsilateral correspondences between CC and MLO views of the same breast
+- **Inception Graph Network (IGN)**: Exploits bilateral symmetry between left and right breasts  
+- **Pseudo-landmarks**: Anatomically consistent reference points (nipple, pectoral muscle, breast contour)
+- **Attention-based Fusion**: Residual mechanism to preserve and enhance features
 
 <div align="center">
   <img src="https://raw.githubusercontent.com/ibouftini/ALR-portfolio/main/images/maskrcnn_adaptation.png" alt="MaskRCNN Adaptation" width="75%">
-  <p><em>Adaptation MaskRCNN pour l'analyse multi-vue du cancer du sein</em></p>
+  <p><em>MaskRCNN adaptation for Multi-view breast cancer detection</em></p>
 </div>
 
-### Preprocessing Pipeline et Extraction d'Éléments Structurels
+### Data Preprocessing and Structural Element Extraction
 
-#### Nettoyage des Données CBIS-DDSM
-Le dataset CBIS-DDSM présente plusieurs défis nécessitant un preprocessing approfondi:
-- **Images miroir**: 26.7% du dataset nécessitait une correction d'orientation
-- **Artefacts et bordures**: Suppression par seuillage adaptatif et cropping basé coordonnées
-- **Fichiers corrompus**: Détection et correction des ROI remplacés par des masques binaires
-- **Incohérences de résolution**: Normalisation des dimensions entre images et masques
+#### CBIS-DDSM Data Cleaning
+Processing the CBIS-DDSM dataset presents several challenges:
+- **Mirrored images**: Some images in the dataset are mirrored, where the breast positioning in the right image is done in the left orientation, and vice versa. Image sets requiring orientation correction represented 26.7% of the dataset.
+- **Artifacts removal**: Non-anatomical information is introduced during digitalization. The implemented methodology employs adaptive thresholding followed by coordinate-based cropping.
+- **Corrupted files**: Some ROI files within the dataset were mistakenly replaced with their corresponding binary masks.
+- **Resolution discrepancies**: Some masks in the dataset had a different resolution than the original image.
 
-#### Extraction de Landmarks Anatomiques
-**Détection du contour mammaire**: Seuillage OTSU avec offset ajusté $t_{adjusted} = t^* - \alpha$ et lissage B-spline
+#### Structural Elements Calculation
+**Breast Contour Detection**: We employ Otsu's thresholding method with adjusted threshold $t_{adjusted} = t^* - \alpha$ and B-spline smoothing.
 
-**Détection du muscle pectoral**: 
-- Vues CC: Ligne verticale approximative à l'étendue médiale
-- Vues MLO: Approche multi-étapes avec CLAHE, seuillage combiné, détection de contours Canny, et transformée de Hough probabiliste
+**Pectoral Muscle Detection**: 
+- CC views: Approximate the pectoral boundary as a vertical line at the medial extent of the breast
+- MLO views: Multi-stage approach with CLAHE enhancement, combined thresholding, Canny edge detection, and Probabilistic Hough Transform
 
-**Détection du mamelon**:
-- Vues CC: Point le plus latéral du contour mammaire
-- Vues MLO: Analyse de courbure avec $\kappa(u) = \frac{x'(u)y''(u) - y'(u)x''(u)}{(x'(u)^2 + y'(u)^2)^{3/2}}$
+**Nipple Detection**:
+- CC views: Located at the lateralmost point of the breast contour
+- MLO views: Curvature analysis with $\kappa(u) = \frac{x'(u)y''(u) - y'(u)x''(u)}{(x'(u)^2 + y'(u)^2)^{3/2}}$
 
 <div align="center">
   <img src="https://raw.githubusercontent.com/ibouftini/ALR-portfolio/main/images/pseudo.png" alt="Pseudo-landmarks" width="40%">
-  <p><em>Génération de pseudo-landmarks: (a) Vue CC, (b) Vue MLO</em></p>
+  <p><em>Pseudo-landmark generation: (a) CC view, (b) MLO view</em></p>
 </div>
 
-### Implémentation Technique Détaillée
+### Technical Implementation Details
 
-#### Architecture MaskRCNN Baseline
-- **Backbone**: ResNet-50 + Feature Pyramid Network (FPN) pour extraction multi-échelle
-- **RPN**: Anchors optimisés par K-means - 5 tailles [4,7,8,10,12] et 3 ratios [1.5,2.5,3.6]
-- **ROI Align**: Configuration 7×7 pour détection, 14×14 pour segmentation
-- **Têtes de détection/masque**: Classification binaire (masse/arrière-plan) + régression de boîtes
+#### MaskRCNN Baseline Architecture
+- **Backbone**: ResNet-50 with Feature Pyramid Networks (FPN) for multi-scale feature extraction
+- **RPN**: K-means optimized anchors - 5 sizes [4,7,8,10,12] and 3 aspect ratios [1.5,2.5,3.6]
+- **ROI Align**: 7×7 configuration for detection, 14×14 for segmentation  
+- **Detection/Mask Heads**: Binary classification (mass/background) + bounding box regression
 
 <div align="center">
   <img src="https://raw.githubusercontent.com/ibouftini/ALR-portfolio/main/images/maskrcnn_architecture.png" alt="MaskRCNN Architecture" width="80%">
-  <p><em>Architecture MaskRCNN complète avec backbone ResNet-50+FPN</em></p>
+  <p><em>Mask R-CNN architecture overview with ResNet-50+FPN backbone</em></p>
 </div>
 
-#### Stratégie d'Entraînement en 3 Étapes
-Pour résoudre les problèmes de surajustement avec données limitées:
-1. **Étape 1**: Backbone gelé, entraînement têtes de détection uniquement (époques 0-20)
-2. **Étape 2**: Dégel partiel couches backbone de haut niveau (époques 20-40)
-3. **Étape 3**: Fine-tuning end-to-end avec régularisation renforcée (époques 40-60)
+#### 3-Stage Training Strategy
+To solve overfitting issues with limited data:
+1. **Stage 1**: Frozen backbone, training detection heads only (epochs 0-20)
+2. **Stage 2**: Partially unfreeze high-level backbone layers (epochs 20-40)
+3. **Stage 3**: End-to-end fine-tuning with enhanced regularization (epochs 40-60)
 
-#### Optimisations GPU et Augmentation
-- **Augmentation probabiliste en ligne**: Albumentation avec flip horizontal, rotation, affine, distorsion élastique
-- **Precision mixte**: Entraînement FP16 pour optimisation mémoire
-- **Configuration SGD**: LR=0.002, momentum=0.9, decay=0.0001, scheduler step=15
+#### Data Augmentation and GPU Optimizations
+- **Probabilistic online augmentation**: Albumentations with horizontal flip, rotation, affine, elastic deformation
+- **Mixed precision**: FP16 training for memory optimization
+- **SGD Configuration**: LR=0.002, momentum=0.9, decay=0.0001, scheduler step=15
 
 ---
 
-## 🛠️ Configuration Expérimentale
+## 🛠️ Implementation & Experimental Setup
 
-### Configuration Dataset CBIS-DDSM
+### CBIS-DDSM Dataset Configuration
 
-#### Données d'Entraînement
-- **Dataset principal**: CBIS-DDSM avec 1,566 patients et 3,069 images mammographiques
-- **Groupes tri-vues**: 111 groupes (87 entraînement, 24 test) après filtrage patients ≥3 mammographies
-- **Vues**: Crânio-caudale (CC) et médio-latérale oblique (MLO)
-- **Résolution**: 4084×3328 pixels, résolution 42.5-200 μm
-- **Défi statistique**: Dataset déséquilibré masses, absence d'images entièrement saines
+#### Training Data
+- **Primary dataset**: CBIS-DDSM with 1,566 patients and 3,069 mammographic images
+- **Multi-view groups**: 111 groups (87 training, 24 test) after filtering patients with ≥3 mammograms
+- **Views**: Craniocaudal (CC) and mediolateral oblique (MLO)
+- **Resolution**: 4084×3328 pixels, resolution 42.5-200 μm
+- **Statistical challenges**: Dataset completely imbalanced across masses, missing entirely healthy images
 
-#### Algorithme de Groupement Multi-vue
-Stratégie de groupement en trois catégories: examinée, controlatérale, et auxiliaire
+#### Multi-View Grouping Algorithm
+Grouping strategy that splits mammography into three categories: examined, contralateral, and auxiliary:
 ```python
-# Algorithme de groupement tri-vue
+# Multi-View Grouping Algorithm
 for each patient p in P:
     if |P[p]| < 3: continue
     for each image i in P[p]:
@@ -155,148 +155,137 @@ for each patient p in P:
         if C and A: create_triad(i, c, a)
 ```
 
-### Infrastructure Technique
+### Technical Infrastructure
 
-#### Configuration Matérielle
-- **GPU**: NVIDIA A100 40GB pour entraînement AGRCNN
-- **Optimisations**: Précision mixte automatique, gradient clipping
-- **Temps d'inférence**: MaskRCNN 79ms vs AGRCNN 432ms (5.5× plus lent)
+#### Hardware Configuration
+- **GPU**: NVIDIA A100 40GB for AGRCNN training
+- **Optimizations**: Automatic mixed precision, gradient clipping
+- **Inference Time**: MaskRCNN 79ms vs AGRCNN 432ms (5.5× slower)
 
-#### Stack Logiciel
-- **Framework**: PyTorch avec poids pré-entraînés ImageNet
-- **Preprocessing**: Modification architecture pour images niveaux de gris
-- **Évaluation**: Seuil IoU réduit à 0.2 pour cohérence avec études comparatives
+#### Software Stack
+- **Framework**: PyTorch with ImageNet pretrained weights
+- **Preprocessing**: Architecture modification for grayscale images
+- **Evaluation**: IoU threshold reduced to 0.2 for consistency with comparative studies
 
 ---
 
 ## 📊 Results
 
-### Comparaison Performance FROC
+### FROC Performance Comparison
 
-| Modèle | R@0.5FPI | R@1.0FPI | R@2.0FPI | R@3.0FPI | R@4.0FPI | Dataset |
-|--------|----------|----------|----------|----------|----------|----------|
+| Model | R@0.5FPI | R@1.0FPI | R@2.0FPI | R@3.0FPI | R@4.0FPI | Dataset |
+|-------|----------|----------|----------|----------|----------|----------|
 | **ALR MaskRCNN+FPN** | 76.0% | 82.5% | 88.7% | 90.8% | 91.4% | DDSM (2,620 img) |
-| **Notre MaskRCNN+FPN** | 68.9% | 79.8% | 86.3% | 90.2% | 91.3% | CBIS-DDSM (1,560 img) |
-| **Notre AGRCNN** | **78.4%** | **85.5%** | **90.1%** | **91.6%** | **92.5%** | CBIS-DDSM |
+| **Our MaskRCNN+FPN** | 68.9% | 79.8% | 86.3% | 90.2% | 91.3% | CBIS-DDSM (1,560 img) |
+| **Our AGRCNN** | **78.4%** | **85.5%** | **90.1%** | **91.6%** | **92.5%** | CBIS-DDSM |
 
 <div align="center">
   <img src="https://raw.githubusercontent.com/ibouftini/ALR-portfolio/main/images/agn_froc.png" alt="FROC Comparison" width="60%">
-  <p><em>Analyse FROC comparative: MaskRCNN, YOLO, DETR et AGRCNN sur CBIS-DDSM</em></p>
+  <p><em>Comparative FROC analysis: MaskRCNN, YOLO, DETR and AGRCNN on CBIS-DDSM test set</em></p>
 </div>
 
-### Améliorations de Performance Clés
+### Key Performance Improvements
 
-**Métriques principales:**
-- **+9.5% d'amélioration** Recall@0.5FPI par rapport au baseline MaskRCNN
-- **Performance supérieure** malgré 40% de données en moins vs dataset DDSM original
-- **Amélioration cohérente** sur tous les seuils FPI, particulièrement significative aux faibles FPI
+**Primary Metrics:**
+- **+9.5% improvement** in Recall@0.5FPI compared to baseline MaskRCNN
+- **Superior performance** despite 40% less data vs original DDSM dataset
+- **Consistent improvement** across all FPI thresholds, particularly significant at low FPI
 
-### Études d'Ablation Complètes
+### Comprehensive Ablation Studies
 
-**Analyse par composants:**
+**Component-wise Performance Analysis:**
 
-| Méthode | R@0.5FPI | R@1.0FPI | R@2.0FPI | Notes |
-|---------|----------|----------|----------|-------|
-| **MaskRCNN (Baseline)** | 68.9% | 79.8% | 86.3% | Détection mono-vue |
-| **+ BGN uniquement** | 72.1% | 81.5% | 87.8% | Correspondances ipsilatérales |
-| **+ IGN uniquement** | 71.3% | 82.2% | 88.1% | Symétrie bilatérale |
-| **+ AGN (fusion originale)** | 54.2% | 63.1% | 68.9% | Mécanisme d'attention destructif |
-| **+ AGN (nos modifications)** | **78.4%** | **85.5%** | **90.1%** | **Connexions résiduelles** |
+| Method | R@0.5FPI | R@1.0FPI | R@2.0FPI | Notes |
+|--------|----------|----------|----------|-------|
+| **MaskRCNN (Baseline)** | 68.9% | 79.8% | 86.3% | Single-view detection |
+| **+ BGN only** | 72.1% | 81.5% | 87.8% | Ipsilateral correspondences |
+| **+ IGN only** | 71.3% | 82.2% | 88.1% | Bilateral symmetry |
+| **+ AGN (Original fusion)** | 54.2% | 63.1% | 68.9% | Destructive attention mechanism |
+| **+ AGN (Our modifications)** | **78.4%** | **85.5%** | **90.1%** | **Residual connections** |
 
-**Optimisation densité pseudo-landmarks:**
-- **PL(13, 17)**: 76.8% recall@0.5FPI (configuration sparse)
-- **PL(22, 26)**: **78.4%** recall@0.5FPI (densité optimale) ⭐
-- **PL(100, 105)**: 77.2% recall@0.5FPI (sur-paramétrisation)
+**Pseudo-Landmark Density Optimization:**
+- **PL(13, 17)**: 76.8% recall@0.5FPI (Sparse configuration)
+- **PL(22, 26)**: **78.4%** recall@0.5FPI (Optimal density) ⭐
+- **PL(100, 105)**: 77.2% recall@0.5FPI (Over-parameterized)
 
-**Stratégie mapping kNN:**
-- **k=1 (Voronoi)**: 75.2% (voisin le plus proche uniquement)
-- **k=3**: **78.4%** (contexte optimal) ⭐  
-- **k=5**: 77.8% (sur-lissage des caractéristiques)
+**Graph Node Mapping Strategy:**
+- **k=1 (Voronoi)**: 75.2% (Nearest neighbor only)
+- **k=3**: **78.4%** (Optimal context) ⭐  
+- **k=5**: 77.8% (Over-smoothed features)
 
-### Training Evolution
-
-<div align="center">
-  <p><em>[Training curves showing loss evolution and metric improvements across epochs]</em></p>
-</div>
-
-### Qualitative Results
-
-<div align="center">
-  <p><em>[Sample detection results showing single-view vs multi-view predictions with confidence scores]</em></p>
-</div>
 
 ---
 
 ## 💬 Discussion
 
-### Contributions Techniques Majeures
+### Major Technical Contributions
 
-#### Solution Inspirée de ResNet
-**Problème identifié**: Le mécanisme d'attention AGN original était destructif, éliminant complètement les caractéristiques apprises du MaskRCNN avec $F_{enhanced} = \sigma(F_I \mathbf{w}_I) \odot F_e$ où les valeurs d'attention approchaient systématiquement zéro.
+#### ResNet-Inspired Feature Preservation Solution
+**Problem identified**: The original AGN attention mechanism was destructive, permanently eliminating carefully learned MaskRCNN features with $F_{enhanced} = \sigma(F_I \mathbf{w}_I) \odot F_e$ where attention values systematically approached zero.
 
-**Notre solution résiduelle**:
+**Our residual solution**:
 ```python
-# Attention résiduelle avec préservation des caractéristiques
+# Residual attention mechanism with feature preservation
 ign_spatial_features = examined_features * (2.0 * ign_attention_map)
 ign_spatial_features = ign_spatial_features + 0.2 * examined_features
 ```
-Transformation de la plage d'attention de [0,1] à [0.2,2.2] permettant suppression (attention < 0.5) ET augmentation (attention > 0.5).
+This transforms the effective attention range from [0,1] to [0.2,2.2], enabling both feature suppression (when attention < 0.5) and enhancement (when attention > 0.5).
 
 <div align="center">
   <img src="https://raw.githubusercontent.com/ibouftini/ALR-portfolio/main/images/agn_results_2.png" alt="AGN Results" width="75%">
-  <p><em>Résultats AGN après modifications: réduction arrière-plan/contour, amélioration région masse</em></p>
+  <p><em>AGN Features after model adjustments: background/contour reduction, mass region enhancement</em></p>
 </div>
 
-#### Entraînement Progressif en 2 Étapes
-1. **Étape 1**: Pré-entraînement MaskRCNN sur données mammographiques complètes
-2. **Étape 2**: Intégration AGN avec poids MaskRCNN gelés pour apprentissage relations graphiques
+#### Progressive 2-Stage Training
+1. **Stage 1**: Pre-training MaskRCNN on complete mammographic data
+2. **Stage 2**: AGN integration with frozen MaskRCNN weights for learning graph relationships
 
-### Signification Clinique
+### Clinical Significance
 
-- **Amélioration sensibilité**: Détection supérieure de lésions subtiles manquées par analyse mono-vue
-- **Réduction faux positifs**: Prédictions robustes via consensus multi-vue  
-- **Workflow inspiré radiologue**: Émulation des patterns diagnostiques d'experts
+- **Improved Sensitivity**: Better detection of subtle lesions missed by single-view analysis
+- **Reduced False Positives**: More robust predictions through multi-view consensus
+- **Radiologist-inspired Workflow**: Mimics natural diagnostic patterns of expert radiologists
 
-### Défis et Limitations
+### Challenges and Limitations
 
-**Contrainte données limitées**: Seulement 111 groupes tri-vues disponibles
-**Solution**: Stratégie d'entraînement progressive + connexions résiduelles
+**Limited Data Constraints**: Only 111 tri-view groups available
+**Solution**: Progressive training strategy + residual connections
 
-**Complexité computationnelle**: Surcoût 5.5× en temps d'inférence (432ms vs 79ms)
-**Impact**: Acceptable pour pipelines de dépistage clinique où précision > vitesse
+**Computational Complexity**: 5.5× inference time overhead (432ms vs 79ms)
+**Impact**: Acceptable for clinical screening pipelines where accuracy > speed
 
-**Correspondances inter-vues**: Défi d'alignement lésions entre projections différentes
-**Approche**: Pseudo-landmarks anatomiques + apprentissage correspondances par attention
+**Cross-view Correspondence**: Challenge of accurately matching lesions across different projections
+**Approach**: Anatomical pseudo-landmarks + learned correspondence through attention
 
-### Directions de Recherche Future
+### Future Research Directions
 
-**Extensions immédiates**:
-- **Module de classification**: Différenciation maligne/bénigne des masses détectées
-- **Optimisation temps d'inférence**: Réduction surcoût computationnel preprocessing
-- **Datasets plus larges**: Extension validation sur OPTIMAM, EMBED
+**Immediate Extensions**:
+- **Classification module**: Our implementation only functions by detecting masses and cannot differentiate between malignant and benign lesions
+- **Inference time optimization**: Reduction of computational preprocessing overhead
+- **Larger datasets**: Extension validation on OPTIMAM, EMBED
 
-**Perspectives ambitieuses**: 
-**Limitation fondamentale 2D**: Toutes les techniques multi-vue 2D tentent d'inférer relations 3D depuis projections 2D, où la superposition tissulaire masque la distribution réelle des lésions.
+**Ambitious Perspectives**: 
+The fundamental flaw in all 2D multi-view techniques is that they try to infer 3D relationships from 2D projections, where tissue superposition obscures the actual distribution of lesions. Even the most advanced techniques cannot differentiate between actual masses and the normal tissue that covers them.
 
-**Vision 3D future**: 
-- **Tomosynthèse mammaire digitale**: Exploitation information 3D native
-- **Reconstruction volumétrique**: Algorithmes synthétisant descriptions 3D depuis projections mammographiques conventionnelles
-- **Résolution ambiguïtés spatiales**: Différenciation masses réelles vs tissus normaux superposés
+**3D Vision Future**: 
+- **Digital Breast Tomosynthesis**: Exploitation of native 3D information
+- **Volumetric reconstruction**: Algorithms synthesizing 3D descriptions from conventional mammographic projections
+- **Spatial ambiguity resolution**: Differentiation of actual masses vs overlapping normal tissues
 
-Cette limitation pointe vers une direction future plus ambitieuse: développer de véritables capacités d'analyse 3D pour résoudre la superposition tissulaire et permettre une détection confiante.
+This limitation points toward a more ambitious future direction: developing true 3D analysis capabilities to resolve tissue superposition and allow for confident detection.
 
 ---
 
 ## 🔗 References
 
-[1] [Author et al. "Act Like a Radiologist: Towards Reliable Multi-view Correspondence Reasoning for Mammogram Mass Detection"](https://arxiv.org/placeholder)
+[1] Liu, Y., et al. (2020). "Act Like a Radiologist: Towards Reliable Multi-view Correspondence Reasoning for Mammogram Mass Detection". In MICCAI 2020.
 
-[2] [Shen, L., et al. (2019). "Deep Learning to Improve Breast Cancer Detection on Screening Mammography"](https://www.nature.com/articles/s41598-019-48995-4)
+[2] He, K., et al. (2017). "Mask R-CNN". In Proceedings of the IEEE international conference on computer vision.
 
-[3] [Kipf, T. N., & Welling, M. (2016). "Semi-Supervised Classification with Graph Convolutional Networks"](https://arxiv.org/abs/1609.02907)
+[3] Lin, T. Y., et al. (2017). "Feature pyramid networks for object detection". In Proceedings of the IEEE conference on computer vision and pattern recognition.
 
-[4] [Veličković, P., et al. (2017). "Graph Attention Networks"](https://arxiv.org/abs/1710.10903)
+[4] Kipf, T. N., & Welling, M. (2016). "Semi-Supervised Classification with Graph Convolutional Networks". arXiv preprint arXiv:1609.02907.
 
-[5] [He, K., et al. (2017). "Mask R-CNN"](https://arxiv.org/abs/1703.06870)
+[5] Veličković, P., et al. (2017). "Graph Attention Networks". arXiv preprint arXiv:1710.10903.
 
 ---
