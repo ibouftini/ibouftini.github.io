@@ -16,7 +16,7 @@ In this section, we will introduce a brief description of the core challenges in
 
 Breast cancer is one of the most common oncological diseases in the world with **2.3 million new cases identified each year**. It arises either from hereditary genetic factors or lifestyle practices. Anatomically, breast cancer is caused by the uncontrolled multiplication of breast cells. Depending on the biological behavior of these cells, there are two forms of tumor: benign and malignant (Figure 1). Benign tumors are formed by cells that partially retain their morphology and function, although they continue to multiply. Malignant tumors, also called cancers, on the other hand, are characterized by a morphology and function that are different from those associated with healthy tissues. During their reproduction, they form extensions that infiltrate adjacent tissues, enveloping normal cells and destroying them, a phenomenon known as neoplastic invasiveness.
 
-![Examples of benign and malignant masses](/images/breast-cancer-diagnosis/mass.png)
+<img src="/images/breast-cancer-diagnosis/mass.png" alt="Examples of benign and malignant masses" width="600" style="display: block; margin: 0 auto;"/>
 *Figure 1: Examples of benign and malignant masses. Reproduced from Alghaib et al.*
 
 Early diagnosis on screening programs is the most effective tool for reducing mortality associated with neoplasms. Cancer screening involves conducting surveillance tests on a person who is supposedly healthy, with the aim of detecting abnormalities that could be warning signs of cancer, well before the first symptoms appear. This approach has proven highly effective in that it significantly reduces the mortality rate from breast cancer by improving the chances of recovery. Indeed, if detected early, breast cancer can be cured in nine out of ten cases, contributing to a 15 to 21% reduction in the mortality rate from this cancer.
@@ -33,7 +33,7 @@ The gold standard in screening programs is represented by mammography, that is, 
 - **Linear**: Arranged in ductal pattern → potential malignancy
 - **Segmental**: Deposits in duct systems and branches → malignancy
 
-![Distribution of calcifications](/images/breast-cancer-diagnosis/calcifications.png)
+<img src="/images/breast-cancer-diagnosis/calcifications.png" alt="Distribution of calcifications" width="700" style="display: block; margin: 0 auto;"/>
 *Figure 2: Distribution of calcifications. Reproduced from Mračko et al.*
 
 Mammography employs an X-ray beam using an X-ray tube, oriented so as to be tangent to the patient's sternum (see Fig. 3). X-rays are radiations capable of penetrating inside biological tissues and reaching the detector. The quantity of radiation absorbed by the body depends on the type of object being examined and in particular it is greater the denser the body crossed is. Mammographs use two compression plates to distribute breast tissue so as to optimize image quality.
@@ -42,7 +42,10 @@ Mammography employs an X-ray beam using an X-ray tube, oriented so as to be tang
 
 When high-speed electrons strike a metal target, their kinetic energy is transformed into heat (99%), and into X-rays (1%). An X-ray tube consists of three elements: an electron source (cathode), a potential difference, and a metal target for generating X-rays (anode). The assembly is contained within a vacuum chamber and a leaded sheath containing a window that allows the X-ray beam to pass through.
 
-![Mammograph design](/images/breast-cancer-diagnosis/mammo.png) ![X-ray tube design](/images/breast-cancer-diagnosis/mammo2.png)
+<div style="display: flex; justify-content: space-around; align-items: center; margin: 20px 0;">
+  <img src="/images/breast-cancer-diagnosis/mammo2.png" alt="X-ray tube design" width="350" style="margin: 10px;"/>
+  <img src="/images/breast-cancer-diagnosis/mammo.png" alt="Mammograph design" width="350" style="margin: 10px;"/>
+</div>
 *Figure 3: (a) Illustration of X-ray tube design (b) Illustration of mammograph design. Adapted from Radiology Cafe*
 
 The cathode consists of one or two filaments to create an electron source and a concentrating (or focusing) part that accommodates and holds the filament(s) in place. The electron source is obtained by the thermionic effect where the tungsten filament is heated to incandescence and the heat is transmitted to the free electrons in the metal in the form of kinetic energy. Thanks to this energy gain, the electrons are torn from the filament and form an electron cloud around the filament called a space charge. The electrons located around the filament are attracted to the target by a high potential difference (40 to 150 kV).
@@ -71,19 +74,22 @@ Four standardized projections make up the mammography examination protocol: medi
 
 The MLO view highlights a greater region of breast tissue including the superior and lateral regions of the breast as well as the region next to the armpit. It is typically the first view taken during a diagnostic or screening mammography. By observing the pectoral muscle, this technique makes it easier to evaluate the breast position and image clarity. Viewing the breast tissue from superior to inferior is possible with the CC view. It works best for examining the inside of the breast and enhances the image produced by the MLO view. It provides the chance to examine the breasts features and verify that there is no distortion.
 
-![Relations between CC and MLO views](/images/breast-cancer-diagnosis/ccmlo.png)
+<img src="/images/breast-cancer-diagnosis/ccmlo.png" alt="Relations between CC and MLO views" width="500" style="display: block; margin: 0 auto;"/>
 *Figure 4: Relations between CC and MLO views. Reproduced from Liu et al.*
 
 ## Other imaging tools
 
 Tomosynthesis, also called Digital Breast Tomosynthesis (DBT), is a sophisticated mammography method in which the X-ray tube rotates in an arc across the breast to take several low-dose pictures from different angles usually ±25° (see Fig. 5). Compared to conventional 2D mammography, studies show higher cancer detection rates in DBT thanks to its 3D layered images which reduce tissue overlap.
 
-![Illustration of Tomosynthesis](/images/breast-cancer-diagnosis/tomo.png)
+<img src="/images/breast-cancer-diagnosis/tomo.png" alt="Illustration of Tomosynthesis" width="450" style="display: block; margin: 0 auto;"/>
 *Figure 5: Illustration of Tomosynthesis. Reproduced from Kontos et al.*
 
 Magnetic Resonance Imaging uses radio waves and magnetic fields to create a detailed picture of breast tissue. It uses a large, tube-shaped equipment that produces intense magnetic fields for detection (see Fig. 6). The main drawback is the rise in false-positive rates, which may call for needless follow-up testing and raise patient worry and medical expenses. Hence, MRI is often employed as an additional screening technique for high-risk patients.
 
-![MRI imaging systems and results](/images/breast-cancer-diagnosis/mri.png) ![Breast MRI scan](/images/breast-cancer-diagnosis/mri2.png)
+<div style="display: flex; justify-content: space-around; align-items: center; margin: 20px 0;">
+  <img src="/images/breast-cancer-diagnosis/mri.png" alt="MRI tube design" width="350" style="margin: 10px;"/>
+  <img src="/images/breast-cancer-diagnosis/mri2.png" alt="Breast MRI scan" width="300" style="margin: 10px;"/>
+</div>
 *Figure 6: (a) Illustration of MRI tube design (b) Breast MRI scan. Sources: (a) reproduced from Radiology Cafe, (b) reproduced from Joines et al.*
 
 Despite the enhanced diagnostic capabilities of MRI and tomosynthesis, scalable deployment across healthcare systems is restricted by **high costs and restricted accessibility**. These technologies restrict throughput in high-volume screening settings since they call for specific tools, skilled workers, and lengthy examination periods. Mammography is therefore a commonly used method for diagnosing breast cancer because it balances diagnostic accuracy with operational feasibility.
@@ -102,7 +108,7 @@ Radiologist workload has skyrocketed in recent years; according to one European 
 
 Macroscopically each breast has three main components: the mammary gland, the skin and the nipple-areola complex (see Fig. 7). The gland is surrounded by a dense network of connective tissue including arteries, veins, nerves and lymphatic vessels.
 
-![Breast anatomy illustration](/images/breast-cancer-diagnosis/breast.png)
+<img src="/images/breast-cancer-diagnosis/breast.png" alt="Breast anatomy illustration" width="400" style="display: block; margin: 0 auto;"/>
 *Figure 7: Breast anatomy illustration. Reproduced from Johns Hopkins Pathology*
 
 Similar to cancers, dense breast tissue appears white on mammograms. Because of this, it becomes difficult to distinguish between normal and cancerous tissue in dense breasts using mammography.
@@ -114,7 +120,7 @@ ACR BI-RADS Atlas 2013 standardization framework utilizes categories a-d based o
 - **Category 3:** Heterogeneously dense tissue potentially obscuring small masses
 - **Category 4:** Extremely dense tissue
 
-![ACR standardized breast density](/images/breast-cancer-diagnosis/density.png)
+<img src="/images/breast-cancer-diagnosis/density.png" alt="ACR standardized breast density" width="550" style="display: block; margin: 0 auto;"/>
 *Figure 8: ACR standardized breast density. Reproduced from Mračko et al.*
 
 ## References
