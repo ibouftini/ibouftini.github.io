@@ -33,11 +33,9 @@ First foray into medical imaging • Implementation of "Act Like a Radiologist" 
 
 ## 📖 Introduction
 
-Breast cancer is the most prevalent neoplastic pathology in women, accounting for an estimated 2.3 million new cases in 2022. This report concerns reviewing, implementing, and refining cutting-edge methods for multi-view breast cancer detection using advanced deep learning techniques conducted at the International Artificial Intelligence Center of Morocco (AiMovement).
+Breast  cancer  is the most prevalent  neoplastic  pathology  in  women, accounting for an  estimated 2.3 million new cases in 2022. This report concerns reviewing, implementing, and refining cutting-edge methods for multi-view breast cancer detection using advanced deep learning techniques conducted at the International Artificial Intelligence Center of Morocco (AiMovement).
 
-Our main focus was on the Anatomy-aware Graph Network (AGN) as it emulates radiologists' simultaneous analysis of mediolateral oblique (MLO) and craniocaudal (CC) views. The AGN architecture consists of an Inception Graph Network (IGN) to capture bilateral symmetry and a Bipartite Graph Network (BGN) to model intra-view correspondences.
-
-This paper was chosen in particular thanks to its ability to balance resource requirements and performance as well as the fact that its code is not publicly accessible. This year represents the lab's first foray into medical imaging.
+Our main focus was on the Anatomy-aware Graph Network (AGN) as it emulates radiologists' simultaneous analysis of mediolateral oblique (MLO) and craniocaudal (CC) views. The AGN architecture consists of an Inception Graph Network (IGN) to capture bilateral symmetry and a Bipartite Graph Network (BGN) to model intra-view correspondences. This paper was chosen in particular thanks to its ability to balance resource requirements and performance as well as the fact that its code is not publicly accessible.
 
 ---
 
@@ -45,7 +43,7 @@ This paper was chosen in particular thanks to its ability to balance resource re
 
 1. **Review, implement and refine** cutting-edge methods for single-view and multi-view breast cancer detection
 2. **Develop a robust preprocessing pipeline** for data cleaning and landmark identification
-3. **Implement AGN architecture** with resource-efficient training methods using a two-stage approach (training MaskRCNN first, then incorporating AGN)
+3. **Implement AGN architecture** with resource-efficient training methods using a two-stage approach
 4. **Achieve architectural adaptation** of the AGN that focuses on augmenting or weakening features rather than the original feature removal strategy to handle small-sized datasets
 5. **Establish comparative benchmarks** against established frameworks (MaskRCNN, DETR, YOLO) on CBIS-DDSM dataset
 
@@ -82,27 +80,85 @@ The Anatomy-aware Graph Neural Network (AGN) works by mimicking the natural reas
 
 ### Data Preprocessing and Structural Element Extraction
 
-#### CBIS-DDSM Data Cleaning
-Processing the CBIS-DDSM dataset presents several challenges:
-- **Mirrored images**: Some images in the dataset are mirrored, where the breast positioning in the right image is done in the left orientation, and vice versa. Image sets requiring orientation correction represented 26.7% of the dataset.
-- **Artifacts removal**: Non-anatomical information is introduced during digitalization. The implemented methodology employs adaptive thresholding followed by coordinate-based cropping.
-- **Corrupted files**: Some ROI files within the dataset were mistakenly replaced with their corresponding binary masks.
-- **Resolution discrepancies**: Some masks in the dataset had a different resolution than the original image.
+#### CBIS-DDSM Dataset Challenges and Solutions
+
+The CBIS-DDSM dataset contains images converted to the standard DICOM format with 1,566 patients and 3,069 mammographic images. Processing this dataset presents several challenges requiring comprehensive preprocessing:
+
+**1. Orientation Standardization**: Anatomical orientation standardization is essential for multi-view preprocessing. The mismatch between the view and the orientation may disrupt the correspondence between views. The orientation correction code performs laterality-based flipping based on comparing the mean of first and last columns. Image sets requiring orientation correction represented 26.7% of the dataset.
+
+**2. Artifacts Removal and Cropping**: Non-anatomical information is introduced during digitalization. Border and artifact removal constitutes a critical step. The implemented methodology employs adaptive thresholding followed by coordinate-based cropping.
+
+**3. Corrupted Files Correction**: Some ROI files within the dataset were mistakenly replaced with their corresponding binary masks. Our implementation detects them based on data type and extracts the bounding box covering the largest connected component from the mask to crop the original mammogram.
+
+**4. Resolution Discrepancies**: Some masks in the dataset had a different resolution than the original image, requiring geometric modifications applied consistently across files.
 
 #### Structural Elements Calculation
-**Breast Contour Detection**: We employ Otsu's thresholding method with adjusted threshold $t_{adjusted} = t^* - \alpha$ and B-spline smoothing.
+
+Since the Act Like a Radiologist paper works on graphs, we need to transform images into graph nodes. The paper relied on multiple structural elements of mammograms (nipple, pectoral muscle and breast contour) to form their graph nodes.
+
+**Breast Contour Detection**: We employ Otsu's thresholding method, which iteratively searches for the optimal threshold $t^*$ that maximizes the between-class variance:
+
+$$t^* = \underset{t}{\arg\max}\{\omega_0(t)\omega_1(t)[\mu_0(t) - \mu_1(t)]^2\}$$
+
+To exclude low intensity pixels close to image borders, we introduce a fixed offset: $t_{adjusted} = t^* - \alpha$. The raw contour is subsequently smoothed using B-spline interpolation with adaptive smoothing parameter:
+
+$$s = \begin{cases}
+10^7 & \text{if view = MLO} \\
+100 & \text{if view = CC}
+\end{cases}$$
 
 **Pectoral Muscle Detection**: 
-- CC views: Approximate the pectoral boundary as a vertical line at the medial extent of the breast
-- MLO views: Multi-stage approach with CLAHE enhancement, combined thresholding, Canny edge detection, and Probabilistic Hough Transform
+
+For CC views, the pectoral muscle is typically not visible. We approximate the pectoral boundary as a vertical line at the medial extent:
+$$x_{pectoral} = \begin{cases}
+\min_i x_i & \text{if side = Left} \\
+\max_i x_i & \text{if side = Right}
+\end{cases}$$
+
+For MLO views, we employ a multi-stage approach:
+1. ROI Definition in upper corner: $[0, 0.4w] \times [0, 0.6h]$ for Left side
+2. CLAHE enhancement: $I_{CLAHE} = \text{CLAHE}(I_{ROI}, \text{clipLimit}=3.0)$
+3. Combined thresholding: $T_{Combined} = T_{Otsu} \land T_{Adaptive}$
+4. Canny edge detection: $E = \text{Canny}(T_{Combined}, \text{low}=50, \text{high}=150)$
+5. Probabilistic Hough Transform for line detection
+6. Line scoring based on length, position, and angle
 
 **Nipple Detection**:
-- CC views: Located at the lateralmost point of the breast contour
-- MLO views: Curvature analysis with $\kappa(u) = \frac{x'(u)y''(u) - y'(u)x''(u)}{(x'(u)^2 + y'(u)^2)^{3/2}}$
+
+For CC views, the nipple is located at the lateralmost point:
+$$p_{nipple} = \begin{cases}
+\arg\min_i x_i & \text{if side = Right} \\
+\arg\max_i x_i & \text{if side = Left}
+\end{cases}$$
+
+For MLO views, we employ contour curvature analysis in the lower lateral quadrant, computing:
+$$\kappa(u) = \frac{x'(u)y''(u) - y'(u)x''(u)}{(x'(u)^2 + y'(u)^2)^{3/2}}$$
+
+The optimal nipple location is determined by maximizing: $\text{score}(i) = |\kappa(u_i)|$
+
+#### Graph Construction for Correspondence Analysis
+
+**Pseudo-Landmark Definition**: To enable multi-view correspondence reasoning, we introduce pseudo-landmarks—anatomically consistent reference points within the breast that maintain relative spatial relationships across different views and patients.
+
+**Landmark Generation Algorithm**:
+1. Identify nipple position and pectoral muscle line as primary references
+2. Define parallel lines at equidistant intervals between nipple and pectoral muscle  
+3. Intersect these lines with breast contour
+4. Place landmarks at uniform intervals along each line
+
+**Graph Node Mapping**: Each pseudo-landmark serves as a graph node. We implement a k-Nearest Neighbor (kNN) mapping function:
+
+$$\phi_k(F, V) = (Q_f)^T F$$
+
+where $Q_f = A(\Lambda_f)^{-1}$ with assignment matrix:
+$$A_{ij} = \begin{cases}
+1 & \text{if $j$th node is among $k$ nearest nodes of $i$th pixel} \\
+0 & \text{otherwise}
+\end{cases}$$
 
 <div align="center">
   <img src="https://raw.githubusercontent.com/ibouftini/ALR-portfolio/main/images/pseudo.png" alt="Pseudo-landmarks" width="40%">
-  <p><em>Pseudo-landmark generation: (a) CC view, (b) MLO view</em></p>
+  <p><em>Pseudo-landmark generation: (a) CC view with generated landmarks, (b) MLO view with generated landmarks</em></p>
 </div>
 
 ### Technical Implementation Details
