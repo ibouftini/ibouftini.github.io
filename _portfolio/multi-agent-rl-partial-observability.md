@@ -76,7 +76,7 @@ The core difficulty is that each agent must make decisions based solely on its l
 ### The Core Problem: Random vs. Informed Masking
 
 <div align="center">
-  <img src="img_pfe/mae_original.PNG" alt="MAE Architecture" width="70%">
+  <img src="images/MARL/mae_original.PNG" alt="MAE Architecture" width="70%">
   <p><em>Standard Masked Auto-Encoder architecture - powerful, but uses random masking</em></p>
 </div>
 
@@ -315,7 +315,7 @@ $$P(M_i = 1) \propto \mathbb{I}[\delta_i > \theta_{\text{batch}}]$$
 making masking probability directly proportional to learning difficulty. This aligns the self-supervised objective with the RL objective - a key theoretical advantage.
 
 <div align="center">
-  <img src="images_pfe/results_li-ma2e/compare_scores.jpg" alt="Scoring strategies comparison" width="80%">
+  <img src="images/MARL/compare_scores.jpg" alt="Scoring strategies comparison" width="80%">
   <p><em>Comparison of all tested masking strategies - VDS actually hurt performance, while REFDS and Mean TD-Error Thresholding both worked well</em></p>
 </div>
 
@@ -413,7 +413,7 @@ Tested on scenarios ranging from simple symmetric battles to complex asymmetric 
 #### 3s_vs_5z (Hard Scenario)
 
 <div align="center">
-  <img src="images_pfe/results_li-ma2e/test_battle_won_mean_3s_vs_5z_Mean_TD-Error_Thresholding _smoothed.png" alt="3s_vs_5z results" width="65%">
+  <img src="images/MARL/test_battle_won_mean_3s_vs_5z_Mean_TD-Error_Thresholding_smoothed.png" alt="3s_vs_5z results" width="65%">
   <p><em>Performance on the hardest scenario - this is where the method shines</em></p>
 </div>
 
@@ -428,7 +428,7 @@ This map is brutal - three ranged units against five melee units. One mistake an
 #### 3s_vs_3z (Medium Scenario)
 
 <div align="center">
-  <img src="images_pfe/results_li-ma2e/comparison_plot_3s_vs_3z.png" alt="3s_vs_3z results" width="60%">
+  <img src="images/MARL/comparison_plot_3s_vs_3z.png" alt="3s_vs_3z results" width="60%">
   <p><em>Medium difficulty - clear improvement in learning speed</em></p>
 </div>
 
@@ -439,7 +439,7 @@ This map is brutal - three ranged units against five melee units. One mistake an
 #### 3s_vs_4z (Medium Scenario)
 
 <div align="center">
-  <img src="images_pfe/results_li-ma2e/comparison_plot_3s_vs_4z.png" alt="3s_vs_4z results" width="60%">
+  <img src="images/MARL/comparison_plot_3s_vs_4z.png" alt="3s_vs_4z results" width="60%">
   <p><em>Interesting trade-off - baseline learns faster initially, but we converge more stably</em></p>
 </div>
 
@@ -448,7 +448,7 @@ This one's interesting - the baseline actually learns faster initially, but our 
 #### 8m (Symmetric Scenario)
 
 <div align="center">
-  <img src="images_pfe/results_li-ma2e/comparison_plot_8m.png" alt="8m results" width="60%">
+  <img src="images/MARL/comparison_plot_8m.png" alt="8m results" width="60%">
   <p><em>Large homogeneous teams - baseline has the edge here</em></p>
 </div>
 
