@@ -155,16 +155,7 @@ The pectoral line is then defined as a vertical line at this x-coordinate, exten
 
 ###### MLO View Pectoral Muscle Detection
 
-For MLO views, we employ a multi-stage approach to detect the pectoral muscle boundary:
-
-1.  **Region of Interest (ROI) Definition**: A rectangular region in the upper corner of the image is defined as the search area.
-2.  **Contrast Enhancement**: We apply Contrast Limited Adaptive Histogram Equalization (CLAHE) to enhance the visibility of the pectoral boundary.
-3.  **Thresholding**: Multiple thresholding techniques are applied and combined to robustly segment the pectoral region, where the symbol $\land$ represents the logical AND operation. While Otsu is concerned with the global nature of clipping, Adaptive threshold employs a Gaussian-weighted neighborhood technique in a way that enables more robust detection particularly in dense breast areas where global thresholding techniques are not effective.
-4.  **Edge Detection**: Canny edge detection is applied to the thresholded image.
-5.  **Line Detection**: Probabilistic Hough Transform is employed to detect line segments.
-6.  **Line Filtering**: Lines are filtered based on slope constraints that depend on the breast side. Notice that the reference axis in Python is different from the conventional ones.
-7.  **Optimal Line Selection**: We score each valid line based on length, position, and angle.
-8.  **Line Extension**: The highest-scoring line is extended to span the full image height.
+For MLO views, we employ a multi-stage approach to detect the pectoral muscle boundary. This involves defining a region of interest, enhancing contrast, applying multiple thresholding techniques, and using Canny edge detection and Probabilistic Hough Transform to identify and score line candidates. The best line is then extended to define the muscle boundary.
 
 <div align="center">
   <img src="/images/ALR-portfolio/pectoral.png" alt="Pectoral muscle detection" width="70%">
@@ -228,7 +219,11 @@ $$
 
 **Note 1:** The nipple may be obscured or flattened in MLO projections, particularly in cases with significant breast compression. The curvature-based approach tackles this issue by intrinsically selecting the point with highest curvature which presents a good fallback solution.
 
-**Note 2:** Our initial approach for MLO nipple detection implemented a convex envelope computation to optimize execution time, as the convex hull incorporates significantly fewer vertices than the original contour. The detection criterion was formulated as $\text{score}(i) = \frac{|\kappa(u_i)|}{d_i + \epsilon}$where $d_i$ is the Euclidean distance from the contour point to the nearest vertex. Hence, we seek the closest contour point to the vertex with highest curvature. However, analysis revealed that this approach resembles to CC view processing by selecting outermost contour points—a suboptimal strategy for MLO views where nipple positions do not consistently manifest at extremal positions.
+**Note 2:** Our initial approach for MLO nipple detection implemented a convex envelope computation to optimize execution time, as the convex hull incorporates significantly fewer vertices than the original contour. The detection criterion was formulated as:
+$$
+\text{score}(i) = \frac{\lvert\kappa(u_i)\rvert}{d_i + \epsilon}
+$$
+where $d_i$ is the Euclidean distance from the contour point to the nearest vertex. Hence, we seek the closest contour point to the vertex with highest curvature. However, analysis revealed that this approach resembles to CC view processing by selecting outermost contour points—a suboptimal strategy for MLO views where nipple positions do not consistently manifest at extremal positions.
 
 #### Graph Construction for Correspondence Analysis
 
