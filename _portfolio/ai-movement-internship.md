@@ -264,7 +264,7 @@ To detect the breast contour, we applied OTSU to get the binary mask. The result
 $$t_{adjusted} = t^* - \alpha$$
 
 <div align="center">
-  <img src="/images/ALR-portfolio/pre_otsu.png" alt="Result of OTSU thresholding" width="30%">
+  <img src="{{ '/images/ALR-portfolio/pre_otsu.png' | relative_url }}" alt="Result of OTSU thresholding" width="30%">
   <p><em>Result of OTSU thresholding</em></p>
 </div>
 
