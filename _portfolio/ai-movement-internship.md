@@ -157,75 +157,14 @@ The pectoral line is then defined as a vertical line at this x-coordinate, exten
 
 For MLO views, we employ a multi-stage approach to detect the pectoral muscle boundary:
 
-1. **Region of Interest (ROI) Definition**: A rectangular region in the upper corner of the image is defined as the search area:
-   $$
-   \text{ROI} = \begin{cases}
-       [0, 0.4w] \times [0, 0.6h] & \text{if side = Left} \\
-       [0.6w, w] \times [0, 0.6h] & \text{if side = Right}
-   \end{cases}
-   $$
-
-2. **Contrast Enhancement**: We apply Contrast Limited Adaptive Histogram Equalization (CLAHE) to enhance the visibility of the pectoral boundary:
-   $$
-   I_{CLAHE} = \text{CLAHE}(I_{ROI}, \text{clipLimit}=3.0, \text{tileGridSize}=(8,8))
-   $$
-
-3. **Thresholding**: Multiple thresholding techniques are applied and combined to robustly segment the pectoral region:
-   $$
-   \begin{aligned}
-   T_{Otsu} &= \text{Otsu}(I_{CLAHE}) \\
-   T_{Adaptive} &= \text{AdaptiveThreshold}(I_{CLAHE}, \text{blockSize}=11, C=2) \\
-   T_{Combined} &= T_{Otsu} \land T_{Adaptive}
-   \end{aligned}
-   $$
-
-where the symbol $\land$ represents the logical AND operation.
-
-While Otsu is concerned with the global nature of clipping, Adaptive threshold employs a Gaussian-weighted neighborhood technique in a way that enables more robust detection particularly in dense breast areas where global thresholding techniques are not effective.
-
-4. **Edge Detection**: Canny edge detection is applied to the thresholded image:
-   $$
-   E = \text{Canny}(T_{Combined}, \text{low}=50, \text{high}=150)
-   $$
-
-5. **Line Detection**: Probabilistic Hough Transform is employed to detect line segments:
-   $$
-   \begin{aligned}
-   L &= \text{HoughLinesP}(E, \rho=1, \theta=\pi/180, \text{threshold}=20, \\
-   &\quad \text{minLineLength}=0.5h_{ROI}, \text{maxLineGap}=0.1h_{ROI})
-   \end{aligned}
-   $$
-
-6. **Line Filtering**: Lines are filtered based on slope constraints that depend on the breast side:
-   $$
-   \text{valid}(L_i) = \begin{cases}
-       \text{slope}(L_i) < 0 & \text{if side = Left} \\
-       \text{slope}(L_i) > 0 & \text{if side = Right}
-   \end{cases}
-   $$
-
-Notice that the reference axis in Python is different from the conventional ones.
-
-7. **Optimal Line Selection**: We score each valid line based on length, position, and angle:
-   $$
-   \begin{aligned}
-   \text{score}(L_i) &= \text{length}(L_i) \cdot (w_{pos} \cdot \text{pos\_score}(L_i)
-   \\ &	+ w_{angle} \cdot \text{angle\_score}(L_i)) \\
-   \text{pos\_score}(L_i) &= 1 - \frac{y_{start}(L_i)}{h_{ROI}} \\
-   \text{angle\_score}(L_i) &= 1 - \min\left(\frac{|\theta(L_i) - \theta_{target}|}{45°}, 1\right)
-   \end{aligned}
-   $$ 
-   where $\theta_{target} = 45 \deg$ for Left breasts and $135 \deg$ for Right breasts, $w_{pos} = 0.2$, and $w_{angle} = 0.8$.
-
-8. **Line Extension**: The highest-scoring line is extended to span the full image height:
-   $$
-   \begin{aligned}
-   m &= \frac{y_2 - y_1}{x_2 - x_1} \\
-   b &= y_1 - m \cdot x_1 \\
-   x_{top} &= \frac{0 - b}{m} \\
-   x_{bottom} &= \frac{h - b}{m}
-   \end{aligned}
-   $$
+1.  **Region of Interest (ROI) Definition**: A rectangular region in the upper corner of the image is defined as the search area.
+2.  **Contrast Enhancement**: We apply Contrast Limited Adaptive Histogram Equalization (CLAHE) to enhance the visibility of the pectoral boundary.
+3.  **Thresholding**: Multiple thresholding techniques are applied and combined to robustly segment the pectoral region, where the symbol $\land$ represents the logical AND operation. While Otsu is concerned with the global nature of clipping, Adaptive threshold employs a Gaussian-weighted neighborhood technique in a way that enables more robust detection particularly in dense breast areas where global thresholding techniques are not effective.
+4.  **Edge Detection**: Canny edge detection is applied to the thresholded image.
+5.  **Line Detection**: Probabilistic Hough Transform is employed to detect line segments.
+6.  **Line Filtering**: Lines are filtered based on slope constraints that depend on the breast side. Notice that the reference axis in Python is different from the conventional ones.
+7.  **Optimal Line Selection**: We score each valid line based on length, position, and angle.
+8.  **Line Extension**: The highest-scoring line is extended to span the full image height.
 
 <div align="center">
   <img src="/images/ALR-portfolio/pectoral.png" alt="Pectoral muscle detection" width="70%">
