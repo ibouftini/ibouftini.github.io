@@ -103,7 +103,7 @@ $$A_{ij} = \begin{cases}
 0, & \text{otherwise}
 \end{cases}$$
 
-where $A \in \mathbb{R}^{HW \times |\mathcal{V}|}$ establishes connections between image pixels and their nearest pseudo-landmark nodes, $\Lambda^f \in \mathbb{R}^{|\mathcal{V}| \times |\mathcal{V}|}$ is a diagonal normalization matrix with $\Lambda^f_{jj} = \sum_{i=1}^{HW} A_{ij}$, and $Q^f$ represents the normalized mapping matrix.
+where $A \in \mathbb{R}^{HW \times \lvert\mathcal{V}\rvert}$ establishes connections between image pixels and their nearest pseudo-landmark nodes, $\Lambda^f \in \mathbb{R}^{\lvert\mathcal{V}\rvert \times \lvert\mathcal{V}\rvert}$ is a diagonal normalization matrix with $\Lambda^f_{jj} = \sum_{i=1}^{HW} A_{ij}$, and $Q^f$ represents the normalized mapping matrix.
 
 #### Bipartite Graph Network (BGN): Modeling Ipsilateral Correspondences
 
@@ -165,7 +165,7 @@ $$X_e^I = \phi_k(F_e, \mathcal{V}_e)$$
 $$X_c^I = \phi_k(F_c, \mathcal{V}_c)$$
 $$X^I = [(X_e^I)^T, (X_c^I)^T]^T$$
 
-**Multi-branch Adjacency Construction**: IGN handles geometric distortions through multi-branch adjacency matrices. For $n = |\mathcal{V}_e| = |\mathcal{V}_c|$ nodes, the adjacency matrix is:
+**Multi-branch Adjacency Construction**: IGN handles geometric distortions through multi-branch adjacency matrices. For $n = \lvert\mathcal{V}_e\rvert = \lvert\mathcal{V}_c\rvert$ nodes, the adjacency matrix is:
 
 $$\hat{J} = \begin{pmatrix}
 M & J \\
@@ -194,7 +194,7 @@ The final stage integrates multi-view reasoning capabilities into enhanced spati
 $$\psi_k(Z, \mathcal{V}_e) = Q^r [Z]_e$$
 $$Q^r = (\Lambda^r)^{-1} A$$
 
-where $\Lambda^r \in \mathbb{R}^{HW \times HW}$ is a diagonal matrix with $\Lambda^r_{ii} = \sum_{j=1}^{|\mathcal{V}_e|} A_{ij}$, and $[Z]_e$ selects nodes from the examined view.
+where $\Lambda^r \in \mathbb{R}^{HW \times HW}$ is a diagonal matrix with $\Lambda^r_{ii} = \sum_{j=1}^{\lvert\mathcal{V}_e\rvert} A_{ij}$, and $[Z]_e$ selects nodes from the examined view.
 
 The reverse mapping generates spatial features from both networks:
 
@@ -276,7 +276,7 @@ $$p_{nipple} = \begin{cases}
 For MLO views, we employ contour curvature analysis in the lower lateral quadrant, computing:
 $$\kappa(u) = \frac{x'(u)y''(u) - y'(u)x''(u)}{(x'(u)^2 + y'(u)^2)^{3/2}}$$
 
-The optimal nipple location is determined by maximizing: $\text{score}(i) = |\kappa(u_i)|$
+The optimal nipple location is determined by maximizing: $\text{score}(i) = \lvert\kappa(u_i)\rvert$
 
 #### Graph Construction for Correspondence Analysis
 
