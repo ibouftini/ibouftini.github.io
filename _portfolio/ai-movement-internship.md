@@ -69,11 +69,11 @@ The MaskRCNN architecture is thoroughly explained in [our previous blog post](li
 
 The Anatomy-aware Graph Neural Network (AGN) works by mimicking the natural reasoning ability that radiologists apply during diagnosis. AGN replicates the clinical process in which radiologists analyze numerous mammographic images to cross-validate results in contrast to traditional single-view detection.
 
-As illustrated in Figure below, AGN applies this reasoning through a dual-graph architecture that processes ipsilateral and bilateral view relationships simultaneously.
+As illustrated in the figure below, AGN applies this reasoning through a dual-graph architecture that processes ipsilateral and bilateral view relationships simultaneously.
 
 <div align="center">
   <img src="/images/ALR-portfolio/AGN.png" alt="AGN Architecture" width="70%">
-  <p><em>AGN overall architecture. The overall architecture is formulated as a function f parameterized by two specialized graphs</em></p>
+  <p><em>AGN overall architecture.</em></p>
 </div>
 
 The overall architecture is formulated as a function $f$ parameterized by two specialized graphs:
@@ -104,6 +104,7 @@ $$A_{ij} = \begin{cases}
 \end{cases}$$
 
 where $A \in \mathbb{R}^{HW \times \lvert\mathcal{V}\rvert}$ establishes connections between image pixels and their nearest pseudo-landmark nodes, $\Lambda^f \in \mathbb{R}^{\lvert\mathcal{V}\rvert \times \lvert\mathcal{V}\rvert}$ is a diagonal normalization matrix with $\Lambda^f_{jj} = \sum_{i=1}^{HW} A_{ij}$, and $Q^f$ represents the normalized mapping matrix.
+
 
 #### Bipartite Graph Network (BGN): Modeling Ipsilateral Correspondences
 
@@ -234,69 +235,349 @@ The CBIS-DDSM dataset contains images converted to the standard DICOM format wit
 
 **4. Resolution Discrepancies**: Some masks in the dataset had a different resolution than the original image, requiring geometric modifications applied consistently across files.
 
-#### Structural Elements Calculation
+#### Structural elements calculation
 
-Since the Act Like a Radiologist paper works on graphs, we need to transform images into graph nodes. The paper relied on multiple structural elements of mammograms (nipple, pectoral muscle and breast contour) to form their graph nodes.
+Since in the Act Like a Radiologist paper works on graphs, we will need to transform images into graph nodes. The paper relied on multiple structural elements of mammograms (nipple, pectoral muscle and breast contour) to form their graph nodes. In this section we will detail how each structural element was calculated.
 
-**Breast Contour Detection**: We employ Otsu's thresholding method, which iteratively searches for the optimal threshold $t^*$ that maximizes the between-class variance:
+##### Basic operations
+
+###### Image Acquisition and Normalization
+
+The preprocessing pipeline begins with the acquisition of mammographic images, which may be in DICOM or standard image formats (png, jpeg, tiff, etc).
+
+Following acquisition, intensity normalization is applied to standardize the dynamic range:
+
+$$I_{norm}(x,y) = \frac{I(x,y) - \min(I)}{\max(I) - \min(I)}$$
+
+###### Breast Segmentation
+
+The segmentation of the breast region was applied multiple times in the preprocessing phase. We employ Otsu's thresholding method, which iteratively searches for the optimal threshold $t^*$ that maximizes the between-class variance:
 
 $$t^* = \underset{t}{\arg\max}\{\omega_0(t)\omega_1(t)[\mu_0(t) - \mu_1(t)]^2\}$$
 
-To exclude low intensity pixels close to image borders, we introduce a fixed offset: $t_{adjusted} = t^* - \alpha$. The raw contour is subsequently smoothed using B-spline interpolation with adaptive smoothing parameter:
+where $\omega_0(t)$ and $\omega_1(t)$ represent the probabilities of the two classes separated by threshold $t$, and $\mu_0(t)$ and $\mu_1(t)$ are the respective mean intensity values.
 
-$$s = \begin{cases}
-10^7 & \text{if view = MLO} \\
-100 & \text{if view = CC}
-\end{cases}$$
+##### Contour Extraction and Smoothing
 
-**Pectoral Muscle Detection**: 
+To detect the breast contour, we applied OTSU to get the binary mask. The results seemed to exclude the low intensity pixels close the the borders of the image. To tackle this issue, we introduce a fixed offset $\alpha$ :
 
-For CC views, the pectoral muscle is typically not visible. We approximate the pectoral boundary as a vertical line at the medial extent:
-$$x_{pectoral} = \begin{cases}
-\min_i x_i & \text{if side = Left} \\
-\max_i x_i & \text{if side = Right}
-\end{cases}$$
+$$t_{adjusted} = t^* - \alpha$$
 
-For MLO views, we employ a multi-stage approach:
-1. ROI Definition in upper corner: $[0, 0.4w] \times [0, 0.6h]$ for Left side
-2. CLAHE enhancement: $I_{CLAHE} = \text{CLAHE}(I_{ROI}, \text{clipLimit}=3.0)$
-3. Combined thresholding: $T_{Combined} = T_{Otsu} \land T_{Adaptive}$
-4. Canny edge detection: $E = \text{Canny}(T_{Combined}, \text{low}=50, \text{high}=150)$
-5. Probabilistic Hough Transform for line detection
-6. Line scoring based on length, position, and angle
+<div align="center">
+  <img src="/images/ALR-portfolio/pre_otsu.png" alt="Result of OTSU thresholding" width="30%">
+  <p><em>Result of OTSU thresholding</em></p>
+</div>
 
-**Nipple Detection**:
+From the binary mask, we extract the breast contour using a boundary tracing algorithm. The raw contour, denoted as $C = \{(x_i, y_i)\}_{i=1}^n$, is subsequently smoothed using B-spline interpolation to enhance contour regularity.
 
-For CC views, the nipple is located at the lateralmost point:
-$$p_{nipple} = \begin{cases}
-\arg\min_i x_i & \text{if side = Right} \\
-\arg\max_i x_i & \text{if side = Left}
-\end{cases}$$
+The smoothing process employs parametric spline representation:
 
-For MLO views, we employ contour curvature analysis in the lower lateral quadrant, computing:
-$$\kappa(u) = \frac{x'(u)y''(u) - y'(u)x''(u)}{(x'(u)^2 + y'(u)^2)^{3/2}}$$
+$$
+\begin{aligned}
+S(u) &= (x(u), y(u)) \\
+&= \sum_{i=0}^{n-1} P_i B_i(u)
+\end{aligned}
+$$
 
-The optimal nipple location is determined by maximizing: $\text{score}(i) = \lvert\kappa(u_i)\rvert$
+where $P_i$ are control points derived from the raw contour, $B_i(u)$ are B-spline basis functions, and $u \in [0,1]$ is a parameterization of the contour. The smoothing parameter $s$ controls the trade-off between fidelity to the original contour and smoothness:
+
+$$
+\min_S \left\{ \sum_{i=1}^n |C_i - S(u_i)|^2 + s \int_0^1 |S''(u)|^2 du \right\}
+$$
+
+We adaptively set $s$ based on the view type, with larger values for MLO views to ensure the efficiency of candidate selection (discussed after):
+
+$$
+s = \begin{cases}
+    10^7 & \text{if view = MLO} \\
+    100 & \text{if view = CC}
+\end{cases}
+$$
+
+<div align="center">
+  <img src="/images/ALR-portfolio/pre_contour.png" alt="Contour extraction and smoothing" width="30%">
+  <p><em>Contour extraction and smoothing: (a) Raw extracted contour, (b) Smoothed contour with B-spline interpolation</em></p>
+</div>
+
+**Note 1:**  We incorporate a padding prior to contour extraction procedures. This step ensures the connectedness of the contour. Otherwise, the contour will be just an open curved line.
+
+**Note 2:**  If multiple contours are detected, we keep the one with maximum inner surface.
+
+##### Pectoral Muscle Detection
+
+The pectoral muscle boundary represents another critical anatomical landmark, particularly in MLO views where it appears as a high-intensity triangular region in the upper portion of the image.
+
+###### CC View Pectoral Line Approximation
+
+For CC views, the pectoral muscle is typically not visible. We approximate the pectoral boundary as a vertical line at the medial extent of the breast:
+
+$$
+x_{pectoral} = \begin{cases}
+    \min_i x_i & \text{if side = Left} \\
+    \max_i x_i & \text{if side = Right}
+\end{cases}
+$$
+
+The pectoral line is then defined as a vertical line at this x-coordinate, extending from the top to the bottom of the contour.
+
+###### MLO View Pectoral Muscle Detection
+
+For MLO views, we employ a multi-stage approach to detect the pectoral muscle boundary:
+
+1. **Region of Interest (ROI) Definition**: A rectangular region in the upper corner of the image is defined as the search area:
+   $$
+   \text{ROI} = \begin{cases}
+       [0, 0.4w] \times [0, 0.6h] & \text{if side = Left} \\
+       [0.6w, w] \times [0, 0.6h] & \text{if side = Right}
+   \end{cases}
+   $$
+
+2. **Contrast Enhancement**: We apply Contrast Limited Adaptive Histogram Equalization (CLAHE) to enhance the visibility of the pectoral boundary:
+   $$
+   I_{CLAHE} = \text{CLAHE}(I_{ROI}, \text{clipLimit}=3.0, \text{tileGridSize}=(8,8))
+   $$
+
+3. **Thresholding**: Multiple thresholding techniques are applied and combined to robustly segment the pectoral region:
+   $$
+   \begin{aligned}
+   T_{Otsu} &= \text{Otsu}(I_{CLAHE}) \\
+   T_{Adaptive} &= \text{AdaptiveThreshold}(I_{CLAHE}, \text{blockSize}=11, C=2) \\
+   T_{Combined} &= T_{Otsu} \land T_{Adaptive}
+   \end{aligned}
+   $$
+
+where the symbol $\land$ represents the logical AND operation.
+
+While Otsu is concerned with the global nature of clipping, Adaptive threshold employs a Gaussian-weighted neighborhood technique in a way that enables more robust detection particularly in dense breast areas where global thresholding techniques are not effective.
+
+4. **Edge Detection**: Canny edge detection is applied to the thresholded image:
+   $$
+   E = \text{Canny}(T_{Combined}, \text{low}=50, \text{high}=150)
+   $$
+
+5. **Line Detection**: Probabilistic Hough Transform is employed to detect line segments:
+   $$
+   \begin{aligned}
+   L &= \text{HoughLinesP}(E, \rho=1, \theta=\pi/180, \text{threshold}=20, \\
+   &\quad \text{minLineLength}=0.5h_{ROI}, \text{maxLineGap}=0.1h_{ROI})
+   \end{aligned}
+   $$
+
+6. **Line Filtering**: Lines are filtered based on slope constraints that depend on the breast side:
+   $$
+   \text{valid}(L_i) = \begin{cases}
+       \text{slope}(L_i) < 0 & \text{if side = Left} \\
+       \text{slope}(L_i) > 0 & \text{if side = Right}
+   \end{cases}
+   $$
+
+Notice that the reference axis in Python is different from the conventional ones.
+
+7. **Optimal Line Selection**: We score each valid line based on length, position, and angle:
+   $$
+   \begin{aligned}
+   \text{score}(L_i) &= \text{length}(L_i) \cdot (w_{pos} \cdot \text{pos\_score}(L_i)
+   \\ &\quad + w_{angle} \cdot \text{angle\_score}(L_i)) \\
+   \text{pos\_score}(L_i) &= 1 - \frac{y_{start}(L_i)}{h_{ROI}} \\
+   \text{angle\_score}(L_i) &= 1 - \min\left(\frac{|\theta(L_i) - \theta_{target}|}{45°}, 1\right)
+   \end{aligned}
+   $$
+   where $\theta_{target} = 45 \deg$ for Left breasts and $135 \deg$ for Right breasts, $w_{pos} = 0.2$, and $w_{angle} = 0.8$.
+
+8. **Line Extension**: The highest-scoring line is extended to span the full image height:
+   $$
+   \begin{aligned}
+   m &= \frac{y_2 - y_1}{x_2 - x_1} \\
+   b &= y_1 - m \cdot x_1 \\
+   x_{top} &= \frac{0 - b}{m} \\
+   x_{bottom} &= \frac{h - b}{m}
+   \end{aligned}
+   $$
+
+<div align="center">
+  <img src="/images/ALR-portfolio/pectoral.png" alt="Pectoral muscle detection" width="70%">
+  <p><em>Pectoral muscle detection in MLO views: (a) Original MLO image, (b) ROI with CLAHE enhancement with ROI box (c) Combined thresholding result, (d) Morphological operations, (e) Edge detection, (f) Detected line candidates in green and Final pectoral muscle line in red</em></p>
+</div>
+
+
+**Note:** This method demonstrated some limitations when applied to the CBIS-DDSM dataset, primarily due to the high variability in pectoral muscle orientation across images. This resulted in suboptimal line scoring metrics and consequent detection failures. To address this shortcoming, we developed a simple GUI that facilitated manual annotation of these cases.
+
+##### Nipple Detection
+
+The nipple represents a critical anatomical landmark for establishing correspondence between views. Our nipple detection methodology employs geometric principles applied to the breast contour.
+
+###### CC View Nipple Detection
+
+For CC views, the nipple is typically located at the lateralmost point of the breast contour. The detection criterion is based on the breast side:
+
+$$
+p_{nipple} = \begin{cases}
+   \arg\min_i x_i & \text{if side = Right} \\
+    \arg\max_i x_i & \text{if side = Left}
+\end{cases}
+$$
+
+where $(x_i, y_i)$ represent the coordinates of the smoothed contour points.
+
+###### MLO View Nipple Detection
+
+Nipple detection in MLO views presents greater complexity due to the projection angle.
+Candidate nipple locations are identified based on regional constraints, selecting points in the lower lateral quadrant of the breast:
+
+$$
+\begin{cases}
+    x \geq x_{threshold} \text{ and } y \geq y_{threshold} & \text{if side = Left} \\
+    x \leq x_{threshold} \text{ and } y \geq y_{threshold} & \text{if side = Right}
+\end{cases}
+$$
+
+where $x_{threshold} = 0.75 \cdot w$ (Left) or $0.25 \cdot w$ (Right),
+
+$y_{threshold} = 0.5 \cdot h$, and $w$ and $h$ are the image width and height, respectively.
+
+Then, we employ contour curvature analysis, computing the curvature at each point on the smoothed contour:
+
+$$
+\kappa(u) = \frac{x'(u)y''(u) - y'(u)x''(u)}{(x'(u)^2 + y'(u)^2)^{3/2}}
+$$
+
+where $(x'(u), y'(u))$ and $(x''(u), y''(u))$ represent the first and second derivatives of the parametric contour.
+
+From these candidates, the optimal nipple location is determined by evaluating a score function :
+
+$$
+\text{score}(i) = |\kappa(u_i)|
+$$
+
+<div align="center">
+  <img src="/images/ALR-portfolio/nipple.png" alt="Nipple detection" width="40%">
+  <p><em>Nipple detection methodology: (a) MLO view showing curvature analysis with Candidate regions in green and final nipple in red (b) CC view with detected nipple at lateralmost point</em></p>
+</div>
+
+**Note 1:** The nipple may be obscured or flattened in MLO projections, particularly in cases with significant breast compression. The curvature-based approach tackles this issue by intrinsically selecting the point with highest curvature which presents a good fallback solution.
+
+**Note 2:** Our initial approach for MLO nipple detection implemented a convex envelope computation to optimize execution time, as the convex hull incorporates significantly fewer vertices than the original contour. The detection criterion was formulated as $\text{score}(i) = \frac{|\kappa(u_i)|}{d_i + \epsilon}$where $d_i$ is the Euclidean distance from the contour point to the nearest vertex. Hence, we seek the closest contour point to the vertex with highest curvature. However, analysis revealed that this approach resembles to CC view processing by selecting outermost contour points—a suboptimal strategy for MLO views where nipple positions do not consistently manifest at extremal positions.
+
 
 #### Graph Construction for Correspondence Analysis
 
-**Pseudo-Landmark Definition**: To enable multi-view correspondence reasoning, we introduce pseudo-landmarks—anatomically consistent reference points within the breast that maintain relative spatial relationships across different views and patients.
+##### Pseudo-Landmark Definition
 
-**Landmark Generation Algorithm**:
-1. Identify nipple position and pectoral muscle line as primary references
-2. Define parallel lines at equidistant intervals between nipple and pectoral muscle  
-3. Intersect these lines with breast contour
-4. Place landmarks at uniform intervals along each line
+To enable multi-view correspondence reasoning, we introduce the of pseudo-landmarks—anatomically consistent reference points within the breast that maintain relative spatial relationships across different views and patients.
 
-**Graph Node Mapping**: Each pseudo-landmark serves as a graph node. We implement a k-Nearest Neighbor (kNN) mapping function:
+###### Rules
 
-$$\phi_k(F, V) = (Q_f)^T F$$
+The pseudo-landmarks fulfill three key properties:
+- Each landmark represents a region with consistent relative location across breast instances
+- Different landmarks represent distinct breast regions
+- The collective set of landmarks provides comprehensive coverage of the breast area
 
-where $Q_f = A(\Lambda_f)^{-1}$ with assignment matrix:
-$$A_{ij} = \begin{cases}
-1 & \text{if $j$th node is among $k$ nearest nodes of $i$th pixel} \\
-0 & \text{otherwise}
-\end{cases}$$
+###### Landmark Generation Algorithm
+
+The pseudo-landmarks are generated through the following procedure:
+
+1. Identify the nipple position and pectoral muscle line as primary anatomical references
+
+2. Define parallel lines between the nipple and pectoral muscle at equidistant intervals
+
+3. Intersect these parallel lines with the breast contour
+
+4. Place landmarks at uniform intervals along each line between intersection points
+
+For MLO views, additional landmarks are placed along the pectoral muscle line to capture the anatomical information in this region.
+
+<div align="center">
+  <img src="/images/ALR-portfolio/pseudo.png" alt="Pseudo-landmark generation" width="40%">
+  <p><em>Pseudo-landmark generation: (a) CC view with generated landmarks, (b) MLO view with generated landmarks</em></p>
+</div>
+
+##### Graph Structure Construction
+
+###### Parallel Line Generation
+
+To establish a structured arrangement of nodes, we generate three parallel lines:
+
+1. **Pectoral Line**: The detected pectoral muscle boundary
+
+2. **Line 1**: A line at 1/3 distance from nipple to pectoral line
+
+3. **Line 2**: A line at 2/3 distance from nipple to pectoral line
+
+The lines follow the direction of the pectoral muscle but are anchored at different distances from the nipple:
+
+$$
+\begin{aligned}
+\vec{v}_{pect} &= \frac{\vec{p}_{pect2} - \vec{p}_{pect1}}{|\vec{p}_{pect2} - \vec{p}_{pect1}|} \\
+\vec{v}_{nipple-pect} &= \frac{\vec{p}_{intersect} - \vec{p}_{nipple}}{|\vec{p}_{intersect} - \vec{p}_{nipple}|} \\
+\vec{p}_{line1} &= \vec{p}_{nipple} + \frac{1}{3}|\vec{p}_{intersect} - \vec{p}_{nipple}| \cdot \vec{v}_{nipple-pect} \\
+\vec{p}_{line2} &= \vec{p}_{nipple} + \frac{2}{3}|\vec{p}_{intersect} - \vec{p}_{nipple}| \cdot \vec{v}_{nipple-pect}
+\end{aligned}
+$$
+
+Each line is extended until it intersects with the breast contour, ensuring all nodes lie within the breast region.
+
+###### Corner Line for MLO Views
+
+For MLO views, an additional "corner line" is introduced to capture the axillary region:
+
+$$
+\vec{p}_{corner} = \begin{cases}
+    (0, 0) & \text{if side = Left} \\
+    (w-1, 0) & \text{if side = Right}
+\end{cases}
+$$
+
+A line parallel to the pectoral line is constructed midway between the pectoral line and this corner point:
+
+$$
+\vec{p}_{corner\_line} = \vec{p}_{pect\_top} + \frac{1}{2}|\vec{p}_{corner} - \vec{p}_{pect\_top}| \cdot \vec{v}_{perpendicular}
+$$
+
+where $\vec{v}_{perpendicular}$ is a unit vector perpendicular to the pectoral direction, oriented toward the corner.
+
+###### Node Distribution
+
+A fixed number $k$ of nodes is distributed uniformly along each line between its contour intersection points:
+
+$$
+\vec{p}_{node\_i} = \vec{p}_{start} + \frac{i}{k-1}(\vec{p}_{end} - \vec{p}_{start}), \quad i \in \{0, 1, \ldots, k-1\}
+$$
+
+This results in a structured arrangement of nodes that captures the breast anatomy in a consistent manner across different views and patients.
+
+##### Graph Node Mapping
+
+Each pseudo-landmark serves as a graph node in our representation. To associate the continuous spatial domain with these discrete nodes, we implement a k-Nearest Neighbor (kNN) mapping function :
+
+$$
+\phi_k(F, V) = (Q_f)^T F
+$$
+
+where $F \in \mathbb{R}^{HW \times C}$ represents the feature map with height $H$, width $W$, and $C$ channels; $V$ is the set of node locations; and $Q_f \in \mathbb{R}^{HW \times \lvert V \rvert}$ is a normalized mapping matrix defined as:
+
+$$
+Q_f = A(\Lambda_f)^{-1}
+$$
+
+The auxiliary matrix $A \in \mathbb{R}^{HW \times \lvert V \rvert}$ assigns spatial features to their $k$ nearest graph nodes:
+
+$$
+A_{ij} = \begin{cases}
+    1 & \text{if $j$th node is among $k$ nearest nodes of $i$th pixel} \\
+    0 & \text{otherwise}
+\end{cases}
+$$
+
+and $\Lambda_f \in \mathbb{R}^{|V| \times |V|}$ is a diagonal normalization matrix with $\Lambda^f_{jj} = \sum_{i=1}^{HW} A_{ij}$.
+
+This mapping mechanism transforms the spatial feature representation into a node-based representation, capturing regional characteristics in a format conducive to correspondence analysis.
+
+<div align="center">
+  <img src="/images/ALR-portfolio/knn.png" alt="kNN segmentation" width="40%">
+  <p><em>Mammogram segmentation: (a) CC view with  landmarks, (b) Segmented image with kNN</em></p>
+</div>
+
+**Note:** consider that kNN will be applied online during training. Coding it in the preprocessing phase allows just to track how well the workflow is going.
 
 <div align="center">
   <img src="/images/ALR-portfolio/pseudo.png" alt="Pseudo-landmarks" width="40%">
