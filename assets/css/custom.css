@@ -1,0 +1,1496 @@
+/* ==========================================================================
+   Site customisations, loaded after theme.css.
+   Class names contain "button" on purpose: theme.css skips [class*='button']
+   links when colouring generic links.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   Theme toggle: a plain icon, a sun that morphs into a moon.
+   -------------------------------------------------------------------------- */
+.theme-button {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 28px;
+	height: 28px;
+	margin-left: 18px;
+	padding: 0;
+	background: transparent;
+	border: 0;
+	color: black;
+	cursor: pointer;
+}
+.theme-dark .theme-button {
+	color: white;
+}
+.theme-button:hover,
+.theme-button:focus-visible {
+	opacity: .6;
+}
+.theme-button svg {
+	width: 20px;
+	height: 20px;
+	overflow: visible;
+}
+.theme-button .tt-sun,
+.theme-button .tt-rays {
+	transform-box: fill-box;
+	transform-origin: center;
+}
+.theme-button .tt-sun {
+	transition: transform .5s cubic-bezier(.5, 1.25, .75, 1.25);
+}
+.theme-button .tt-moon-cut {
+	transition: transform .25s cubic-bezier(0, 0, 0, 1);
+}
+.theme-button .tt-rays {
+	transition: transform .5s cubic-bezier(.5, 1.5, .75, 1.25), opacity .5s cubic-bezier(.25, 0, .3, 1);
+}
+.theme-dark .theme-button .tt-sun {
+	transform: scale(1.75);
+	transition-timing-function: cubic-bezier(.25, 0, .3, 1);
+	transition-duration: .25s;
+}
+.theme-dark .theme-button .tt-moon-cut {
+	transform: translateX(-7px);
+	transition-delay: .25s;
+	transition-duration: .5s;
+}
+.theme-dark .theme-button .tt-rays {
+	opacity: 0;
+	transform: rotate(-25deg) scale(.6);
+	transition-duration: .15s;
+}
+
+/* --------------------------------------------------------------------------
+   Buttons, after the pixfort "Conseil" template (.btn) in the site's colours:
+   10px corners, Poppins 600, the icon slides 8px away from the label on hover.
+   - action-button: the main action of a section, dark fill, arrow after the label
+     <a class="action-button" href="...">
+         <span class="action-button-text">Label</span>
+         <i class="bi bi-arrow-right" aria-hidden="true"></i>
+     </a>
+   - paper-button: secondary actions, grey fill, icon before the label (Papers section below)
+   -------------------------------------------------------------------------- */
+.action-button {
+	display: inline-flex;
+	align-items: center;
+	padding: .5625rem 1.125rem;
+	background: #18181b;
+	border-radius: 10px;
+	color: #e4e4e7;
+	font-family: "Poppins", sans-serif;
+	font-size: .875rem;
+	font-weight: 600;
+	line-height: 1.8;
+	text-decoration: none;
+	transition: background-color .15s ease-in-out, color .15s ease-in-out;
+}
+.action-button i {
+	margin-left: .5rem;
+	font-size: 1.1em;
+	line-height: 1;
+	transition: padding .4s cubic-bezier(.165, .84, .44, 1);
+}
+.action-button:hover,
+.action-button:focus-visible {
+	background: black;
+	color: #d9d9dd;
+}
+.action-button:hover i,
+.action-button:focus-visible i {
+	padding-left: 8px;
+}
+.theme-dark .action-button {
+	background: white;
+	color: #333;
+}
+.theme-dark .action-button:hover,
+.theme-dark .action-button:focus-visible {
+	background: #e6e6e6;
+	color: #292929;
+}
+.action-button:focus-visible,
+.paper-button:focus-visible {
+	outline: 2px solid black;
+	outline-offset: 3px;
+}
+.theme-dark :is(.action-button, .paper-button):focus-visible {
+	outline-color: white;
+}
+
+/* --------------------------------------------------------------------------
+   Section nav on phones/tablets: icons instead of single letters, and the
+   active section expands into a pill showing its name.
+   -------------------------------------------------------------------------- */
+.section-nav .nav-link-mobile {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	height: 100%;
+}
+.section-nav .nav-link-label {
+	display: inline-block;
+	overflow: hidden;
+	max-width: 0;
+	font-family: "Poppins", sans-serif;
+	font-size: .72rem;
+	white-space: nowrap;
+	transition: max-width .3s ease-out, margin .3s ease-out;
+}
+@media (max-width: 991.98px) {
+	.section-nav ul li a,
+	.section-nav ul li button {
+		width: auto;
+		min-width: 34px;
+		padding: 0 4px;
+		font-size: 1.05rem;
+		letter-spacing: 0;
+	}
+	.section-nav ul li a.active {
+		padding: 0 12px 0 10px;
+		letter-spacing: 0;
+	}
+	.section-nav ul li a.active .nav-link-label {
+		max-width: 16em;
+		margin-left: 6px;
+	}
+	/* The template's dashed circle becomes a still dashed pill around the active item. */
+	.section-nav ul li a:before,
+	.section-nav ul li button:before {
+		border-radius: 18px;
+	}
+	.section-nav ul li a.active:before,
+	.section-nav ul li button.active:before {
+		animation: none;
+	}
+}
+@media (min-width: 992px) {
+	.section-nav .nav-link-mobile {
+		display: none;
+	}
+}
+
+/* --------------------------------------------------------------------------
+   Page transition, after the template's fade: a layer in the page colour
+   covers each page as it opens and fades out; it fades back in when a link
+   to another page is followed (assets/js/custom.js adds .page-leaving).
+   The reveal is pure CSS, so a page never stays covered without JavaScript.
+   The colour follows the theme through the color-scheme set on <html>.
+   -------------------------------------------------------------------------- */
+html::after {
+	content: "";
+	position: fixed;
+	inset: 0;
+	z-index: 2147483000;
+	background: #f2f5f8;
+	background: light-dark(#f2f5f8, black);
+	pointer-events: none;
+	animation: page-reveal .16s ease-in-out .04s both;
+}
+html.page-leaving::after {
+	animation: page-cover .16s ease-in-out both;
+}
+@keyframes page-reveal {
+	from { opacity: 1; }
+	to { opacity: 0; }
+}
+@keyframes page-cover {
+	from { opacity: 0; }
+	to { opacity: 1; }
+}
+@media (prefers-reduced-motion: reduce), print {
+	html::after {
+		content: none;
+	}
+}
+
+/* --------------------------------------------------------------------------
+   Link underline, after the template's menu: a 3px line with rounded ends,
+   4px under the text, that draws in from the left on hover and retracts to
+   the right. The current page in the menu keeps it. Smaller links use 2px.
+   -------------------------------------------------------------------------- */
+.toggle-menu .link-decoration,
+[data-contact-card] .contact-value a,
+.post-banner-pdf {
+	position: relative;
+}
+.toggle-menu .link-decoration::after,
+[data-contact-card] .contact-value a::after,
+.post-banner-pdf::after {
+	content: "";
+	position: absolute;
+	top: 100%;
+	left: 0;
+	width: 100%;
+	height: var(--underline, 3px);
+	margin-top: var(--underline-gap, 4px);
+	background: currentColor;
+	border-radius: 3px;
+	transform: scaleX(0);
+	transform-origin: right center;
+	transition: transform .2s;
+}
+[data-contact-card] .contact-value a,
+.post-banner-pdf {
+	--underline: 2px;
+	--underline-gap: 2px;
+}
+/* Pages menu: a tight box so the line sits just under the words, and more room between pages. */
+.toggle-menu .link-decoration {
+	display: inline-block;
+	line-height: 1.2;
+	--underline-gap: 2px;
+}
+.toggle-menu ul.list-circle li + li {
+	margin-top: .7rem;
+}
+.toggle-menu .link-decoration:hover,
+.toggle-menu .link-decoration:focus-visible,
+[data-contact-card] .contact-value a:hover,
+.post-banner-pdf:hover,
+.post-banner-pdf:focus-visible {
+	text-decoration: none;
+}
+.toggle-menu .link-decoration:hover::after,
+.toggle-menu .link-decoration:focus-visible::after,
+.toggle-menu .link-decoration[aria-current="page"]::after,
+[data-contact-card] .contact-value a:hover::after,
+[data-contact-card] .contact-value a:focus-visible::after,
+.post-banner-pdf:hover::after,
+.post-banner-pdf:focus-visible::after {
+	transform: scaleX(1);
+	transform-origin: left center;
+}
+
+/* --------------------------------------------------------------------------
+   Footer: name, year and external profiles. Links between pages stay in the
+   three-dots menu.
+   -------------------------------------------------------------------------- */
+.site-footer {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: space-between;
+	gap: 8px 18px;
+	margin-top: 1.5em;
+	padding: 18px 4px;
+	border-top: 1px dashed rgba(0, 0, 0, .15);
+	color: #838485;
+	font-family: "Poppins", sans-serif;
+	font-size: .78rem;
+	line-height: 1.5;
+}
+.theme-dark .site-footer {
+	border-color: rgba(255, 255, 255, .2);
+	color: rgba(255, 255, 255, .6);
+}
+/* theme.css gives p a 1.74 line height and list items a 7px bottom margin (lists -7px):
+   reset both so the name and the links sit on one line. */
+.site-footer p {
+	margin: 0;
+	line-height: inherit;
+}
+.site-footer ul {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 6px 16px;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+.site-footer ul li {
+	margin: 0;
+}
+body .site-footer a {
+	display: inline-flex;
+	align-items: center;
+	gap: .4em;
+	color: inherit;
+	text-decoration: none;
+}
+body .site-footer a:hover,
+body .site-footer a:focus-visible {
+	color: black;
+}
+body.theme-dark .site-footer a:hover,
+body.theme-dark .site-footer a:focus-visible {
+	color: white;
+}
+
+/* --------------------------------------------------------------------------
+   Back-to-top button: appears after one screen of scrolling (custom.js),
+   bottom right, away from the three dots at the top right. Same colour as
+   the floating three dots.
+   -------------------------------------------------------------------------- */
+.back-to-top {
+	position: fixed;
+	right: max(24px, env(safe-area-inset-right, 0px));
+	bottom: calc(24px + env(safe-area-inset-bottom, 0px));
+	z-index: 994;
+	display: grid;
+	place-items: center;
+	width: 50px;
+	height: 50px;
+	padding: 0;
+	background: black;
+	border: 0;
+	border-radius: 10px;
+	color: white;
+	font-size: 1.2rem;
+	cursor: pointer;
+	visibility: hidden;
+	opacity: 0;
+	transform: translateY(30px);
+	transition: opacity .4s cubic-bezier(.165, .84, .44, 1), transform .4s cubic-bezier(.165, .84, .44, 1), visibility .4s;
+}
+.theme-dark .back-to-top {
+	background: rgba(42, 44, 47, .96);
+}
+.back-to-top.is-visible {
+	visibility: visible;
+	opacity: 1;
+	transform: none;
+}
+.back-to-top.is-visible:hover,
+.back-to-top.is-visible:focus-visible {
+	transform: translateY(-6px);
+}
+.back-to-top:focus-visible {
+	outline: 2px solid black;
+	outline-offset: 3px;
+}
+.theme-dark .back-to-top:focus-visible {
+	outline-color: white;
+}
+@media (max-width: 575.98px) {
+	.back-to-top {
+		width: 44px;
+		height: 44px;
+	}
+}
+
+/* Circular reveal when switching themes (browsers with View Transitions). */
+::view-transition-old(root),
+::view-transition-new(root) {
+	animation: none;
+	mix-blend-mode: normal;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.theme-button,
+	.theme-button *,
+	.action-button,
+	.action-button *,
+	.paper-button,
+	.paper-button *,
+	.back-to-top,
+	.link-decoration::after,
+	.contact-value a::after,
+	.post-banner-pdf::after {
+		transition: none !important;
+	}
+}
+
+/* --------------------------------------------------------------------------
+   Contact card (filled by custom.js): email, phone, LinkedIn and GitHub as
+   four rows of icon, label and value. The same card sits in the side menu,
+   the homepage contact section and the top of the CV page. The side menu is
+   dark in both themes, so the card there uses the dark-theme colours.
+   -------------------------------------------------------------------------- */
+.contact-list {
+	display: grid;
+	gap: 18px 32px;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+/* Items take the width of their content, so the email row cannot run into the
+   next one: LinkedIn sits beside it when both fit, and wraps below when not. */
+.section-box .contact-list {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 18px 40px;
+	max-width: 620px;
+}
+.contact-item {
+	display: grid;
+	grid-template-columns: 40px minmax(0, 1fr);
+	gap: 4px 14px;
+	align-items: center;
+}
+.contact-icon {
+	display: flex;
+	grid-row: span 2;
+	align-items: center;
+	justify-content: center;
+	width: 40px;
+	height: 40px;
+	background: black;
+	border-radius: 50%;
+	color: white;
+	font-size: 1.05rem;
+}
+.theme-dark .contact-icon,
+.toggle-menu .contact-icon {
+	background: white;
+	color: black;
+}
+.contact-label {
+	align-self: end;
+	color: #838485;
+	font-family: "Poppins", sans-serif;
+	font-size: .75rem;
+	line-height: 1.3;
+}
+.toggle-menu .contact-label {
+	color: rgba(255, 255, 255, .5);
+}
+/* Fixed height: rows line up whether they hold a link, a "Show" button or a revealed value. */
+.contact-value {
+	display: flex;
+	align-self: start;
+	align-items: center;
+	min-width: 0;
+	height: 26px;
+	font-size: .95rem;
+	line-height: 1.4;
+}
+[data-contact-card] .contact-value a {
+	display: inline-flex;
+	align-items: center;
+	gap: .3em;
+	color: black;
+	white-space: nowrap;
+	text-decoration: none;
+}
+.theme-dark [data-contact-card] .contact-value a,
+.toggle-menu [data-contact-card] .contact-value a {
+	color: white;
+}
+.contact-value .bi-arrow-up-right {
+	font-size: .75em;
+	opacity: .6;
+}
+
+/* The email address, with a copy icon next to it. */
+.contact-email {
+	display: inline-flex;
+	align-items: center;
+	gap: .2em;
+	max-width: 100%;
+}
+.copy-button {
+	display: inline-flex;
+	flex: none;
+	align-items: center;
+	justify-content: center;
+	width: 24px;
+	height: 24px;
+	padding: 0;
+	background: transparent;
+	border: 0;
+	border-radius: 50%;
+	color: inherit;
+	font-size: .9em;
+	opacity: .55;
+	cursor: pointer;
+}
+.copy-button:hover,
+.copy-button:focus-visible,
+.copy-button.copied {
+	opacity: 1;
+}
+
+/* Homepage About title: always one line. The text is about 20.6 times its font size wide,
+   so the size follows the column width (cqi) and never exceeds the usual h1 size. */
+.about-text {
+	container-type: inline-size;
+}
+.about-title {
+	font-size: min(2.5rem, calc(100cqi / 21.2));
+	white-space: nowrap;
+}
+
+/* Homepage avatar: centred on phones. The box shrinks to the photo so the typed badge stays
+   on the photo's lower left edge. */
+@media (max-width: 767.98px) {
+	.hero-avatar {
+		max-width: 256px;
+		margin-inline: auto;
+	}
+}
+
+/* Papers: small PDF / Code links under each entry. */
+.paper-links {
+	margin: 0;
+}
+/* Secondary button (template btn-gray-2): grey fill, the text stays dark on hover. */
+.paper-button {
+	display: inline-flex;
+	align-items: center;
+	gap: .5rem;
+	padding: .5625rem 1.125rem;
+	background: #e4e4e7;
+	border: 0;
+	border-radius: 10px;
+	color: black;
+	font-family: "Poppins", sans-serif;
+	font-size: .875rem;
+	font-weight: 600;
+	line-height: 1.8;
+	text-decoration: none;
+	cursor: pointer;
+	transition: background-color .15s ease-in-out;
+}
+.paper-button i {
+	line-height: 1;
+	transition: padding .4s cubic-bezier(.165, .84, .44, 1);
+}
+.paper-button:hover,
+.paper-button:focus-visible {
+	background: #d4d4d8;
+	color: black;
+}
+.paper-button:not(.share-icon):hover i,
+.paper-button:not(.share-icon):focus-visible i {
+	padding-right: 8px;
+}
+.theme-dark .paper-button {
+	background: rgba(255, 255, 255, .14);
+	color: white;
+}
+.theme-dark .paper-button:hover,
+.theme-dark .paper-button:focus-visible {
+	background: rgba(255, 255, 255, .22);
+	color: white;
+}
+/* Papers: one full-width block per paper (long titles and author lists need the room). */
+.services-list .paper-item {
+	display: block;
+}
+
+/* --------------------------------------------------------------------------
+   News: one row per item, date | tag | text (stacked on phones).
+   -------------------------------------------------------------------------- */
+.news-list {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+.news-list .news-item {
+	display: grid;
+	grid-template-columns: 90px 100px 1fr;
+	align-items: baseline;
+	gap: 0 16px;
+	margin: 0;
+	padding: 18px 0;
+	border-top: 1px dashed rgba(0, 0, 0, .15);
+}
+.news-list .news-item:first-child {
+	padding-top: 0;
+	border-top: 0;
+}
+.theme-dark .news-list .news-item {
+	border-color: rgba(255, 255, 255, .2);
+}
+.news-date {
+	color: black;
+	font-family: "Poppins", sans-serif;
+	font-size: .85em;
+	font-weight: 500;
+	white-space: nowrap;
+}
+.theme-dark .news-date {
+	color: white;
+}
+/* Tags, pills and timeline dates: a light fill instead of the theme's dashed
+   outline (template badges), so they match the filled buttons. Dashed lines
+   remain for dividers only. */
+.news-tag {
+	justify-self: start;
+	padding: 5px 10px;
+	background: rgba(0, 0, 0, .06);
+	border-radius: .25rem;
+	color: black;
+	font-family: "Poppins", sans-serif;
+	font-size: .72rem;
+	font-weight: 600;
+	line-height: 1;
+}
+.theme-dark .news-tag {
+	background: rgba(255, 255, 255, .1);
+	color: white;
+}
+ul.list-inline-pills li,
+.resume-wrapper .resume-box .resume-date {
+	background: rgba(0, 0, 0, .06);
+	border: 0;
+	border-radius: 10px;
+	color: black;
+}
+.theme-dark ul.list-inline-pills li,
+.theme-dark .resume-wrapper .resume-box .resume-date {
+	background: rgba(255, 255, 255, .1);
+	color: white;
+}
+.news-text {
+	margin: 0;
+}
+.news-text strong {
+	color: black;
+	font-weight: 600;
+}
+.theme-dark .news-text strong {
+	color: white;
+}
+@media (max-width: 575.98px) {
+	.news-list .news-item {
+		grid-template-columns: auto 1fr;
+		gap: 6px 12px;
+	}
+	.news-text {
+		grid-column: 1 / -1;
+	}
+}
+
+/* --------------------------------------------------------------------------
+   Homepage blog teaser: equal cards with the series banner as cover.
+   The layout follows the width of the section itself (container queries):
+   three columns when wide, cover-left rows in between, stacked when narrow.
+   -------------------------------------------------------------------------- */
+.teaser-grid {
+	container-type: inline-size;
+}
+.teaser-list {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr);
+	gap: 32px;
+}
+body a.teaser-card,
+body a.teaser-card:hover,
+body a.teaser-card:focus {
+	display: flex;
+	flex-direction: column;
+	gap: 18px;
+	color: inherit;
+	text-decoration: none;
+}
+.teaser-cover {
+	position: relative;
+	aspect-ratio: 16 / 10;
+	overflow: hidden;
+	background-color: black;
+	border-radius: .7em;
+}
+.theme-dark .teaser-cover {
+	background-color: #1c1e20;
+}
+/* Banner image, or the template's vertical lines without one. */
+.teaser-cover::before {
+	content: "";
+	position: absolute;
+	inset: 0;
+	background-image: var(--banner, repeating-linear-gradient(90deg, rgba(255, 255, 255, .07) 0 1px, transparent 1px 25%));
+	background-position: center;
+	background-size: cover;
+}
+.teaser-pill {
+	position: absolute;
+	top: 12px;
+	left: 12px;
+	display: inline-flex;
+	align-items: center;
+	gap: .45rem;
+	padding: .4em .9em;
+	background: rgba(0, 0, 0, .35);
+	-webkit-backdrop-filter: blur(6px);
+	backdrop-filter: blur(6px);
+	border-radius: 2em;
+	color: white;
+	font-family: "Poppins", sans-serif;
+	font-size: .7rem;
+	white-space: nowrap;
+}
+.teaser-meta {
+	margin: 0 0 .5rem;
+	font-family: "Poppins", sans-serif;
+	font-size: .75rem;
+}
+.teaser-title {
+	margin: 0 0 .5rem;
+	font-size: 1.2rem;
+	font-weight: 600;
+	line-height: 1.3;
+	background: linear-gradient(currentColor, currentColor) 0 100% / 0 1px no-repeat;
+	display: inline;
+	transition: background-size .25s ease-out;
+}
+.teaser-card:hover .teaser-title,
+.teaser-card:focus-visible .teaser-title {
+	background-size: 100% 1px;
+}
+.teaser-text {
+	display: -webkit-box;
+	margin: .5rem 0 0;
+	overflow: hidden;
+	-webkit-box-orient: vertical;
+	-webkit-line-clamp: 3;
+	line-clamp: 3;
+}
+.teaser-card:focus-visible {
+	outline: 2px solid currentColor;
+	outline-offset: 6px;
+	border-radius: .7em;
+}
+@container (min-width: 460px) and (max-width: 719.98px) {
+	body a.teaser-card {
+		flex-direction: row;
+		align-items: center;
+		gap: 24px;
+	}
+	.teaser-cover {
+		flex: 0 0 220px;
+	}
+}
+@container (min-width: 720px) {
+	.teaser-list {
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+		gap: 28px;
+	}
+}
+
+/* Series menu: black box under the section nav, one collapsible group per series. */
+.series-nav {
+	padding: 1.5em 2em;
+	background: black;
+	border-radius: .5em;
+	color: rgba(255, 255, 255, .7);
+}
+.theme-dark .series-nav {
+	background: #1c1e20;
+}
+.series-nav h6 {
+	color: white;
+}
+.series-group + .series-group {
+	margin-top: .4rem;
+	padding-top: .4rem;
+	border-top: 1px dashed rgba(255, 255, 255, .2);
+}
+.series-group summary {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: .75rem;
+	padding: .45rem 0;
+	color: white;
+	font-weight: 500;
+	list-style: none;
+	cursor: pointer;
+}
+.series-group summary::-webkit-details-marker {
+	display: none;
+}
+.series-group summary i {
+	font-size: .85em;
+	transition: transform .2s ease-out;
+}
+.series-group[open] summary i {
+	transform: rotate(180deg);
+}
+.series-group ul {
+	margin: .2rem 0 .5rem;
+	padding: 0 0 0 .9rem;
+	border-left: 1px dashed rgba(255, 255, 255, .25);
+	list-style: none;
+}
+.series-group li {
+	margin: 0;
+	padding: .25rem 0;
+}
+/* "body" outranks the template's black link hover and focus colours (theme.css). */
+body .series-nav a {
+	color: rgba(255, 255, 255, .7);
+	font-family: "Poppins", sans-serif;
+	font-size: .85em;
+	text-decoration: none;
+}
+body .series-nav a:hover,
+body .series-nav a:focus,
+body .series-nav a:focus-visible {
+	color: white;
+}
+@media (max-width: 991.98px) {
+	.series-nav {
+		padding: 1.2em 1.4em;
+	}
+}
+
+/* --------------------------------------------------------------------------
+   Series banner: the series' visual identity image (any size, cropped to a
+   wide rounded rectangle) with a white title and a soft dark shadow. Without
+   an image it falls back to black with the template's vertical lines.
+   Images come from _src/banners/ via _dev/build_blog.py.
+   -------------------------------------------------------------------------- */
+.series-banner {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-end;
+	gap: .6rem;
+	min-height: 240px;
+	padding: 2em 2.4em;
+	overflow: hidden;
+	background-color: black;
+	background-image: var(--banner-lg, repeating-linear-gradient(90deg, rgba(255, 255, 255, .07) 0 1px, transparent 1px 25%));
+	background-position: center;
+	background-size: cover;
+	border-radius: .9em;
+	color: white;
+}
+.theme-dark .series-banner {
+	background-color: #1c1e20;
+}
+/* Darkened lower-left region behind the label and title, fading towards the
+   top right, so white text stays readable on any image. */
+.series-banner::before {
+	content: "";
+	position: absolute;
+	inset: 0;
+	background:
+		radial-gradient(ellipse 70% 85% at 0% 100%, rgba(0, 0, 0, .45) 0%, rgba(0, 0, 0, .22) 45%, transparent 75%);
+	pointer-events: none;
+}
+.series-banner > * {
+	position: relative;
+	z-index: 1;
+}
+.series-banner-title {
+	margin: 0;
+	color: white;
+	font-size: clamp(1.45rem, 4.2vw, 2.6rem);
+	line-height: 1.15;
+	text-shadow: 0 2px 14px rgba(0, 0, 0, .55), 0 1px 3px rgba(0, 0, 0, .6);
+}
+.theme-dark .series-banner-title,
+body .series-banner .series-banner-title {
+	color: white;
+}
+.series-banner-label,
+.series-banner-back {
+	display: inline-flex;
+	align-items: center;
+	gap: .5rem;
+	color: white;
+	font-family: "Poppins", sans-serif;
+	font-size: clamp(.66rem, 1.9vw, .8rem);
+	text-shadow: 0 1px 8px rgba(0, 0, 0, .6), 0 1px 2px rgba(0, 0, 0, .6);
+}
+/* "All posts" stays in the flow, pinned to the top by margin-bottom: auto, so a long subtitle makes the
+   banner taller instead of running into it. */
+body .series-banner .series-banner-back {
+	margin-bottom: auto;
+	color: white;
+	text-decoration: none;
+}
+/* Small texts sit in the template's frosted dark pill (as on blog categories),
+   readable on any image. */
+.series-banner-label,
+body .series-banner .series-banner-back {
+	align-self: flex-start;
+	padding: .45em 1em;
+	background: rgba(0, 0, 0, .35);
+	-webkit-backdrop-filter: blur(6px);
+	backdrop-filter: blur(6px);
+	border-radius: 2em;
+	text-shadow: none;
+}
+body .series-banner .series-banner-back:hover,
+body .series-banner .series-banner-back:focus {
+	background: rgba(0, 0, 0, .5);
+	color: white;
+	opacity: 1;
+}
+.series-banner-back:hover {
+	opacity: .8;
+}
+.post-banner {
+	grid-column: 1 / -1;
+	min-height: 300px;
+}
+/* Chapter banners also carry a subtitle and the date line: a darker band along the bottom keeps them readable
+   on light images */
+.post-banner::before {
+	background:
+		linear-gradient(to top, rgba(0, 0, 0, .55) 0%, rgba(0, 0, 0, .3) 45%, transparent 80%),
+		radial-gradient(ellipse 70% 85% at 0% 100%, rgba(0, 0, 0, .45) 0%, rgba(0, 0, 0, .22) 45%, transparent 75%);
+}
+/* Post banners carry the whole header: series, title, subtitle, date. */
+.series-banner-subtitle {
+	max-width: 46em;
+	margin: -.1rem 0 0;
+	color: rgba(255, 255, 255, .92);
+	font-size: clamp(.95rem, 2.6vw, 1.1rem);
+	line-height: 1.5;
+	text-shadow: 0 1px 10px rgba(0, 0, 0, .6), 0 1px 2px rgba(0, 0, 0, .6);
+}
+.post-banner-meta {
+	display: flex;
+	flex-wrap: wrap;
+	gap: .3rem 1.2rem;
+	margin-top: .2rem;
+	color: rgba(255, 255, 255, .9);
+	font-size: clamp(.68rem, 1.8vw, .78rem);
+	text-shadow: 0 1px 8px rgba(0, 0, 0, .6), 0 1px 2px rgba(0, 0, 0, .6);
+}
+.post-banner-meta i {
+	margin-right: .35rem;
+}
+@media (max-width: 767.98px) {
+	.series-banner {
+		min-height: 200px;
+		padding: 1.5em 1.4em;
+		background-image: var(--banner-sm, var(--banner-lg, repeating-linear-gradient(90deg, rgba(255, 255, 255, .07) 0 1px, transparent 1px 25%)));
+	}
+	.post-banner {
+		min-height: 240px;
+	}
+}
+
+/* Series pages: label, numbered post rows. */
+.series-label {
+	display: flex;
+	align-items: center;
+	gap: .5rem;
+	color: black;
+	font-family: "Poppins", sans-serif;
+	font-size: .85em;
+}
+.theme-dark .series-label {
+	color: white;
+}
+.post-list {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+.post-list .post-row {
+	display: grid;
+	grid-template-columns: 70px 1fr auto;
+	align-items: baseline;
+	gap: 0 16px;
+	margin: 0;
+	padding: 18px 0;
+	border-top: 1px dashed rgba(0, 0, 0, .15);
+	scroll-margin-top: 90px;
+}
+.post-list .post-row:first-child {
+	border-top: 0;
+	padding-top: 0;
+}
+.theme-dark .post-list .post-row {
+	border-color: rgba(255, 255, 255, .2);
+}
+.post-row-link {
+	color: inherit;
+	text-decoration: none;
+	background: linear-gradient(currentColor, currentColor) 0 100% / 0 1px no-repeat;
+	transition: background-size .25s ease-out;
+}
+.post-row-link:hover,
+.post-row-link:focus-visible {
+	background-size: 100% 1px;
+}
+/* Title keeps the heading colour; hover only draws the underline. */
+.post-list a.post-row-link,
+.post-list a.post-row-link:hover,
+.post-list a.post-row-link:focus {
+	color: inherit;
+}
+.post-row-planned {
+	opacity: .55;
+}
+.post-part {
+	color: black;
+	font-family: "Poppins", sans-serif;
+	font-size: .85em;
+	white-space: nowrap;
+}
+.theme-dark .post-part {
+	color: white;
+}
+@media (max-width: 575.98px) {
+	.post-list .post-row {
+		grid-template-columns: auto 1fr;
+		gap: 6px 12px;
+	}
+	.post-list .post-body {
+		grid-column: 1 / -1;
+		grid-row: 2;
+	}
+}
+
+/* Blog and CV sidebars: page nav and the black box under it stick together as one block. */
+@media (min-width: 992px) {
+	.blog-sidebar,
+	.cv-sidebar {
+		position: sticky;
+		top: 24px;
+		max-height: calc(100vh - 48px);
+		overflow-y: auto;
+		scrollbar-width: none;
+	}
+	.blog-sidebar::-webkit-scrollbar,
+	.cv-sidebar::-webkit-scrollbar {
+		display: none;
+	}
+	.blog-sidebar .nav-wrapper,
+	.cv-sidebar .nav-wrapper {
+		position: static;
+	}
+}
+
+/* --------------------------------------------------------------------------
+   Navigation model, the same on every page:
+   - three dots (top right): moves between pages (Home, Resume, Blog);
+   - left column on desktop, sticky bar on phones and tablets: moves within
+     the current page (sections, series, contents).
+   -------------------------------------------------------------------------- */
+
+
+/* Floating elements in the dark theme (three dots, sticky bars) float over both the black page and
+   the #1c1e20 boxes, so they take a third, lighter grey that stands out from both. */
+.theme-dark .menu-dots.menu-dots-float,
+.theme-dark .section-nav.fixed,
+.theme-dark .post-toc-bar.fixed {
+	background: rgba(42, 44, 47, .96);
+}
+
+/* Floating copy of the three dots (assets/js/custom.js), hidden above the
+   viewport until the header has scrolled away. */
+.menu-dots.menu-dots-float {
+	position: fixed;
+	top: 0;
+	right: var(--dots-right, 12px);
+	margin: 0;
+	visibility: hidden;
+	opacity: 0;
+	transform: translateY(-100%);
+	transition: transform .2s ease-out, opacity .2s ease-out, visibility .2s;
+}
+.menu-floating .menu-dots.menu-dots-float {
+	visibility: visible;
+	opacity: 1;
+	transform: none;
+}
+@media (max-width: 991.98px) {
+	/* Same height, colour and corners as the sticky bar, right next to it. */
+	.menu-dots.menu-dots-float {
+		top: 8px;
+		right: 12px;
+		width: var(--bar-height, 50px);
+		height: var(--bar-height, 50px);
+		background: rgba(0, 0, 0, .9);
+		border-radius: .5em;
+	}
+
+	.menu-floating .section-nav.fixed,
+	.menu-floating .post-toc-bar.fixed {
+		right: calc(20px + var(--bar-height, 50px));
+	}
+	/* Bar items stay on one line and scroll sideways when they do not fit. */
+	.section-nav ul {
+		flex-wrap: nowrap;
+		justify-content: safe center;
+		overflow-x: auto;
+		scrollbar-width: none;
+	}
+	.section-nav ul::-webkit-scrollbar {
+		display: none;
+	}
+	.section-nav ul li {
+		flex: none;
+	}
+}
+
+
+/* --------------------------------------------------------------------------
+   Listing pages: courses.html (one box per course) and blog.html (posts by
+   year), with an index in the left column and in the sticky bar
+   (assets/js/custom.js).
+   -------------------------------------------------------------------------- */
+/* Courses page: one panel per course, after the template's figure block. The course banner fills a rounded
+   panel and a card overlaps its lower part: facts and title on the left, description and actions on the
+   right. The visible band of banner keeps the template's proportion, about a fifth of the
+   panel's width (270px on 1380px), at every width. */
+.course-hero {
+	position: relative;
+	padding: max(150px, 19.5%) 30px 30px;
+	background-color: black;
+	background-image: var(--banner-lg, none);
+	background-position: center;
+	background-size: cover;
+	border-radius: 15px;
+	scroll-margin-top: 90px;
+}
+.theme-dark .course-hero {
+	background-color: #1c1e20;
+}
+.course-hero > .teaser-pill {
+	top: 24px;
+	left: 24px;
+}
+.course-card {
+	display: grid;
+	grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+	gap: 1.5rem 2.5rem;
+	align-items: center;
+	padding: 1.75rem 2rem;
+	background: white;
+	border-radius: 10px;
+}
+.theme-dark .course-card {
+	background: #1c1e20;
+}
+.course-facts {
+	margin: 0;
+	font-family: "Poppins", sans-serif;
+	font-size: .85rem;
+}
+.course-card-title {
+	margin: .5rem 0 0;
+	font-size: 1.75rem;
+}
+.course-actions {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: .75rem;
+	margin-top: 1.25rem;
+}
+/* Slightly smaller buttons in the card's narrow column, so the 8px the icon gains on hover
+   fits on the line and the second button does not wrap. */
+.course-actions .action-button,
+.course-actions .paper-button {
+	padding: .5rem .875rem;
+	font-size: .8125rem;
+}
+@media (max-width: 991.98px) {
+	.course-card {
+		grid-template-columns: minmax(0, 1fr);
+		gap: 1rem;
+	}
+}
+@media (max-width: 767.98px) {
+	.course-hero {
+		padding: max(120px, 19.5%) 12px 12px;
+		background-image: var(--banner-sm, none);
+	}
+	.course-hero > .teaser-pill {
+		top: 16px;
+		left: 16px;
+	}
+	.course-card {
+		padding: 1.5rem;
+	}
+	.course-card-title {
+		font-size: 1.5rem;
+	}
+}
+
+/* Blog: year groups. */
+.archive-group + .archive-group {
+	margin-top: 2.5em;
+}
+.archive-year {
+	display: flex;
+	align-items: baseline;
+	gap: .8rem;
+	margin: 0 0 1.2rem;
+	padding-bottom: .8rem;
+	border-bottom: 1px solid black;
+	font-size: 1.6rem;
+	scroll-margin-top: 90px;
+}
+.theme-dark .archive-year {
+	border-color: white;
+}
+.archive-year span {
+	color: #838485;
+	font-family: "Poppins", sans-serif;
+	font-size: .8rem;
+	font-weight: 400;
+}
+.archive-group,
+.listing .section-box[id] {
+	scroll-margin-top: 90px;
+}
+.archive-empty {
+	margin-bottom: 2.5em;
+}
+.post-date {
+	color: black;
+	font-family: "Poppins", sans-serif;
+	font-size: .85em;
+	white-space: nowrap;
+}
+.theme-dark .post-date {
+	color: white;
+}
+
+/* Desktop index of the blog: years with their post counts. */
+.archive-index {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+.archive-index li {
+	display: flex;
+	justify-content: space-between;
+	gap: 1rem;
+	margin: 0;
+	padding: .35rem 0;
+}
+.archive-index li + li {
+	border-top: 1px dashed rgba(255, 255, 255, .2);
+}
+.archive-index span {
+	flex-shrink: 0;
+	font-family: "Poppins", sans-serif;
+	font-size: .8em;
+	white-space: nowrap;
+}
+body .series-nav a.active,
+.series-nav .series-group summary.active {
+	color: white;
+}
+
+/* Sticky bar items without an icon (years): plain text. */
+.section-nav .nav-link-text {
+	font-family: "Poppins", sans-serif;
+	font-size: .75rem;
+	letter-spacing: .5px;
+}
+@media (max-width: 991.98px) {
+	/* Text alone sets the baseline lower than an icon does: fill the link instead, so the text is centred like the
+	   icons and the three dots. */
+	.section-nav .nav-link-mobile:has(> .nav-link-text) {
+		vertical-align: top;
+	}
+	/* Chapter numbers (course overview): narrow enough for nine on a 360px phone; the dashed circle keeps its size,
+	   centred on the number. */
+	.section-nav ul li a:has(.nav-link-text),
+	.section-nav ul li a.active:has(.nav-link-text) {
+		min-width: 27px;
+		padding: 0;
+	}
+	.section-nav ul li a:has(.nav-link-text):before {
+		left: 50%;
+		width: 34px;
+		margin-left: -17px;
+	}
+}
+
+/* Desktop shows the index box, phones and tablets the sticky bar. */
+@media (min-width: 992px) {
+	.blog-sidebar .blog-bar {
+		display: none;
+	}
+}
+@media (max-width: 991.98px) {
+	.blog-sidebar .series-nav {
+		display: none;
+	}
+}
+.blog-sidebar .series-nav + .series-nav {
+	margin-top: 1.5rem;
+}
+.blog-sidebar .blog-bar .section-nav + .section-nav {
+	margin-top: 0;
+}
+
+/* Series label on post banners links to the series. */
+body .series-banner a.series-banner-label {
+	color: white;
+	text-decoration: none;
+}
+body .series-banner a.series-banner-label:hover {
+	background: rgba(0, 0, 0, .5);
+}
+
+
+/* --------------------------------------------------------------------------
+   CV page (cv.html): homepage components (timeline, news rows, services
+   rows, pills) plus an "At a glance" box, a pulse on the current position
+   and a print layout for the browser. The PDFs come from _dev/cv/.
+   -------------------------------------------------------------------------- */
+.cv-page .section-box[id] {
+	scroll-margin-top: 90px;
+}
+
+/* At a glance: the blog's black index box, holding short facts. */
+.cv-glance dl {
+	margin: 0;
+}
+.cv-glance dl > div {
+	padding: .55rem 0;
+}
+.cv-glance dl > div + div {
+	border-top: 1px dashed rgba(255, 255, 255, .2);
+}
+.cv-glance dt {
+	margin-bottom: .15rem;
+	color: rgba(255, 255, 255, .5);
+	font-family: "Poppins", sans-serif;
+	font-size: .72rem;
+	font-weight: 400;
+}
+.cv-glance dd {
+	margin: 0;
+	color: white;
+	font-size: .9em;
+	overflow-wrap: anywhere;
+}
+/* PDF downloads, styled as the box's links (.series-nav a). */
+.cv-glance-links {
+	display: flex;
+	flex-direction: column;
+	gap: .4rem;
+	margin-top: 1rem;
+}
+@media (max-width: 991.98px) {
+	.cv-sidebar .cv-glance {
+		display: none;
+	}
+}
+
+/* Timeline entries: a short description, result lines and small tags. */
+.cv-timeline .resume-box p {
+	margin-top: .5rem;
+}
+.cv-points {
+	margin: .5rem 0 0;
+	padding-left: 1.1rem;
+}
+.cv-points li {
+	margin: .2rem 0;
+}
+.cv-tags {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 6px;
+	margin-top: .8rem;
+}
+
+/* Current position: the timeline dot sends out a slow ring. */
+.cv-timeline .is-current .resume-date:after {
+	--pulse: 0, 0, 0;
+	animation: cvPulse 2.4s ease-out infinite;
+}
+.theme-dark .cv-timeline .is-current .resume-date:after {
+	--pulse: 255, 255, 255;
+}
+@keyframes cvPulse {
+	0% {
+		box-shadow: 0 0 0 0 rgba(var(--pulse), .4);
+	}
+	70%,
+	100% {
+		box-shadow: 0 0 0 7px rgba(var(--pulse), 0);
+	}
+}
+@media (prefers-reduced-motion: reduce) {
+	.cv-timeline .is-current .resume-date:after {
+		animation: none;
+	}
+}
+
+/* Awards: news rows, the rank tag on one line and links under the text. */
+.cv-awards .news-tag {
+	white-space: nowrap;
+}
+@media (min-width: 576px) {
+	.cv-awards .news-item {
+		grid-template-columns: 90px max-content 1fr;
+	}
+}
+.cv-awards .paper-links {
+	margin-top: .6rem;
+}
+
+/* Skills: services rows, group name on the left and pills on the right. */
+.cv-skills .list-inline-pills li {
+	margin-bottom: 8px;
+}
+@media (min-width: 1200px) {
+	.cv-skills .services-item .services-title {
+		min-width: 220px;
+	}
+}
+
+/* Print (Ctrl+P): one light column, no site chrome, entries kept whole. */
+@media print {
+	@page {
+		margin: 14mm;
+	}
+	.cv-page .bg-lines,
+	.cv-page .toggle-menu,
+	.cv-page .preloader,
+	.cv-page #header .text-end,
+	.cv-page .cv-sidebar-col,
+	.cv-page .menu-dots,
+	.cv-page .cv-downloads,
+	.cv-page .title-heading:after {
+		display: none !important;
+	}
+	.cv-page,
+	.cv-page * {
+		background: transparent !important;
+		border-color: rgba(0, 0, 0, .3) !important;
+		box-shadow: none !important;
+		color: black !important;
+	}
+	.cv-page p,
+	.cv-page li,
+	.cv-page dd {
+		color: #333 !important;
+	}
+	.cv-page .container {
+		max-width: none;
+	}
+	.cv-page #header .py-4 {
+		padding: 0 !important;
+	}
+	.cv-page .display-2 {
+		font-size: 2.4rem;
+	}
+	.cv-page .stroke-text {
+		-webkit-text-stroke-color: black !important;
+	}
+	.cv-page .cv-main-col {
+		flex: 0 0 100%;
+		max-width: 100%;
+	}
+	.cv-page .section-box {
+		margin-top: 1.6em !important;
+		padding: 0;
+	}
+	.cv-page .section-box h1 {
+		font-size: 1.5rem;
+	}
+	.cv-page .resume-date:after {
+		background: black !important;
+		animation: none !important;
+	}
+	.cv-page .resume-box,
+	.cv-page .news-item,
+	.cv-page .services-item,
+	.cv-page .paper-item {
+		break-inside: avoid;
+	}
+	.cv-page .section-box a[href^="http"]:after {
+		content: " (" attr(href) ")";
+		font-size: .8em;
+	}
+}

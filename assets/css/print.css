@@ -1,0 +1,424 @@
+/* ==========================================================================
+   Printed and PDF version of a post (Save as PDF button, or the browser's own
+   print). Loaded with media="print", so nothing here changes the screen.
+   A reading copy: black on white in the light theme's colors, site chrome
+   removed, every fold open, figures and math blocks kept whole on a page.
+   The running head (title) and the URL in the footer are filled in by post.js.
+   ========================================================================== */
+
+/* Page: the paper size follows the print dialog (A4 or Letter). These margin boxes
+   also replace the browser's own header and footer, so the result is the same with
+   the dialog's "Headers and footers" option on or off. */
+@page {
+	margin: 20mm 22mm 18mm;
+	@top-left {
+		color: #6b6c6e;
+		font-family: "Poppins", sans-serif;
+		font-size: 7.5pt;
+		vertical-align: bottom;
+		padding-bottom: 5mm;
+	}
+	@top-right {
+		content: "Imade Bouftini";
+		color: #6b6c6e;
+		font-family: "Poppins", sans-serif;
+		font-size: 7.5pt;
+		vertical-align: bottom;
+		padding-bottom: 5mm;
+	}
+	@bottom-left {
+		color: #6b6c6e;
+		font-family: "Poppins", sans-serif;
+		font-size: 7.5pt;
+		vertical-align: top;
+		padding-top: 5mm;
+	}
+	@bottom-right {
+		content: counter(page) " / " counter(pages);
+		color: #6b6c6e;
+		font-family: "Poppins", sans-serif;
+		font-size: 7.5pt;
+		vertical-align: top;
+		padding-top: 5mm;
+	}
+}
+/* The first page opens with the printed header block instead of a running head */
+@page :first {
+	@top-left {
+		content: "";
+	}
+	@top-right {
+		content: "";
+	}
+}
+
+/* Site chrome and screen-only controls */
+.bg-lines,
+.toggle-menu,
+.menu-dots,
+#header,
+.reading-progress,
+.post-toc-bar-wrapper,
+.post-toc-rail,
+.series-banner-back,
+.post-banner-pdf,
+.post-banner-meta span:has(.bi-clock),
+.post-share,
+.post-series-nav,
+.post-card-footer,
+.code-copy,
+.post-body .box-chevron,
+.post-cite summary > i:last-child,
+.post-changelog summary > i:last-child,
+.post-body .footnote-back {
+	display: none !important;
+}
+/* Print-only parts of the template carry the hidden attribute on screen */
+.print-head[hidden] {
+	display: flex !important;
+}
+.print-colophon[hidden] {
+	display: block !important;
+}
+.print-date[hidden] {
+	display: inline !important;
+}
+
+/* Page and column: the light theme, whatever theme the reader had on screen */
+html,
+body,
+body.theme-dark {
+	height: auto;
+	min-height: 0;
+	overflow: visible;
+	background: white !important;
+	color: black;
+}
+body.theme-dark h1,
+body.theme-dark h2,
+body.theme-dark h3,
+body.theme-dark h4,
+body.theme-dark h5,
+body.theme-dark h6 {
+	color: black;
+}
+.container {
+	width: auto;
+	max-width: none;
+	margin: 0;
+	padding: 0;
+}
+.post-layout,
+.post-layout.has-toc {
+	display: block;
+	padding: 0;
+}
+.post,
+.theme-dark .post {
+	--text: rgba(0, 0, 0, .88);
+	--muted: #5c5d5f;
+	--rule: rgba(0, 0, 0, .25);
+	--soft: #f2f5f8;
+	padding: 0;
+	background: none;
+	border-radius: 0;
+	box-shadow: none;
+}
+.theme-dark .schematic .sch-card {
+	fill: white;
+}
+.theme-dark .post-body img.ink-image {
+	filter: none;
+}
+
+/* Printed header: author and address of the online version */
+.print-head {
+	justify-content: space-between;
+	align-items: baseline;
+	gap: 1em;
+	margin-bottom: 9mm;
+	padding-bottom: 2.5mm;
+	border-bottom: .5pt solid rgba(0, 0, 0, .3);
+	color: #5c5d5f;
+	font-family: "Poppins", sans-serif;
+	font-size: 8pt;
+}
+.print-head-name {
+	color: black;
+	font-weight: 500;
+}
+
+/* Banner: becomes a plain title block (background images are not printed) */
+.series-banner {
+	display: block;
+	min-height: 0;
+	margin: 0 0 7mm;
+	padding: 0;
+	overflow: visible;
+	background: none !important;
+	border-radius: 0;
+	color: black;
+}
+.series-banner::before {
+	display: none;
+}
+.series-banner i {
+	display: none;
+}
+body .series-banner .series-banner-label {
+	display: block;
+	padding: 0;
+	background: none;
+	-webkit-backdrop-filter: none;
+	backdrop-filter: none;
+	border-radius: 0;
+	color: #5c5d5f;
+	font-size: 9pt;
+	text-decoration: none;
+	text-shadow: none;
+}
+body .series-banner .series-banner-title {
+	margin: 1.5mm 0 2.5mm;
+	color: black;
+	font-size: 23pt;
+	line-height: 1.15;
+	text-shadow: none;
+}
+.series-banner-subtitle {
+	max-width: none;
+	margin: 0 0 3mm;
+	color: #333;
+	font-size: 11.5pt;
+	line-height: 1.45;
+	text-shadow: none;
+}
+.post-banner-meta {
+	gap: .2em 1.6em;
+	color: #5c5d5f;
+	font-size: 8.5pt;
+	text-shadow: none;
+}
+
+/* "In this chapter" card */
+.post-card {
+	max-width: none;
+	margin-bottom: 7mm;
+	padding: 4mm 5mm;
+	break-inside: avoid;
+}
+.post-card h2.mono-heading {
+	font-size: 7.5pt;
+}
+.post-card ul {
+	font-size: 9.5pt;
+	line-height: 1.45;
+}
+
+/* Text */
+.post-body {
+	font-size: 10.5pt;
+	line-height: 1.55;
+	orphans: 3;
+	widows: 3;
+}
+.post-body p,
+.post-body ul,
+.post-body ol {
+	margin-bottom: .75em;
+}
+.post-body h2 {
+	margin-top: 1.5em;
+	margin-bottom: .5em;
+	font-size: 15pt;
+}
+.post-body h3 {
+	margin-top: 1.3em;
+	margin-bottom: .45em;
+	font-size: 12pt;
+}
+.post-body h2,
+.post-body h3,
+.post-body h4,
+.post-body .box-heading,
+.post-body .math-proof > summary {
+	break-after: avoid;
+}
+.post-body blockquote {
+	font-size: 11pt;
+}
+.post-body a:not([class]) {
+	text-decoration-thickness: .5pt;
+}
+
+/* Math: displays are never scrolled or split */
+.post-body .math.display {
+	overflow: visible;
+	margin: .9em 0;
+	break-inside: avoid;
+}
+
+/* Figures: whole on one page, never taller than about half a page */
+.post-body figure {
+	margin-top: 1.3em;
+	margin-bottom: 1.3em;
+	break-inside: avoid;
+}
+.post-body figure img {
+	max-height: 115mm;
+	object-fit: contain;
+}
+.post-body figure.compare .compare-panels {
+	max-width: 125mm;
+	margin: 0 auto;
+}
+.post-body figcaption {
+	font-size: 8.5pt;
+	line-height: 1.45;
+}
+.post-body figure.interactive figcaption::after {
+	content: " The online version of this figure is interactive.";
+	font-style: italic;
+}
+
+/* Definitions, theorems, problems: kept whole; panel colors printed as on screen */
+.post-body .math-block {
+	margin-top: 1.2em;
+	margin-bottom: 1.2em;
+}
+.post-body .math-definition,
+.post-body .math-problem,
+.post-body .math-theorem,
+.post-body .math-proposition,
+.post-body .math-lemma,
+.post-body .math-corollary,
+.post-body .math-property,
+.post-body .math-assumption {
+	break-inside: avoid;
+}
+.post-body .math-definition,
+.post-body .math-problem,
+.post-body .box,
+.post-body .box-tab,
+.post-body .box-tab::after,
+.post-body :not(pre) > code,
+.code-block pre {
+	-webkit-print-color-adjust: exact;
+	print-color-adjust: exact;
+}
+.post-body .math-proof {
+	margin-top: -.3em;
+}
+.post-body details.math-proof > summary {
+	padding: .2em 0;
+}
+
+/* Boxes: the folder tab is drawn inside the box's own top margin area, so it stays
+   attached to the box when the box starts a new page */
+.post-body .box {
+	margin: 1.4em 0;
+	padding-top: 2.4em;
+	border-radius: .6em;
+	font-size: 9.8pt;
+}
+.post-body .box-tab {
+	top: 0;
+	bottom: auto;
+	padding: .5em 1.15em .35em;
+	border-radius: .6em 0 .6em 0;
+	background: #e3e8ee;
+	font-size: 7.5pt;
+}
+.post-body .box-tab::after {
+	display: none;
+}
+.post-body .box-deep > summary {
+	display: block;
+}
+.post-body .box-deep[open] > summary {
+	margin-bottom: .6em;
+	padding-bottom: .6em;
+}
+.post-body .check-answer > summary::before {
+	display: none;
+}
+.post-body .check-answer > summary {
+	font-size: 8pt;
+}
+
+/* Tables and code */
+.post-body .table-scroll {
+	overflow: visible;
+}
+.post-body table {
+	font-size: 9pt;
+	break-inside: avoid;
+}
+/* Inside a box a table that moved to the next page would leave an empty panel behind:
+   there it may split between rows, and its header row repeats */
+.post-body .box table {
+	break-inside: auto;
+}
+.post-body thead {
+	display: table-header-group;
+}
+.post-body tr {
+	break-inside: avoid;
+}
+.post-body pre,
+.code-block pre {
+	white-space: pre-wrap;
+	overflow: visible;
+	break-inside: avoid;
+}
+
+/* References and footnotes */
+.post-body .footnotes,
+.post-body #refs {
+	font-size: 8.8pt;
+	line-height: 1.45;
+}
+.post-body #refs .csl-entry {
+	margin-bottom: .5em;
+	break-inside: avoid;
+}
+
+/* Changelog and citation, opened by post.js before printing */
+.post-changelog,
+.post-cite {
+	max-width: none;
+	margin-top: 6mm;
+	break-inside: avoid;
+}
+/* On screen these boxes are a grey fill, which printers drop: draw their edge instead */
+.post-card,
+.post-changelog,
+.post-cite {
+	background: none;
+	border: .5pt solid rgba(0, 0, 0, .3);
+}
+.post-changelog summary,
+.post-cite summary {
+	font-size: 9pt;
+}
+.post-changelog ul {
+	font-size: 8.8pt;
+}
+.post-cite pre {
+	font-size: 8pt;
+}
+
+/* Closing note: where the online version lives */
+.print-colophon {
+	margin-top: 6mm;
+	padding-top: 3mm;
+	border-top: .5pt solid rgba(0, 0, 0, .3);
+	color: #5c5d5f;
+	font-family: "Poppins", sans-serif;
+	font-size: 8pt;
+	line-height: 1.5;
+	break-inside: avoid;
+}
+.print-colophon a {
+	color: inherit;
+	text-decoration: none;
+}

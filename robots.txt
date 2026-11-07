@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+# The CV PDFs repeat cv.html, which is the page to index; keeping them out of search results keeps the email in them
+# out of search results too.
+Disallow: /assets/cv/
+
+Sitemap: https://ibouftini.github.io/sitemap.xml

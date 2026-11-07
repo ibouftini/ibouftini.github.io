@@ -1,0 +1,287 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self'; font-src 'self'; connect-src 'self'; media-src 'none'; object-src 'none'; frame-src 'none'; worker-src 'none'; base-uri 'self'; form-action 'none'">
+		<meta name="referrer" content="strict-origin-when-cross-origin">
+		<meta name="theme-color" content="#f2f5f8">
+		<title>Generative Models for Images | Imade Bouftini</title>
+		<meta name="description" content="How models learn to create new images, explained step by step, from the basic idea to the methods behind today’s image generators.">
+		<link rel="canonical" href="https://ibouftini.github.io/courses/generative-models/">
+		<meta name="author" content="Imade Bouftini">
+		<!-- Social previews (image and structured data set by _dev/build_blog.py) -->
+		<meta property="og:type" content="website">
+		<meta property="og:site_name" content="Imade Bouftini">
+		<meta property="og:title" content="Generative Models for Images">
+		<meta property="og:description" content="How models learn to create new images, explained step by step, from the basic idea to the methods behind today’s image generators.">
+		<meta property="og:url" content="https://ibouftini.github.io/courses/generative-models/">
+		<meta property="og:image" content="https://ibouftini.github.io/assets/images/banners/generative-models-card.jpg">
+		<meta property="og:image:width" content="1200">
+		<meta property="og:image:height" content="630">
+		<meta property="og:locale" content="en_US">
+		<meta name="twitter:card" content="summary_large_image">
+		<!-- Structured data -->
+		<script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "Course", "@id": "https://ibouftini.github.io/courses/generative-models/#course", "name": "Generative Models for Images", "description": "How models learn to create new images, explained step by step, from the basic idea to the methods behind today’s image generators.", "url": "https://ibouftini.github.io/courses/generative-models/", "inLanguage": "en", "provider": {"@type": "Person", "@id": "https://ibouftini.github.io/#person", "name": "Imade Bouftini", "url": "https://ibouftini.github.io/"}, "author": {"@type": "Person", "@id": "https://ibouftini.github.io/#person", "name": "Imade Bouftini", "url": "https://ibouftini.github.io/"}, "hasPart": [{"@type": "BlogPosting", "headline": "Learning a distribution", "url": "https://ibouftini.github.io/courses/generative-models/learning-a-distribution/", "position": 1}, {"@type": "BlogPosting", "headline": "Comparing distributions", "url": "https://ibouftini.github.io/courses/generative-models/comparing-distributions/", "position": 2}, {"@type": "BlogPosting", "headline": "Variational autoencoders", "url": "https://ibouftini.github.io/courses/generative-models/variational-autoencoders/", "position": 3}], "image": "https://ibouftini.github.io/assets/images/banners/generative-models-card.jpg"}, {"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://ibouftini.github.io/"}, {"@type": "ListItem", "position": 2, "name": "Courses", "item": "https://ibouftini.github.io/courses.html"}, {"@type": "ListItem", "position": 3, "name": "Generative Models for Images", "item": "https://ibouftini.github.io/courses/generative-models/"}]}]}</script>
+		<!-- Favicon -->
+		<link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48">
+		<link rel="icon" href="/assets/images/icon-192.png" type="image/png" sizes="192x192">
+		<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+		<!-- CSS -->
+		<link href="/assets/plugins/bootstrap/bootstrap.min.css" rel="stylesheet">
+		<link rel="preload" href="/assets/fonts/google/opensans/memvYaGs126MiZpBA-UvWbX2vVnXBbObj2OVTS-muw.woff2" as="font" type="font/woff2" crossorigin>
+		<link href="/assets/fonts/google/fonts.css" rel="stylesheet">
+		<link href="/assets/css/theme.css" rel="stylesheet">
+		<!-- Fonts/Icons -->
+		<link href="/assets/plugins/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+		<!-- Site customisations -->
+		<link href="/assets/css/custom.css" rel="stylesheet">
+	</head>
+	<body class="loaded">
+		<script src="/assets/js/theme-init.js"></script>
+
+		<!-- Background Vertical lines -->
+		<div class="bg-lines">
+			<div class="bg-line-1"></div>
+			<div class="bg-line-2"></div>
+			<div class="bg-line-3"></div>
+			<div class="bg-line-4"></div>
+		</div>
+		<!-- end Background Vertical lines -->
+
+		<!-- Toggle Menu Content -->
+		<div class="toggle-menu">
+			<!-- Close button -->
+			<button class="toggle-close">
+				<i class="bi bi-x"></i>
+			</button>
+			<!-- end Close button -->
+			<div class="contact-card mt-2" data-contact-card></div>
+			<div class="mt-5">
+				<ul class="list-circle">
+					<li><a class="mono-heading link-decoration" href="/">Home</a></li>
+					<li><a class="mono-heading link-decoration" href="/cv.html">Resume</a></li>
+					<li><a class="mono-heading link-decoration" href="/courses.html" aria-current="page">Courses</a></li>
+				</ul>
+			</div>
+		</div>
+		<!-- end Toggle Menu Content -->
+
+		<div class="container">
+
+			<div id="header">
+				<div class="row">
+					<div class="col-12 col-lg-4 col-xl-3 order-lg-2 text-end">
+						<div class="d-inline-flex align-items-center">
+							<!-- Theme Toggle -->
+							<button class="theme-button" type="button" aria-label="Dark theme" aria-pressed="false" title="Switch to dark theme">
+								<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+									<mask id="tt-moon-mask">
+										<rect x="0" y="0" width="24" height="24" fill="white"/>
+										<circle class="tt-moon-cut" cx="24" cy="10" r="6" fill="black"/>
+									</mask>
+									<circle class="tt-sun" cx="12" cy="12" r="6" mask="url(#tt-moon-mask)" fill="currentColor"/>
+									<g class="tt-rays" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+										<line x1="12" y1="1" x2="12" y2="3"/>
+										<line x1="12" y1="21" x2="12" y2="23"/>
+										<line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+										<line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+										<line x1="1" y1="12" x2="3" y2="12"/>
+										<line x1="21" y1="12" x2="23" y2="12"/>
+										<line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+										<line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+									</g>
+								</svg>
+							</button>
+							<!-- end Theme Toggle -->
+							<!-- Toggle Menu Button -->
+							<button class="menu-dots" type="button" aria-label="Menu" title="Menu">
+								<span></span>
+							</button>
+							<!-- end Toggle Menu Button -->
+						</div>
+					</div><!-- end col -->
+					<div class="col-12 col-lg-8 order-lg-1 col-xl-9">
+						<div class="py-4">
+							<h1 class="display-2 fw-semi-bold m-0">Imade <span class="stroke-text">Bouftini</span></h1>
+						</div>
+					</div><!-- end col -->
+				</div><!-- end row -->
+			</div>
+			
+			<div class="row g-4 g-lg-5">
+
+				<div class="col-12 col-lg-4 col-xl-3">
+					<div class="blog-sidebar">
+						<!-- Index bar, phones and tablets (generated by _dev/build_blog.py) -->
+						<div class="nav-wrapper blog-bar">
+							<div class="section-nav" data-index>
+								<ul class="nav">
+									<li class="nav-item">
+										<a class="nav-link" href="#chapter-1" aria-label="Chapter 1: Learning a distribution">
+											<span class="nav-link-mobile"><span class="nav-link-text">1</span></span>
+										</a>
+									</li>
+									<li class="nav-item">
+										<a class="nav-link" href="#chapter-2" aria-label="Chapter 2: Comparing distributions">
+											<span class="nav-link-mobile"><span class="nav-link-text">2</span></span>
+										</a>
+									</li>
+									<li class="nav-item">
+										<a class="nav-link" href="#chapter-3" aria-label="Chapter 3: Variational autoencoders">
+											<span class="nav-link-mobile"><span class="nav-link-text">3</span></span>
+										</a>
+									</li>
+									<li class="nav-item">
+										<a class="nav-link" href="#chapter-4" aria-label="Chapter 4: Generative adversarial networks">
+											<span class="nav-link-mobile"><span class="nav-link-text">4</span></span>
+										</a>
+									</li>
+									<li class="nav-item">
+										<a class="nav-link" href="#chapter-5" aria-label="Chapter 5: Wasserstein GANs">
+											<span class="nav-link-mobile"><span class="nav-link-text">5</span></span>
+										</a>
+									</li>
+									<li class="nav-item">
+										<a class="nav-link" href="#chapter-6" aria-label="Chapter 6: VAE or GAN? Judging a generative model">
+											<span class="nav-link-mobile"><span class="nav-link-text">6</span></span>
+										</a>
+									</li>
+									<li class="nav-item">
+										<a class="nav-link" href="#chapter-7" aria-label="Chapter 7: Diffusion models">
+											<span class="nav-link-mobile"><span class="nav-link-text">7</span></span>
+										</a>
+									</li>
+									<li class="nav-item">
+										<a class="nav-link" href="#chapter-8" aria-label="Chapter 8: Flow matching">
+											<span class="nav-link-mobile"><span class="nav-link-text">8</span></span>
+										</a>
+									</li>
+									<li class="nav-item">
+										<a class="nav-link" href="#chapter-9" aria-label="Chapter 9: Latent diffusion and the final benchmark">
+											<span class="nav-link-mobile"><span class="nav-link-text">9</span></span>
+										</a>
+									</li>
+								</ul>
+							</div>
+						</div>
+						<!-- Index box, desktop (generated by _dev/build_blog.py) -->
+						<nav class="series-nav" aria-label="Chapters" data-index>
+							<h6 class="mono-heading mb-3">Chapters</h6>
+							<ul class="archive-index">
+								<li><a href="#chapter-1">Learning a distribution</a></li>
+								<li><a href="#chapter-2">Comparing distributions</a></li>
+								<li><a href="#chapter-3">Variational autoencoders</a></li>
+								<li><a href="#chapter-4">Generative adversarial networks</a></li>
+								<li><a href="#chapter-5">Wasserstein GANs</a></li>
+								<li><a href="#chapter-6">VAE or GAN? Judging a generative model</a></li>
+								<li><a href="#chapter-7">Diffusion models</a></li>
+								<li><a href="#chapter-8">Flow matching</a></li>
+								<li><a href="#chapter-9">Latent diffusion and the final benchmark</a></li>
+							</ul>
+						</nav>
+					</div><!-- end blog-sidebar -->
+				</div><!-- end col -->
+
+				<div class="col-12 col-lg-8 col-xl-9">
+					<div class="sections-wrapper listing">
+						<!-- Course: Generative Models for Images -->
+						<div class="section-box" id="course-generative-models">
+							<div class="series-banner" style="--banner-lg: url(/assets/images/banners/generative-models-1600.webp); --banner-sm: url(/assets/images/banners/generative-models-800.webp);">
+								<a class="series-banner-back" href="/courses.html"><i class="bi bi-arrow-left"></i> All courses</a>
+								<div class="series-banner-label"><i class="bi bi-stars"></i> Course · 9 chapters · 3 available</div>
+								<h1 class="series-banner-title">Generative Models for Images</h1>
+							</div>
+							<p class="mt-4">How models learn to create new images, explained step by step, from the basic idea to the methods behind today’s image generators.</p>
+							<ol class="post-list mt-4">
+								<li class="post-row" id="chapter-1">
+									<span class="post-part">Chapter 1</span>
+									<div class="post-body">
+										<h5 class="fw-medium mb-1"><a class="post-row-link" href="/courses/generative-models/learning-a-distribution/">Learning a distribution</a></h5>
+										<p class="mb-0">An AI image generator only ever sees a finite set of training images. What should it learn from them so it doesn’t just copy them?</p>
+									</div>
+									<span class="news-tag">Oct 8, 2026 · 35 min read</span>
+								</li>
+								<li class="post-row" id="chapter-2">
+									<span class="post-part">Chapter 2</span>
+									<div class="post-body">
+										<h5 class="fw-medium mb-1"><a class="post-row-link" href="/courses/generative-models/comparing-distributions/">Comparing distributions</a></h5>
+										<p class="mb-0">Training an AI image generator needs a number for how far its images are from real ones. Which distances still work when the two don’t overlap?</p>
+									</div>
+									<span class="news-tag">Oct 26, 2026 · 33 min read</span>
+								</li>
+								<li class="post-row" id="chapter-3">
+									<span class="post-part">Chapter 3</span>
+									<div class="post-body">
+										<h5 class="fw-medium mb-1"><a class="post-row-link" href="/courses/generative-models/variational-autoencoders/">Variational autoencoders</a></h5>
+										<p class="mb-0">A generator with fewer random inputs than pixels has no probability density over images. How can one still be trained by maximum likelihood?</p>
+									</div>
+									<span class="news-tag">Nov 2, 2026 · 49 min read</span>
+								</li>
+								<li class="post-row post-row-planned" id="chapter-4">
+									<span class="post-part">Chapter 4</span>
+									<div class="post-body">
+										<h5 class="fw-medium mb-1">Generative adversarial networks</h5>
+										<p class="mb-0">Choosing a distance by hand keeps failing. Can a second neural network learn to judge the generator’s images instead?</p>
+									</div>
+									<span class="news-tag">Coming soon</span>
+								</li>
+								<li class="post-row post-row-planned" id="chapter-5">
+									<span class="post-part">Chapter 5</span>
+									<div class="post-body">
+										<h5 class="fw-medium mb-1">Wasserstein GANs</h5>
+										<p class="mb-0">The original GAN’s training signal fades when real and generated images don’t overlap. Can the Wasserstein distance keep it alive?</p>
+									</div>
+									<span class="news-tag">Coming soon</span>
+								</li>
+								<li class="post-row post-row-planned" id="chapter-6">
+									<span class="post-part">Chapter 6</span>
+									<div class="post-body">
+										<h5 class="fw-medium mb-1">VAE or GAN? Judging a generative model</h5>
+										<p class="mb-0">A low loss and a sharp grid of samples can both hide a bad image generator. How do we judge one fairly?</p>
+									</div>
+									<span class="news-tag">Coming soon</span>
+								</li>
+								<li class="post-row post-row-planned" id="chapter-7">
+									<span class="post-part">Chapter 7</span>
+									<div class="post-body">
+										<h5 class="fw-medium mb-1">Diffusion models</h5>
+										<p class="mb-0">Diffusion models turn pure noise into an image step by step. Why does adding noise make an image generator easier to train?</p>
+									</div>
+									<span class="news-tag">Coming soon</span>
+								</li>
+								<li class="post-row post-row-planned" id="chapter-8">
+									<span class="post-part">Chapter 8</span>
+									<div class="post-body">
+										<h5 class="fw-medium mb-1">Flow matching</h5>
+										<p class="mb-0">Diffusion reaches an image through many small noisy steps. Can an image generator learn a direct path from noise to image instead?</p>
+									</div>
+									<span class="news-tag">Coming soon</span>
+								</li>
+								<li class="post-row post-row-planned" id="chapter-9">
+									<span class="post-part">Chapter 9</span>
+									<div class="post-body">
+										<h5 class="fw-medium mb-1">Latent diffusion and the final benchmark</h5>
+										<p class="mb-0">Today’s AI image generators don’t work on raw pixels. Why do they generate in a compressed space, and how do the methods compare?</p>
+									</div>
+									<span class="news-tag">Coming soon</span>
+								</li>
+							</ol>
+						</div><!-- end section-box -->
+					</div>
+					<footer class="site-footer">
+						<p>© 2026 Imade Bouftini</p>
+						<ul>
+							<li><a href="https://github.com/ibouftini" target="_blank" rel="noopener me"><i class="bi bi-github" aria-hidden="true"></i>GitHub</a></li>
+							<li><a href="https://www.linkedin.com/in/imade-bouftini" target="_blank" rel="noopener me"><i class="bi bi-linkedin" aria-hidden="true"></i>LinkedIn</a></li>
+						</ul>
+					</footer>
+				</div><!-- end col -->
+			</div><!-- end main row -->
+
+		</div><!-- end main container -->
+
+		<!-- JavaScripts -->
+		<script src="/assets/js/custom.js"></script>
+	</body>
+</html>

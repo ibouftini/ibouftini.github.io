@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self'; font-src 'self'; connect-src 'self'; media-src 'none'; object-src 'none'; frame-src 'none'; worker-src 'none'; base-uri 'self'; form-action 'none'">
+		<meta name="referrer" content="strict-origin-when-cross-origin">
+		<meta name="theme-color" content="#f2f5f8">
+		<meta name="robots" content="noindex">
+		<title>Page not found | Imade Bouftini</title>
+		<!-- Absolute paths: GitHub Pages serves this page for missing URLs at any depth. -->
+		<link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48">
+		<link rel="icon" href="/assets/images/icon-192.png" type="image/png" sizes="192x192">
+		<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+		<link href="/assets/plugins/bootstrap/bootstrap.min.css" rel="stylesheet">
+		<link rel="preload" href="/assets/fonts/google/opensans/memvYaGs126MiZpBA-UvWbX2vVnXBbObj2OVTS-muw.woff2" as="font" type="font/woff2" crossorigin>
+		<link href="/assets/fonts/google/fonts.css" rel="stylesheet">
+		<link href="/assets/css/theme.css" rel="stylesheet">
+		<link href="/assets/plugins/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+		<link href="/assets/css/custom.css" rel="stylesheet">
+		<style>
+			/* Error page, after the template's 404: one large rounded panel with the content at its foot,
+			   a large "404" and a headline whose words slide in, text and action beside. Conway's Game of
+			   Life runs on a canvas behind the content; the lower part fades to the panel colour so the
+			   text stays readable. */
+			.error-page {
+				display: flex;
+				align-items: center;
+				min-height: 100vh;
+				min-height: 100dvh;
+				padding: 32px max(16px, env(safe-area-inset-right, 0px)) 32px max(16px, env(safe-area-inset-left, 0px));
+			}
+			.error-panel {
+				--panel: white;
+				--panel-clear: rgba(255, 255, 255, 0);
+				position: relative;
+				isolation: isolate;
+				display: flex;
+				flex-wrap: wrap;
+				align-items: flex-end;
+				justify-content: space-between;
+				gap: 2rem 3rem;
+				width: 100%;
+				max-width: 1100px;
+				min-height: 600px;
+				margin: 0 auto;
+				padding: 80px;
+				overflow: hidden;
+				background: var(--panel);
+				border-radius: 15px;
+				box-shadow: 0 8px 26px 0 rgba(22, 24, 26, .07);
+				cursor: crosshair;
+			}
+			.theme-dark .error-panel {
+				--panel: #1c1e20;
+				--panel-clear: rgba(28, 30, 32, 0);
+				box-shadow: none;
+			}
+			.life {
+				position: absolute;
+				inset: 0;
+				z-index: -2;
+				width: 100%;
+				height: 100%;
+				pointer-events: none;
+			}
+			.error-panel::after {
+				content: "";
+				position: absolute;
+				inset: 40% 0 0;
+				z-index: -1;
+				background: linear-gradient(to bottom, var(--panel-clear), var(--panel) 65%);
+				pointer-events: none;
+			}
+			.life-caption {
+				position: absolute;
+				top: 24px;
+				left: 28px;
+				margin: 0;
+				color: #838485;
+				font-family: "Poppins", sans-serif;
+				font-size: .75rem;
+				font-variant-numeric: tabular-nums;
+				pointer-events: none;
+			}
+			.theme-dark .life-caption {
+				color: rgba(255, 255, 255, .6);
+			}
+			.error-main,
+			.error-side {
+				min-width: 0;
+				cursor: auto;
+			}
+			.error-main {
+				flex: 0 1 55%;
+			}
+			.error-side {
+				flex: 1 1 280px;
+			}
+			.error-code {
+				margin: 0 0 .75rem;
+				color: black;
+				font-family: "Poppins", sans-serif;
+				font-size: clamp(6rem, 14vw, 9.4rem);
+				font-weight: 700;
+				letter-spacing: -.02em;
+				line-height: 1;
+			}
+			.theme-dark .error-code {
+				color: white;
+			}
+			.error-title {
+				margin: 0;
+				font-size: clamp(1.6rem, 3.6vw, 2.4rem);
+			}
+			/* Words slide up and come into focus one after another (template: 75ms apart, 0.8s each). */
+			.error-title .word {
+				display: inline-block;
+				animation: word-in .8s cubic-bezier(.13, .91, .42, 1) both;
+				animation-delay: calc(var(--i) * 75ms + 150ms);
+			}
+			@keyframes word-in {
+				from {
+					opacity: 0;
+					filter: blur(5px);
+					transform: translateY(10px);
+				}
+			}
+			.error-text {
+				margin: 0 0 1.5rem;
+			}
+			@media (max-width: 767.98px) {
+				.error-panel {
+					min-height: 70vh;
+					padding: 64px 24px 32px;
+				}
+				.life-caption {
+					top: 20px;
+					left: 24px;
+				}
+				.error-main {
+					flex-basis: 100%;
+				}
+			}
+			@media (prefers-reduced-motion: reduce) {
+				.error-title .word {
+					animation: none;
+				}
+			}
+		</style>
+	</head>
+	<body class="loaded">
+		<script src="/assets/js/theme-init.js"></script>
+
+		<!-- Background Vertical lines -->
+		<div class="bg-lines">
+			<div class="bg-line-1"></div>
+			<div class="bg-line-2"></div>
+			<div class="bg-line-3"></div>
+			<div class="bg-line-4"></div>
+		</div>
+
+		<main class="error-page">
+			<div class="error-panel">
+				<canvas class="life" aria-hidden="true"></canvas>
+				<p class="life-caption" aria-hidden="true"><span data-generation>Generation 0</span> · click or drag to add cells</p>
+				<div class="error-main">
+					<p class="error-code" aria-hidden="true">404</p>
+					<h1 class="error-title"><span class="visually-hidden">404, </span><span class="word" style="--i: 0">Nothing</span> <span class="word" style="--i: 1">lives</span> <span class="word" style="--i: 2">at</span> <span class="word" style="--i: 3">this</span> <span class="word" style="--i: 4">address.</span></h1>
+				</div>
+				<div class="error-side">
+					<p class="error-text">In Conway’s Game of Life, a cell with fewer than two live neighbours dies at the next step. The page you were looking for had none left. The cells behind this text follow the same rules.</p>
+					<a class="action-button" href="/">
+						<span class="action-button-text">Back to home</span>
+						<i class="bi bi-arrow-right" aria-hidden="true"></i>
+					</a>
+				</div>
+			</div>
+		</main>
+
+		<script src="/assets/js/life.js"></script>
+	</body>
+</html>
