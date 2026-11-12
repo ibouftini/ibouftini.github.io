@@ -1,0 +1,1584 @@
+/* ==========================================================================
+   Blog post pages (built by _dev/build_posts.py from _src/posts/*.md).
+   Reading layout inspired by Medium, Distill and al-folio: a ~700px text
+   column, wider figures, numbered captions, table of contents.
+   ========================================================================== */
+
+.post,
+.post-comments {
+	--text: rgba(0, 0, 0, .84);
+	--muted: #6b6c6e;
+	--rule: rgba(0, 0, 0, .15);
+	--soft: #f2f5f8;
+	--soft-2: #e4e4e7;
+	--box: white;
+	--measure: 700px;
+	padding: 3em 3em 3.5em;
+}
+.theme-dark .post,
+.theme-dark .post-comments {
+	--text: rgba(255, 255, 255, .84);
+	--muted: rgba(255, 255, 255, .55);
+	--rule: rgba(255, 255, 255, .2);
+	--soft: #2a2c2f; /* one step lighter than the dark post box (#1c1e20), so panels and code stay visible */
+	--soft-2: #34373b;
+	--box: #1c1e20;
+}
+
+/* Reading progress bar */
+.reading-progress {
+	position: fixed;
+	top: 0;
+	right: 0;
+	left: 0;
+	z-index: 996;
+	height: 3px;
+	background: black;
+	transform: scaleX(0);
+	transform-origin: 0 50%;
+}
+.theme-dark .reading-progress {
+	background: white;
+}
+
+/* Layout: table of contents rail from 992px (the site's left column breakpoint), article next to it */
+.post-layout {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr);
+	gap: 32px;
+	padding-bottom: 3em;
+}
+.post-toc-rail {
+	display: none;
+}
+@media (min-width: 992px) {
+	/* Only posts with headings have a contents rail; without one the article takes the full width */
+	.post-layout.has-toc {
+		grid-template-columns: 230px minmax(0, 1fr);
+	}
+	.post-toc-rail {
+		display: block;
+		position: sticky;
+		top: 24px;
+		align-self: start;
+		max-height: calc(100vh - 48px);
+		overflow-y: auto;
+		padding: 1.5em 1.6em;
+		background: black;
+		border-radius: .5em;
+	}
+	.theme-dark .post-toc-rail {
+		background: #1c1e20;
+	}
+	.post-toc-rail h6 {
+		color: white;
+	}
+	.post-toc-bar-wrapper {
+		display: none;
+	}
+}
+.post-toc-rail ul,
+.post-toc-bar ul {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+.post-toc-rail ul ul,
+.post-toc-bar ul ul {
+	margin: .2rem 0 .3rem .9rem;
+}
+.post-toc-rail li,
+.post-toc-bar li {
+	margin: 0;
+	padding: .25rem 0;
+}
+/* "body" outranks the template's black link hover and focus colours (theme.css). */
+body .post-toc-rail a {
+	color: rgba(255, 255, 255, .65);
+	font-size: .85em;
+	text-decoration: none;
+}
+body .post-toc-rail a:hover,
+body .post-toc-rail a:focus,
+body .post-toc-rail a.active {
+	color: white;
+}
+
+/* Header */
+.post-back {
+	display: inline-flex;
+	align-items: center;
+	gap: .4rem;
+	margin-bottom: 2em;
+	font-family: "Poppins", sans-serif;
+	font-size: .85em;
+}
+.post-body > *,
+.post-cite,
+.post-share,
+.post-series-nav {
+	max-width: var(--measure);
+	margin-right: auto;
+	margin-left: auto;
+}
+.post-title {
+	font-size: clamp(2rem, 5vw, 2.8rem);
+	line-height: 1.15;
+	letter-spacing: -.5px;
+}
+/* "Cite this post" fold-out */
+.post-cite summary {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	color: var(--text);
+	font-family: "Poppins", sans-serif;
+	font-size: .9em;
+	list-style: none;
+	cursor: pointer;
+}
+.post-cite summary::-webkit-details-marker {
+	display: none;
+}
+.post-cite[open] summary > i:last-child {
+	transform: rotate(180deg);
+}
+.post-cite-text {
+	margin: .8em 0;
+	font-size: .9em;
+	overflow-wrap: anywhere;
+}
+
+/* Table of contents bar (below 992px): the section bar of the other pages,
+   showing the current section; tap to open the full contents. It sticks to
+   the top once the header has scrolled away (assets/js/custom.js). */
+.post-toc-bar-wrapper {
+	position: relative;
+	z-index: 994;
+	height: calc(36px + 1.4em);
+}
+.post-toc-bar {
+	position: absolute;
+	top: 0;
+	right: 0;
+	left: 0;
+	padding: .7em 1.2em;
+	background: black;
+	border-radius: .5em;
+	color: rgba(255, 255, 255, .7);
+	transition: linear .1s;
+}
+.theme-dark .post-toc-bar {
+	background: #1c1e20;
+}
+.post-toc-bar.fixed {
+	position: fixed;
+	top: 8px;
+	right: 12px;
+	left: 12px;
+	background: rgba(0, 0, 0, .9);
+}
+.post-toc-bar summary {
+	display: flex;
+	align-items: center;
+	gap: .6rem;
+	height: 36px;
+	color: white;
+	font-family: "Poppins", sans-serif;
+	font-size: .8rem;
+	list-style: none;
+	cursor: pointer;
+}
+.post-toc-bar summary::-webkit-details-marker {
+	display: none;
+}
+.post-toc-bar summary .bi-list-ul {
+	font-size: 1.05rem;
+}
+.post-toc-bar-current {
+	flex: 1;
+	min-width: 0;
+	overflow: hidden;
+	color: rgba(255, 255, 255, .7);
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+.post-toc-bar-current:not(:empty) {
+	padding-left: .6rem;
+	border-left: 1px dashed rgba(255, 255, 255, .3);
+}
+.post-toc-bar summary .bi-chevron-down {
+	margin-left: auto;
+	transition: transform .2s ease-out;
+}
+.post-toc-bar[open] summary .bi-chevron-down {
+	transform: rotate(180deg);
+}
+.post-toc-bar > ul {
+	max-height: 60vh;
+	margin-top: .5em;
+	padding: .5em 0 .3em;
+	overflow-y: auto;
+	border-top: 1px dashed rgba(255, 255, 255, .2);
+}
+body .post-toc-bar a {
+	color: rgba(255, 255, 255, .65);
+	font-size: .9em;
+	text-decoration: none;
+}
+body .post-toc-bar a:hover,
+body .post-toc-bar a:focus,
+body .post-toc-bar a.active {
+	color: white;
+}
+
+/* Last entry of the contents, rail and bar: the comments under the chapter, set apart from its sections */
+.post-toc-rail ul.toc-comments,
+.post-toc-bar ul.toc-comments {
+	margin-top: .4rem;
+	padding-top: .4rem;
+	border-top: 1px dashed rgba(255, 255, 255, .25);
+}
+
+/* Body typography */
+.post-body {
+	color: var(--text);
+	font-size: 1.125rem;
+	line-height: 1.8;
+	counter-reset: figure;
+}
+.post-body p,
+.post-body ul,
+.post-body ol {
+	margin-bottom: 1.4em;
+}
+.post-body h2,
+.post-body h3,
+.post-body h4 {
+	scroll-margin-top: 80px;
+}
+.post-body h2 {
+	margin-top: 2.2em;
+	margin-bottom: .7em;
+	font-size: 1.7rem;
+}
+.post-body h3 {
+	margin-top: 1.8em;
+	margin-bottom: .6em;
+	font-size: 1.3rem;
+}
+.post-body a:not([class]) {
+	color: inherit;
+	text-decoration: underline;
+	text-decoration-thickness: 1px;
+	text-underline-offset: 3px;
+}
+.post-body strong {
+	color: inherit;
+	font-weight: 600;
+}
+.post-body blockquote {
+	padding-left: 1.2em;
+	border-left: 3px solid currentColor;
+	font-size: 1.2rem;
+	font-style: italic;
+}
+.post-body hr {
+	margin: 3em auto;
+	border: 0;
+	border-top: 1px dashed var(--rule);
+	opacity: 1;
+}
+
+/* Inline code */
+.post-body :not(pre) > code {
+	padding: .1em .35em;
+	background: var(--soft);
+	border-radius: .3em;
+	color: inherit;
+	font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "DejaVu Sans Mono", monospace;
+	font-size: .85em;
+}
+
+/* Math */
+.post-body .math.display {
+	display: block;
+	overflow-x: auto;
+	overflow-y: hidden;
+	margin: 1.6em 0;
+	padding: .2em 0;
+}
+.post-body .katex {
+	font-size: 1.08em;
+}
+
+/* Figures: numbered captions, optional wide variant */
+.post-body figure {
+	margin-top: 2.4em;
+	margin-bottom: 2.4em;
+	counter-increment: figure;
+}
+.post-body figure img,
+.post-cover-figure img {
+	display: block;
+	width: 100%;
+	height: auto;
+	border-radius: .5em;
+}
+.post-body figcaption {
+	margin-top: .8em;
+	color: var(--muted);
+	font-size: .9rem;
+	line-height: 1.6;
+	text-align: center;
+}
+.post-body figcaption::before {
+	content: "Figure " counter(figure) ". ";
+	color: var(--text);
+	font-family: "Poppins", sans-serif;
+	font-weight: 500;
+}
+.post-body > figure.wide,
+.post-cover-figure {
+	max-width: 100%;
+}
+.post-cover-figure {
+	margin: 2.5em 0 0;
+}
+
+/* Math environments (::: definition, theorem, lemma, proof, ...), built by math_blocks() in build_blog.py.
+   Textbook style: inline bold header, definitions on a soft panel, results with a left rule. */
+.post-body .math-block {
+	margin-top: 2em;
+	margin-bottom: 2em; /* left and right stay auto: the block sits in the text column */
+}
+.post-body .math-block > :last-child {
+	margin-bottom: 0;
+}
+.post-body .math-head {
+	color: var(--text);
+	font-family: "Poppins", sans-serif;
+	font-weight: 600;
+}
+.post-body .math-title {
+	color: var(--text);
+	font-family: "Poppins", sans-serif;
+	font-weight: 400;
+}
+.post-body .math-definition,
+.post-body .math-problem {
+	padding: 1.2em 1.5em;
+	background: var(--soft);
+	border-radius: .5em;
+}
+.post-body .math-theorem,
+.post-body .math-proposition,
+.post-body .math-lemma,
+.post-body .math-corollary,
+.post-body .math-property,
+.post-body .math-assumption {
+	padding: .1em 0 .1em 1.3em;
+	border-left: 2px solid currentColor;
+}
+.post-body .math-theorem > p,
+.post-body .math-proposition > p,
+.post-body .math-lemma > p,
+.post-body .math-corollary > p {
+	font-style: italic;
+}
+.post-body .math-theorem .math-head,
+.post-body .math-theorem .math-title,
+.post-body .math-proposition .math-head,
+.post-body .math-proposition .math-title,
+.post-body .math-lemma .math-head,
+.post-body .math-lemma .math-title,
+.post-body .math-corollary .math-head,
+.post-body .math-corollary .math-title {
+	font-style: normal;
+}
+.post-body .math-example .math-head,
+.post-body .math-remark .math-head,
+.post-body .math-proof .math-head {
+	font-family: inherit;
+	font-style: italic;
+}
+.post-body .math-proof .math-head {
+	font-weight: 400;
+}
+/* End of proof: a drawn hollow square on the last line */
+.post-body .math-proof::after {
+	content: "";
+	display: block;
+	width: .62em;
+	height: .62em;
+	margin: -1.15em 0 0 auto;
+	border: 1.5px solid currentColor;
+}
+/* A display formula wider than the column scrolls inside it (phones, boxes) and never spills over the edge */
+.post-body .katex-display {
+	position: relative; /* also clips KaTeX's hidden MathML copy (position: absolute), which otherwise widens the page */
+	overflow-x: auto;
+	overflow-y: hidden;
+	padding: .15em 0;
+}
+.post-body .math-proof {
+	margin-top: -.6em;
+}
+
+/* Inline SVG schematics (_dev/figures/*_svg.py), drawn with these classes so they follow the theme */
+.post-body figure svg.schematic {
+	display: block;
+	width: 100%;
+	height: auto;
+}
+.schematic .sch-frame {
+	fill: none;
+	stroke: var(--rule);
+	stroke-width: 1;
+}
+.schematic .sch-region {
+	fill: var(--text);
+	fill-opacity: .07;
+	stroke: var(--text);
+	stroke-width: 1.4;
+}
+.schematic .sch-muted {
+	fill: var(--muted);
+	fill-opacity: .4;
+}
+.schematic .sch-ink {
+	fill: var(--text);
+}
+.schematic .sch-line {
+	fill: none;
+	stroke: var(--text);
+	stroke-width: 1.6;
+	stroke-linecap: round;
+	stroke-linejoin: round;
+}
+.schematic .sch-layer {
+	fill: var(--text);
+	fill-opacity: .18;
+	stroke: var(--text);
+	stroke-width: 1.2;
+}
+.schematic .sch-band {
+	fill: var(--text);
+	fill-opacity: .06;
+}
+.schematic .sch-grid {
+	fill: none;
+	stroke: var(--muted);
+	stroke-opacity: .45;
+	stroke-width: .8;
+}
+/* Open marker drawn over a point cloud: the points stay visible through it */
+.schematic .sch-ring {
+	fill: none;
+	stroke: var(--text);
+}
+/* Small framed thumbnail on top of a drawing: takes the post background so it hides what is behind */
+.schematic .sch-card {
+	fill: white;
+	stroke: var(--rule);
+	stroke-width: 1;
+}
+.theme-dark .schematic .sch-card {
+	fill: #1c1e20;
+}
+.schematic .sch-digit {
+	font-size: 19px;
+	font-style: normal;
+	font-weight: 700;
+}
+.schematic .sch-thin {
+	stroke-width: 1.1;
+}
+.schematic .sch-tiny {
+	font-size: 10px;
+}
+.schematic .sch-small {
+	font-size: 18px;
+}
+.schematic .sch-label {
+	fill: var(--text);
+	font-family: "Open Sans", sans-serif;
+	font-size: 12px;
+}
+.schematic .sch-label.sch-digit {
+	font-family: "Poppins", sans-serif;
+	font-size: 19px;
+}
+/* Math in figures is LaTeX typeset by KaTeX, never Unicode glyphs. Inline SVGs write <text class="sch-tex">TeX</text>,
+   which _dev/build_blog.py moves into an HTML layer over the drawing; interactive figures use texLabel() of
+   assets/js/figures.js. Each label is placed in percent of the viewBox (centred 0.3 em above the text baseline,
+   aligned by text-anchor) and its font scales with the drawing: --fs px of a viewBox --sch-w wide.
+   Not a foreignObject: Safari on iOS misplaces the positioned spans of KaTeX inside one. */
+.sch-figure {
+	position: relative;
+	container-type: inline-size;
+}
+.sch-tex-layer {
+	position: absolute;
+	inset: 0;
+	pointer-events: none;
+}
+.sch-tex {
+	--fs: 22;
+	position: absolute;
+	color: var(--text);
+	font-size: calc(var(--fs) * 1px);
+	line-height: 1;
+	white-space: nowrap;
+	transform: translate(0, -50%);
+}
+@supports (width: 1cqw) {
+	.sch-tex {
+		font-size: calc(var(--fs) * 100cqw / var(--sch-w));
+	}
+}
+.sch-tex.sch-tex-small {
+	--fs: 18;
+}
+.sch-tex.sch-tex-tiny {
+	--fs: 12;
+}
+.sch-tex.sch-tex-middle {
+	transform: translate(-50%, -50%);
+}
+.sch-tex.sch-tex-end {
+	transform: translate(-100%, -50%);
+}
+.sch-tex .katex {
+	font-size: 1em;
+}
+
+/* Images drawn as black ink on a transparent background: inverted in the dark theme */
+.theme-dark .post-body img.ink-image {
+	filter: invert(1);
+}
+
+/* Compare figure (::: compare): two labelled panels with an arrow, stacked on phones */
+.post-body figure.compare .compare-panels {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+	align-items: center;
+	gap: 1.2em;
+}
+.post-body figure.compare .compare-panel {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: .6em;
+}
+.post-body figure.compare img {
+	border-radius: .35em;
+}
+.post-body figure.compare .compare-label {
+	color: var(--text);
+	font-family: "Poppins", sans-serif;
+	font-size: .85rem;
+	text-align: center;
+}
+.post-body figure.compare .compare-arrow {
+	margin-bottom: 1.6em;
+	color: var(--text);
+	font-size: 1.8rem;
+}
+@media (max-width: 575.98px) {
+	.post-body figure.compare .compare-panels {
+		grid-template-columns: minmax(0, 1fr);
+		justify-items: center;
+	}
+	.post-body figure.compare .compare-arrow {
+		margin: 0;
+		transform: rotate(90deg);
+	}
+}
+
+/* Code blocks (Pandoc highlighting, black and white) */
+.post-body div.sourceCode,
+.code-block {
+	position: relative;
+	margin-bottom: 1.6em;
+}
+.post-body pre,
+.code-block pre {
+	overflow-x: auto;
+	margin: 0;
+	padding: 1.2em 1.4em;
+	background: var(--soft);
+	border-radius: .5em;
+	color: var(--text);
+	font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "DejaVu Sans Mono", monospace;
+	font-size: .85rem;
+	line-height: 1.7;
+}
+.post-body pre code,
+.code-block pre code {
+	color: inherit;
+	font-size: inherit;
+}
+.post-body pre a[aria-hidden="true"] {
+	display: none;
+}
+.sourceCode .kw,
+.sourceCode .cf,
+.sourceCode .im,
+.sourceCode .bu { font-weight: 600; }
+.sourceCode .co { color: var(--muted); font-style: italic; }
+.sourceCode .st,
+.sourceCode .ch,
+.sourceCode .sc { color: var(--muted); }
+.sourceCode .fu { text-decoration: underline; text-decoration-color: var(--rule); text-underline-offset: 3px; }
+.sourceCode .dv,
+.sourceCode .fl,
+.sourceCode .op { color: var(--text); }
+.code-copy {
+	position: absolute;
+	top: .6em;
+	right: .6em;
+	padding: .25em .5em;
+	background: var(--soft-2);
+	border: 0;
+	border-radius: .4em;
+	color: var(--muted);
+	line-height: 1;
+	cursor: pointer;
+	opacity: 0;
+	transition: opacity .15s ease-out;
+}
+div.sourceCode:hover .code-copy,
+.code-block:hover .code-copy,
+.code-copy:focus-visible {
+	opacity: 1;
+}
+@media (hover: none) {
+	.code-copy {
+		opacity: 1;
+	}
+}
+
+/* Tables (wrapped by the build) scroll inside the column when they are wider than it */
+.post-body .table-scroll {
+	position: relative; /* clips the hidden MathML of formulas in the table, as for .katex-display */
+	overflow-x: auto;
+	margin-bottom: 1.6em;
+}
+.post-body .table-scroll > table {
+	margin-bottom: 0;
+}
+.post-body table {
+	width: 100%;
+	margin-bottom: 1.6em;
+	border-collapse: collapse;
+	font-size: .95rem;
+}
+/* Same colour and size as figure captions; Bootstrap's grey does not follow the dark theme */
+.post-body caption {
+	padding-top: .8em;
+	color: var(--muted);
+	font-size: .9rem;
+	line-height: 1.6;
+}
+.post-body th {
+	font-family: "Poppins", sans-serif;
+	font-size: .85rem;
+	font-weight: 500;
+}
+.post-body th,
+.post-body td {
+	padding: .6em .8em;
+	border-bottom: 1px dashed var(--rule);
+	text-align: left;
+}
+
+/* Footnotes and references */
+.post-body .footnote-ref sup {
+	font-size: .7em;
+}
+.post-body .footnotes,
+.post-body #refs {
+	color: var(--muted);
+	font-size: .95rem;
+}
+.post-body .footnotes hr {
+	margin: 3em 0 1.5em;
+}
+.post-body .footnote-back {
+	margin-left: .3em;
+	text-decoration: none;
+}
+.post-body #refs .csl-entry {
+	margin-bottom: .8em;
+	padding-left: 1.5em;
+	text-indent: -1.5em;
+}
+
+/* Cite, share, series navigation */
+.post-cite {
+	margin-top: 3em;
+	padding: 1em 1.4em;
+	background: var(--soft);
+	border-radius: 10px;
+}
+.post-cite summary > span {
+	display: inline-flex;
+	align-items: center;
+	gap: .5em;
+}
+.post-cite .code-block {
+	margin: 1em 0 0;
+}
+.post-cite pre {
+	background: var(--box);
+	white-space: pre-wrap;
+}
+.post-share {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: .6em;
+	margin-top: 1.6em;
+}
+.post-share .mono-heading {
+	margin-right: .4em;
+}
+/* Icon-only share buttons: the grey paper button as a square */
+.post-share .share-icon {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 2.2rem;
+	height: 2.2rem;
+	padding: 0;
+	font-size: .85rem;
+}
+.post-share .share-icon[hidden] {
+	display: none;
+}
+.post-series-nav {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 16px;
+	margin-top: 2.5em;
+	padding-top: 2em;
+	border-top: 1px dashed var(--rule);
+}
+.series-step {
+	display: flex;
+	flex-direction: column;
+	gap: .3em;
+	padding: 1em 1.2em;
+	background: var(--soft);
+	border-radius: 10px;
+	color: var(--text);
+	text-decoration: none;
+	transition: background-color .15s ease-in-out;
+}
+.series-step:hover,
+.series-step:focus-visible {
+	background: var(--soft-2);
+}
+.series-step-next {
+	grid-column: 2;
+	text-align: right;
+}
+.series-step-next .mono-heading {
+	justify-content: flex-end;
+}
+
+/* Beside the contents rail, the comments card and the footer go in the chapter's column (the footer sits under
+   the main column on the other pages too); left to the grid, they would fill the narrow rail column. */
+@media (min-width: 992px) {
+	.post-layout.has-toc > .post-comments,
+	.post-layout.has-toc > .site-footer {
+		grid-column: 2;
+	}
+}
+/* Comments (assets/js/comments.js): a card of its own under the chapter, so the reading progress bar still
+   measures the chapter alone. Comment text keeps its line breaks (pre-line) and long words wrap. */
+.post-comments {
+	scroll-margin-top: 80px;  /* a jump from the contents stops below the sticky bar, as for the headings */
+}
+.post-comments > * {
+	max-width: var(--measure);
+	margin-right: auto;
+	margin-left: auto;
+}
+.post-comments-title {
+	margin-bottom: 1em;
+	font-size: 1.7rem;
+}
+.comments-count {
+	color: var(--muted);
+	font-weight: 400;
+}
+.comments-list {
+	padding: 0;
+	list-style: none;
+}
+.comments-list:empty {
+	display: none;
+}
+.comment {
+	padding: 1.2em 0;
+	border-top: 1px dashed var(--rule);
+}
+.comment:first-child {
+	padding-top: 0;
+	border-top: 0;
+}
+/* Held in a flood (local preview only) */
+.comment-held > .comment-head,
+.comment-held > .comment-body {
+	padding-left: 1em;
+	border-left: 3px solid var(--rule);
+}
+/* Replies: one level under the first comment of the thread */
+.comment-replies {
+	margin: 1em 0 0 1.2em;
+	padding: 0 0 0 1.1em;
+	border-left: 2px solid var(--soft-2);
+	list-style: none;
+}
+.comment-replies .comment {
+	padding: .9em 0;
+}
+.comment-replies .comment:first-child {
+	padding-top: .1em;
+}
+.comment-replies .comment:last-child {
+	padding-bottom: 0;
+}
+/* The author's answers stand out on a grey panel */
+.comments-list .comment.comment-by-author {
+	padding: .9em 1.1em;
+	background: var(--soft);
+	border-top: 0;
+	border-radius: 10px;
+}
+.comment-replies .comment-by-author + .comment,
+.comment-replies .comment + .comment-by-author {
+	margin-top: .6em;
+}
+/* A comment just sent: a short highlight */
+.comment-new > .comment-body {
+	animation: comment-new 2.4s ease-out;
+}
+@keyframes comment-new {
+	from {
+		background: var(--soft-2);
+	}
+	to {
+		background: transparent;
+	}
+}
+@media (prefers-reduced-motion: reduce) {
+	.comment-new > .comment-body {
+		animation: none;
+	}
+}
+.comment-reply-button {
+	display: inline-flex;
+	align-items: center;
+	gap: .4em;
+	margin-top: .7em;
+	padding: .2em 0;
+	background: none;
+	border: 0;
+	color: var(--muted);
+	font-family: "Poppins", sans-serif;
+	font-size: .85em;
+	font-weight: 600;
+	cursor: pointer;
+}
+.comment-reply-button:hover,
+.comment-reply-button:focus-visible {
+	color: var(--text);
+}
+.comment-reply-button:focus-visible {
+	outline: 2px solid currentColor;
+	outline-offset: 3px;
+}
+/* The reply form sits where the reply will appear: indented, with the thread's line */
+.comment-reply-form {
+	margin: .8em 0 0 1.2em;
+	padding: .2em 0 .2em 1.1em;
+	border-left: 2px solid var(--soft-2);
+}
+.comment-reply-form textarea {
+	min-height: 5em;
+}
+.comment-head {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: baseline;
+	gap: .2em .7em;
+	margin-bottom: .45em;
+	font-family: "Poppins", sans-serif;
+	font-size: .9em;
+}
+.comment-name {
+	color: var(--text);
+	font-weight: 600;
+}
+.comment-date {
+	color: var(--muted);
+	font-size: .9em;
+}
+.comment-badge {
+	padding: .05em .55em;
+	background: var(--soft);
+	border-radius: 6px;
+	color: var(--muted);
+	font-size: .8em;
+}
+.comment-by-author .comment-badge {
+	background: var(--box);
+}
+.comment-body p {
+	margin: 0 0 .7em;
+	color: var(--text);
+	white-space: pre-line;
+	overflow-wrap: anywhere;
+}
+.comment-body p:last-child {
+	margin-bottom: 0;
+}
+.comments-empty {
+	color: var(--muted);
+}
+.comment-form {
+	margin-top: 1.6em;
+	padding-top: 1.6em;
+	border-top: 1px dashed var(--rule);
+}
+.comment-form-title {
+	margin-bottom: 1em;
+	font-size: 1.2rem;
+}
+.comment-field {
+	margin-bottom: 1em;
+}
+.comment-field label {
+	display: block;
+	margin-bottom: .35em;
+	color: var(--text);
+	font-family: "Poppins", sans-serif;
+	font-size: .9em;
+	font-weight: 600;
+}
+.comment-optional {
+	color: var(--muted);
+	font-weight: 400;
+}
+.post-comments input[type="text"],
+.post-comments textarea {
+	display: block;
+	width: 100%;
+	padding: .7em .9em;
+	background: var(--soft);
+	border: 1px solid transparent;
+	border-radius: 10px;
+	color: var(--text);
+	margin: 0;
+	font: inherit;
+	line-height: 1.6;
+	transition: border-color .15s ease-in-out, background-color .15s ease-in-out;
+}
+.post-comments input[type="text"] {
+	max-width: 22rem;
+}
+.post-comments textarea {
+	min-height: 8em;
+	resize: vertical;
+}
+.post-comments :is(input[type="text"], textarea):focus {
+	background: var(--box);
+	border-color: var(--text);
+	outline: none;
+}
+/* The field only bots fill: off screen rather than display: none, which some bots skip */
+.comment-trap {
+	position: absolute;
+	left: -10000px;
+	width: 1px;
+	height: 1px;
+	overflow: hidden;
+}
+.comment-note {
+	margin: 0 0 1.2em;
+	color: var(--muted);
+	font-size: .85em;
+}
+.comment-actions {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: .6em 1.2em;
+}
+.post-comments .action-button {
+	border: 0;
+	cursor: pointer;
+}
+.post-comments :is(.action-button, .paper-button):disabled {
+	opacity: .55;
+	cursor: progress;
+}
+.comment-status {
+	margin: 0;
+	color: var(--text);
+	font-size: .9em;
+}
+.comment-status:empty {
+	display: none;
+}
+.comment-status.is-error {
+	color: #b42318;
+}
+.theme-dark .comment-status.is-error {
+	color: #fda29b;
+}
+/* Local preview only: moderation buttons and the author's answer box */
+.comment-admin-status {
+	margin-bottom: 1em;
+}
+.comment-tools {
+	display: flex;
+	flex-wrap: wrap;
+	gap: .5em;
+	margin-top: .8em;
+}
+.post-comments .comment-tool {
+	padding: .3rem .8rem;
+	font-size: .8rem;
+}
+.comment-author-form {
+	display: grid;
+	justify-items: start;
+	gap: .5em;
+	margin-top: .6em;
+}
+
+/* Phones */
+@media (max-width: 767.98px) {
+	.post,
+	.post-comments {
+		padding: 2em 1.25em 2.5em;
+	}
+	.post-body {
+		font-size: 1.05rem;
+		line-height: 1.75;
+	}
+	.post-body h2 {
+		font-size: 1.45rem;
+	}
+	.post-series-nav {
+		grid-template-columns: 1fr;
+	}
+	.series-step-next {
+		grid-column: 1;
+	}
+}
+
+/* ==========================================================================
+   Teaching layer (plan: _dev/SERIES-PLAN.md, Phase 1)
+   "In this part" card, folding proofs, boxes (_dev/blocks.lua),
+   interactive figures, changelog.
+   ========================================================================== */
+
+/* "In this part" card: sits in the text column, above the body */
+.post-card,
+.post-changelog {
+	max-width: var(--measure);
+	margin-right: auto;
+	margin-left: auto;
+}
+.post-card {
+	margin-bottom: 3em;
+	padding: 1.6em 1.8em;
+	background: var(--soft);
+	border-radius: 10px;
+	color: var(--text);
+}
+.post-card h2.mono-heading {
+	display: block;
+	margin-bottom: .6em;
+	color: var(--muted);
+	font-size: .72rem;
+}
+.post-card-grid {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: 1.6em;
+}
+.post-card ul {
+	margin: 0;
+	padding-left: 1.1em;
+	font-size: .98rem;
+	line-height: 1.6;
+}
+.post-card li + li {
+	margin-top: .4em;
+}
+.post-card a:not([class]) {
+	color: inherit;
+	text-decoration: underline;
+	text-decoration-thickness: 1px;
+	text-underline-offset: 3px;
+}
+.post-card-footer {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: space-between;
+	gap: .8em;
+	margin-top: 1.4em;
+	padding-top: 1.2em;
+	border-top: 1px dashed var(--rule);
+}
+@media (max-width: 767.98px) {
+	.post-card {
+		padding: 1.3em 1.2em;
+	}
+	.post-card-grid {
+		grid-template-columns: minmax(0, 1fr);
+	}
+}
+
+/* Folding blocks: proofs (math_blocks in build_blog.py) and Going further boxes share the summary style */
+.post-body details > summary {
+	list-style: none;
+	cursor: pointer;
+}
+.post-body details > summary::-webkit-details-marker {
+	display: none;
+}
+.post-body .box-chevron {
+	margin-left: auto;
+	font-size: .8em;
+	transition: transform .2s ease-out;
+}
+.post-body details[open] > summary .box-chevron {
+	transform: rotate(180deg);
+}
+.post-body details.math-proof > summary {
+	display: flex;
+	align-items: center;
+	gap: .4em;
+	padding: .35em 0;
+	border-bottom: 1px dashed var(--rule);
+}
+.post-body details.math-proof:not([open]) > summary::after {
+	content: "Show";
+	order: 1;
+	color: var(--muted);
+	font-family: "Poppins", sans-serif;
+	font-size: .8rem;
+}
+.post-body details.math-proof > summary .box-chevron {
+	order: 2;
+	margin-left: 0;
+}
+.post-body details.math-proof > summary .proof-label {
+	margin-right: auto;
+}
+.post-body details.math-proof[open] > summary {
+	margin-bottom: .6em;
+}
+.post-body details.math-proof:not([open])::after {
+	display: none;
+}
+.post-body .proof-body > :last-child {
+	margin-bottom: 0;
+}
+
+/* Boxes as folders: ::: practice / failure / lab / check, the callouts (note, tip, warning) and ::: deep.
+   A tab on the top edge carries the kind; the body is the folder, in the post's soft panel color.
+   No icons, no rules: the tab is the title. */
+.post-body .box {
+	position: relative;
+	margin: 3.6em auto 2.2em; /* room for the tab above */
+	padding: 1.15em 1.5em 1.25em;
+	background: var(--soft);
+	border-radius: 0 .6em .6em .6em;
+	color: var(--text);
+	font-size: 1rem;
+}
+.post-body .box-tab {
+	position: absolute;
+	bottom: 100%;
+	left: 0;
+	padding: .6em 1.15em .4em;
+	background: var(--soft);
+	border-radius: .6em .6em 0 0;
+	color: var(--text);
+	font-family: "Poppins", sans-serif;
+	font-size: .8rem;
+	font-weight: 500;
+	line-height: 1.2;
+	white-space: nowrap;
+}
+/* The tab's shoulder: an inverted rounded corner that joins it to the folder */
+.post-body .box-tab::after {
+	content: "";
+	position: absolute;
+	right: -.6em;
+	bottom: 0;
+	width: .6em;
+	height: .6em;
+	background: radial-gradient(circle at 100% 0, transparent .6em, var(--soft) calc(.6em + .5px));
+}
+.post-body .box-heading {
+	margin-bottom: .5em;
+	font-family: "Poppins", sans-serif;
+	font-weight: 600;
+}
+.post-body .box > :last-child,
+.post-body .box-body > :last-child {
+	margin-bottom: 0;
+}
+/* Going further: the summary is the folder's closed face; the tab is part of it */
+.post-body .box-deep > summary {
+	display: flex;
+	align-items: center;
+	gap: .6em;
+}
+.post-body .box-deep > summary .box-heading {
+	margin: 0;
+}
+.post-body .box-deep > summary .box-chevron {
+	margin-left: auto;
+}
+.post-body .box-deep[open] > summary {
+	margin-bottom: .8em;
+	padding-bottom: .8em;
+	border-bottom: 1px dashed var(--rule);
+}
+
+/* Check yourself: questions with folded answers */
+.post-body .box-check ol {
+	margin-bottom: 0;
+	padding-left: 1.2em;
+}
+.post-body .box-check li + li {
+	margin-top: .8em;
+}
+.post-body .check-answer {
+	margin-top: .5em;
+}
+.post-body .check-answer > summary {
+	display: inline-flex;
+	align-items: center;
+	gap: .4em;
+	color: var(--muted);
+	font-family: "Poppins", sans-serif;
+	font-size: .85rem;
+}
+.post-body .check-answer > summary::before {
+	content: "";
+	width: .5em;
+	height: .5em;
+	border-right: 1.5px solid currentColor;
+	border-bottom: 1.5px solid currentColor;
+	transform: rotate(-45deg);
+	transition: transform .2s ease-out;
+}
+.post-body .check-answer[open] > summary::before {
+	transform: rotate(45deg);
+}
+.post-body .check-answer-body {
+	margin-top: .5em;
+	padding-left: .9em;
+	border-left: 2px solid var(--rule);
+}
+
+/* Interactive figures (::: interactive): static image until the module mounts */
+.post-body figure.interactive .interactive-stage {
+	position: relative;
+}
+.post-body figure.interactive.is-live .interactive-fallback {
+	display: none;
+}
+.post-body .interactive-live svg {
+	display: block;
+	width: 100%;
+	height: auto;
+	overflow: visible;
+}
+.post-body .fig-controls {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: .6em 1.2em;
+	margin-top: 1em;
+	font-size: .8rem;
+}
+.post-body .fig-steps {
+	display: flex;
+	flex-wrap: wrap;
+	gap: .4em;
+}
+.post-body .fig-steps button {
+	min-width: 2.2em;
+	height: 2.2em;
+	padding: 0 .5em;
+	background: transparent;
+	border: 1px solid var(--rule);
+	border-radius: .45em;
+	color: var(--muted);
+	font: inherit;
+	font-variant-numeric: tabular-nums;
+	cursor: pointer;
+	transition: background-color .15s, color .15s, border-color .15s;
+}
+.post-body .fig-steps button:hover {
+	border-color: var(--muted);
+	color: var(--text);
+}
+.post-body .fig-steps button[aria-pressed="true"],
+.post-body .fig-steps button[aria-selected="true"] {
+	background: var(--soft);
+	border-color: var(--text);
+	color: var(--text);
+	font-weight: 600;
+}
+.post-body .fig-steps button:focus-visible {
+	outline: 2px solid var(--text);
+	outline-offset: 2px;
+}
+.post-body .fig-setting {
+	color: var(--muted);
+}
+.post-body .fig-slider {
+	display: flex;
+	flex: 1 1 260px;
+	align-items: center;
+	gap: 1em;
+	margin: 0;
+	padding: 0;
+}
+/* Math names and values of the controls are typeset by KaTeX (figures.js tex()) */
+.post-body .fig-slider > .fig-tex .katex,
+.post-body .fig-readout .katex,
+.post-body .fig-readings .katex {
+	font-size: 1.1em;
+}
+.post-body .fig-slider > .fig-word,
+.post-body .fig-controls > .fig-word {
+	color: var(--muted);
+}
+/* Range input: the template's theme.css styles every input as a form field (width, margin, padding, border) */
+.post-body .fig-slider input[type="range"] {
+	flex: 1;
+	width: auto;
+	min-width: 0;
+	height: 1.6em;
+	margin: 0;
+	padding: 0;
+	background: transparent;
+	border: 0;
+	color: var(--text);
+	-webkit-appearance: none;
+	appearance: none;
+	cursor: pointer;
+}
+.post-body .fig-slider input[type="range"]::-webkit-slider-runnable-track {
+	height: 2px;
+	background: var(--muted);
+	border-radius: 1px;
+}
+.post-body .fig-slider input[type="range"]::-webkit-slider-thumb {
+	width: 16px;
+	height: 16px;
+	margin-top: -7px;
+	background: var(--text);
+	border: 0;
+	border-radius: 50%;
+	-webkit-appearance: none;
+	appearance: none;
+}
+.post-body .fig-slider input[type="range"]::-moz-range-track {
+	height: 2px;
+	background: var(--muted);
+	border-radius: 1px;
+}
+.post-body .fig-slider input[type="range"]::-moz-range-thumb {
+	width: 16px;
+	height: 16px;
+	background: var(--text);
+	border: 0;
+	border-radius: 50%;
+}
+.post-body .fig-slider input[type="range"]:focus-visible {
+	outline: 2px solid var(--text);
+	outline-offset: 4px;
+	border-radius: 2px;
+}
+.post-body .fig-readout {
+	min-width: 3.6em;
+	white-space: nowrap;
+	font-size: .85rem;
+	font-variant-numeric: tabular-nums;
+	text-align: right;
+}
+/* The values at the current setting: one ruled row, no boxes */
+.post-body .fig-readings {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-around;
+	gap: .4em 1.4em;
+	margin-top: 1em;
+	padding: .6em 0;
+	border-top: 1px dashed var(--rule);
+	border-bottom: 1px dashed var(--rule);
+	font-size: .85rem;
+	font-variant-numeric: tabular-nums;
+}
+.post-body .fig-readings > div > span {
+	margin-right: .6em;
+	color: var(--muted);
+}
+.post-body .fig-readings strong {
+	display: inline-block;
+	min-width: 3.2em;
+	font-weight: 600;
+	font-variant-numeric: tabular-nums;
+}
+
+/* Changelog */
+.post-changelog {
+	margin-top: 2em;
+	padding: 1em 1.4em;
+	background: var(--soft);
+	border-radius: 10px;
+	color: var(--text);
+}
+.post-changelog summary {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	font-family: "Poppins", sans-serif;
+	font-size: .9em;
+	list-style: none;
+	cursor: pointer;
+}
+.post-changelog summary::-webkit-details-marker {
+	display: none;
+}
+.post-changelog summary > span {
+	display: inline-flex;
+	align-items: center;
+	gap: .5em;
+}
+.post-changelog[open] summary > i:last-child {
+	transform: rotate(180deg);
+}
+.post-changelog ul {
+	margin: 1em 0 0;
+	padding-left: 1.1em;
+	font-size: .95rem;
+}
+.post-changelog time {
+	margin-right: .5em;
+	font-size: .85em;
+}
+
+/* Print: every fold open (post.js opens them before printing) */
+@media print {
+	.post-toc-rail,
+	.post-toc-bar-wrapper,
+	.post-share,
+	.post-comments,
+	.reading-progress {
+		display: none !important;
+	}
+	.post-body figure.interactive .interactive-fallback {
+		display: block !important;
+	}
+	.post-body .interactive-live {
+		display: none;
+	}
+}
+
+/* Two-panel interactive figures (latent explorer): a plane and what it maps to; stacked on phones */
+.post-body .fig-pair {
+	display: grid;
+	grid-template-columns: minmax(0, 320px) minmax(0, 1fr);
+	align-items: center;
+	gap: 1.5em;
+}
+.post-body .fig-pair .latent-plane {
+	width: 100%;
+	height: auto;
+	cursor: crosshair;
+	touch-action: none;
+}
+.post-body .fig-pair .latent-plane:focus-visible {
+	outline: 2px solid var(--text);
+	outline-offset: 4px;
+	border-radius: .4em;
+}
+.post-body .fig-pair-side {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: .8em;
+}
+.post-body .latent-digit {
+	width: 168px;
+	height: 168px;
+	color: var(--text);
+	border: 1px dashed var(--rule);
+	border-radius: .4em;
+	image-rendering: pixelated;
+}
+.post-body .fig-pair-side .fig-readings {
+	width: 100%;
+	margin-top: 0;
+}
+@media (max-width: 575.98px) {
+	.post-body .fig-pair {
+		grid-template-columns: minmax(0, 1fr);
+	}
+}
+
+/* Shared with the homepage and the blog index, which keep their own style */
+.series-nav a {
+	font-family: inherit;
+}
+
+.mono-heading {
+	font-family: "Poppins", sans-serif;
+	text-transform: none;
+	letter-spacing: 0;
+}
+
+/* PDF download (the file is made by _dev/build_pdfs.py with the printed layout of assets/css/print.css).
+   In the banner it reads as one more item of the meta line. */
+.post-banner-pdf {
+	display: inline-flex;
+	align-items: center;
+	padding: 0;
+	border: 0;
+	background: none;
+	color: inherit;
+	font: inherit;
+	text-shadow: inherit;
+	cursor: pointer;
+}
+/* It is a link: keep the banner's white over the theme's link colors (grey, black on hover). */
+body .post-banner-meta a.post-banner-pdf,
+body .post-banner-meta a.post-banner-pdf:hover,
+body .post-banner-meta a.post-banner-pdf:focus {
+	color: inherit;
+}
+
+/* Section numbers of chapters (pandoc --number-sections): muted, so the heading text stays the first thing read */
+.header-section-number,
+.toc-section-number {
+	color: var(--muted);
+	font-variant-numeric: tabular-nums;
+	margin-right: .2em;
+}

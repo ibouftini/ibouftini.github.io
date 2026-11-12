@@ -1,0 +1,151 @@
+/*!
+ * Bootstrap Icons v1.11.3 (https://icons.getbootstrap.com/)
+ * Copyright 2019-2024 The Bootstrap Authors
+ * Licensed under MIT (https://github.com/twbs/icons/blob/main/LICENSE)
+ */
+/* Subset of _src/vendor/bootstrap-icons/ made by _dev/subset_assets.py (123 icons): do not edit. */
+
+@font-face {
+  font-display: block;
+  font-family: "bootstrap-icons";
+  src: url("./fonts/bootstrap-icons.woff2?f16788d8ba7e") format("woff2");
+}
+
+.bi::before,
+[class^="bi-"]::before,
+[class*=" bi-"]::before {
+  display: inline-block;
+  font-family: bootstrap-icons !important;
+  font-style: normal;
+  font-weight: normal !important;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+  vertical-align: -.125em;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.bi-alt::before { content: "\f109"; }
+.bi-app::before { content: "\f10b"; }
+.bi-archive::before { content: "\f10d"; }
+.bi-arrow-left::before { content: "\f12f"; }
+.bi-arrow-repeat::before { content: "\f130"; }
+.bi-arrow-return-left::before { content: "\f131"; }
+.bi-arrow-right::before { content: "\f138"; }
+.bi-arrow-up::before { content: "\f148"; }
+.bi-arrow-up-right::before { content: "\f144"; }
+.bi-at::before { content: "\f152"; }
+.bi-back::before { content: "\f155"; }
+.bi-bootstrap::before { content: "\f1a8"; }
+.bi-box::before { content: "\f1c8"; }
+.bi-boxes::before { content: "\f685"; }
+.bi-briefcase::before { content: "\f1cc"; }
+.bi-building::before { content: "\f1dd"; }
+.bi-calendar3::before { content: "\f214"; }
+.bi-check::before { content: "\f26e"; }
+.bi-check2::before { content: "\f272"; }
+.bi-chevron-down::before { content: "\f282"; }
+.bi-circle::before { content: "\f28a"; }
+.bi-clipboard::before { content: "\f290"; }
+.bi-clock::before { content: "\f293"; }
+.bi-clock-history::before { content: "\f292"; }
+.bi-cloud::before { content: "\f2c1"; }
+.bi-clouds::before { content: "\f2c3"; }
+.bi-code::before { content: "\f2c8"; }
+.bi-coin::before { content: "\f634"; }
+.bi-columns::before { content: "\f2ce"; }
+.bi-copy::before { content: "\f759"; }
+.bi-cursor::before { content: "\f2e3"; }
+.bi-disc::before { content: "\f2ff"; }
+.bi-display::before { content: "\f302"; }
+.bi-dot::before { content: "\f309"; }
+.bi-download::before { content: "\f30a"; }
+.bi-envelope::before { content: "\f32f"; }
+.bi-envelope-fill::before { content: "\f32c"; }
+.bi-escape::before { content: "\f7ee"; }
+.bi-exclamation-triangle::before { content: "\f33b"; }
+.bi-explicit::before { content: "\f69c"; }
+.bi-file::before { content: "\f3c0"; }
+.bi-file-earmark-pdf::before { content: "\f63e"; }
+.bi-file-earmark-text::before { content: "\f38b"; }
+.bi-files::before { content: "\f3c2"; }
+.bi-filter::before { content: "\f3ca"; }
+.bi-flag::before { content: "\f3cc"; }
+.bi-folder::before { content: "\f3d7"; }
+.bi-fonts::before { content: "\f3da"; }
+.bi-forward::before { content: "\f3dc"; }
+.bi-front::before { content: "\f3dd"; }
+.bi-github::before { content: "\f3ed"; }
+.bi-google::before { content: "\f3f0"; }
+.bi-grid::before { content: "\f3fc"; }
+.bi-hash::before { content: "\f40a"; }
+.bi-highlights::before { content: "\f8ee"; }
+.bi-image::before { content: "\f42a"; }
+.bi-images::before { content: "\f42b"; }
+.bi-indent::before { content: "\f7fe"; }
+.bi-infinity::before { content: "\f69e"; }
+.bi-info-circle::before { content: "\f431"; }
+.bi-key::before { content: "\f44f"; }
+.bi-layers::before { content: "\f45b"; }
+.bi-lightbulb::before { content: "\f46b"; }
+.bi-line::before { content: "\f660"; }
+.bi-link::before { content: "\f471"; }
+.bi-link-45deg::before { content: "\f470"; }
+.bi-linkedin::before { content: "\f472"; }
+.bi-list::before { content: "\f479"; }
+.bi-list-ol::before { content: "\f475"; }
+.bi-list-ul::before { content: "\f478"; }
+.bi-map::before { content: "\f47f"; }
+.bi-markdown::before { content: "\f481"; }
+.bi-meta::before { content: "\f6a1"; }
+.bi-mortarboard::before { content: "\f6fe"; }
+.bi-newspaper::before { content: "\f4a3"; }
+.bi-paragraph::before { content: "\f4b4"; }
+.bi-pass::before { content: "\f809"; }
+.bi-people::before { content: "\f4d0"; }
+.bi-percent::before { content: "\f4d1"; }
+.bi-person::before { content: "\f4e1"; }
+.bi-phone::before { content: "\f4e7"; }
+.bi-play::before { content: "\f4f5"; }
+.bi-plus::before { content: "\f4fe"; }
+.bi-power::before { content: "\f4ff"; }
+.bi-question::before { content: "\f50c"; }
+.bi-quote::before { content: "\f6b0"; }
+.bi-record::before { content: "\f51a"; }
+.bi-reddit::before { content: "\f650"; }
+.bi-reply::before { content: "\f520"; }
+.bi-safe::before { content: "\f65a"; }
+.bi-save::before { content: "\f525"; }
+.bi-search::before { content: "\f52a"; }
+.bi-send::before { content: "\f6c0"; }
+.bi-server::before { content: "\f52c"; }
+.bi-share::before { content: "\f52e"; }
+.bi-shift::before { content: "\f541"; }
+.bi-signal::before { content: "\f664"; }
+.bi-sim::before { content: "\f54c"; }
+.bi-spellcheck::before { content: "\f581"; }
+.bi-square::before { content: "\f584"; }
+.bi-stars::before { content: "\f589"; }
+.bi-sticky::before { content: "\f58d"; }
+.bi-stop::before { content: "\f593"; }
+.bi-subscript::before { content: "\f848"; }
+.bi-subtract::before { content: "\f598"; }
+.bi-table::before { content: "\f5aa"; }
+.bi-tag::before { content: "\f5b0"; }
+.bi-tags::before { content: "\f5b2"; }
+.bi-textarea::before { content: "\f5cc"; }
+.bi-threads::before { content: "\f8d9"; }
+.bi-tools::before { content: "\f5db"; }
+.bi-trash::before { content: "\f5de"; }
+.bi-tree::before { content: "\f5e2"; }
+.bi-triangle::before { content: "\f5e5"; }
+.bi-trophy::before { content: "\f5e7"; }
+.bi-trophy-fill::before { content: "\f5e6"; }
+.bi-tv::before { content: "\f5ed"; }
+.bi-twitter::before { content: "\f5ef"; }
+.bi-twitter-x::before { content: "\f8db"; }
+.bi-type::before { content: "\f5f7"; }
+.bi-union::before { content: "\f5fe"; }
+.bi-window::before { content: "\f620"; }
+.bi-x::before { content: "\f62a"; }

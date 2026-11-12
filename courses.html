@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self'; font-src 'self'; connect-src 'self'; media-src 'none'; object-src 'none'; frame-src 'none'; worker-src 'none'; base-uri 'self'; form-action 'none'">
+		<meta name="referrer" content="strict-origin-when-cross-origin">
+		<meta name="theme-color" content="#f2f5f8">
+		<title>Courses | Imade Bouftini</title>
+		<meta name="description" content="Course notes by Imade Bouftini, written chapter by chapter, starting with generative models for images.">
+		<link rel="canonical" href="https://ibouftini.github.io/courses.html">
+		<meta name="author" content="Imade Bouftini">
+		<!-- Social previews (image and structured data set by _dev/build_blog.py) -->
+		<meta property="og:type" content="website">
+		<meta property="og:site_name" content="Imade Bouftini">
+		<meta property="og:title" content="Courses">
+		<meta property="og:description" content="Course notes by Imade Bouftini, written chapter by chapter, starting with generative models for images.">
+		<meta property="og:url" content="https://ibouftini.github.io/courses.html">
+		<meta property="og:image" content="https://ibouftini.github.io/assets/images/banners/generative-models-for-images-card.jpg">
+		<meta property="og:image:width" content="1200">
+		<meta property="og:image:height" content="630">
+		<meta property="og:locale" content="en_US">
+		<meta name="twitter:card" content="summary_large_image">
+		<!-- Structured data -->
+		<script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "CollectionPage", "name": "Courses", "url": "https://ibouftini.github.io/courses.html", "inLanguage": "en", "author": {"@type": "Person", "@id": "https://ibouftini.github.io/#person", "name": "Imade Bouftini", "url": "https://ibouftini.github.io/"}, "hasPart": [{"@type": "Course", "@id": "https://ibouftini.github.io/courses/generative-models-for-images/#course", "name": "Generative Models for Images", "description": "How models learn to create new images, explained step by step, from the basic idea to the methods behind today’s image generators.", "url": "https://ibouftini.github.io/courses/generative-models-for-images/", "provider": {"@type": "Person", "@id": "https://ibouftini.github.io/#person", "name": "Imade Bouftini", "url": "https://ibouftini.github.io/"}}]}, {"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://ibouftini.github.io/"}, {"@type": "ListItem", "position": 2, "name": "Courses", "item": "https://ibouftini.github.io/courses.html"}]}]}</script>
+		<!-- Favicon -->
+		<link rel="icon" href="favicon.ico" sizes="16x16 32x32 48x48">
+		<link rel="icon" href="assets/images/icon-192.png" type="image/png" sizes="192x192">
+		<link rel="apple-touch-icon" href="apple-touch-icon.png">
+		<!-- CSS -->
+		<link href="assets/plugins/bootstrap/bootstrap.min.css" rel="stylesheet">
+		<link rel="preload" href="assets/fonts/google/opensans/memvYaGs126MiZpBA-UvWbX2vVnXBbObj2OVTS-muw.woff2" as="font" type="font/woff2" crossorigin>
+		<link href="assets/fonts/google/fonts.css" rel="stylesheet">
+		<link href="assets/css/theme.css" rel="stylesheet">
+		<!-- Fonts/Icons -->
+		<link href="assets/plugins/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+		<!-- Site customisations -->
+		<link href="assets/css/custom.css" rel="stylesheet">
+	</head>
+	<body class="loaded">
+		<script src="assets/js/theme-init.js"></script>
+
+		<!-- Background Vertical lines -->
+		<div class="bg-lines">
+			<div class="bg-line-1"></div>
+			<div class="bg-line-2"></div>
+			<div class="bg-line-3"></div>
+			<div class="bg-line-4"></div>
+		</div>
+		<!-- end Background Vertical lines -->
+
+		<!-- Toggle Menu Content -->
+		<div class="toggle-menu">
+			<!-- Close button -->
+			<button class="toggle-close">
+				<i class="bi bi-x"></i>
+			</button>
+			<!-- end Close button -->
+			<div class="contact-card mt-2" data-contact-card></div>
+			<div class="mt-5">
+				<ul class="list-circle">
+					<li><a class="mono-heading link-decoration" href="index.html">Home</a></li>
+					<li><a class="mono-heading link-decoration" href="cv.html">Resume</a></li>
+					<li><a class="mono-heading link-decoration" href="courses.html" aria-current="page">Courses</a></li>
+				</ul>
+			</div>
+		</div>
+		<!-- end Toggle Menu Content -->
+
+		<div class="container">
+
+			<div id="header">
+				<div class="row">
+					<div class="col-12 col-lg-4 col-xl-3 order-lg-2 text-end">
+						<div class="d-inline-flex align-items-center">
+							<!-- Theme Toggle -->
+							<button class="theme-button" type="button" aria-label="Dark theme" aria-pressed="false" title="Switch to dark theme">
+								<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+									<mask id="tt-moon-mask">
+										<rect x="0" y="0" width="24" height="24" fill="white"/>
+										<circle class="tt-moon-cut" cx="24" cy="10" r="6" fill="black"/>
+									</mask>
+									<circle class="tt-sun" cx="12" cy="12" r="6" mask="url(#tt-moon-mask)" fill="currentColor"/>
+									<g class="tt-rays" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+										<line x1="12" y1="1" x2="12" y2="3"/>
+										<line x1="12" y1="21" x2="12" y2="23"/>
+										<line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+										<line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+										<line x1="1" y1="12" x2="3" y2="12"/>
+										<line x1="21" y1="12" x2="23" y2="12"/>
+										<line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+										<line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+									</g>
+								</svg>
+							</button>
+							<!-- end Theme Toggle -->
+							<!-- Toggle Menu Button -->
+							<button class="menu-dots" type="button" aria-label="Menu" title="Menu">
+								<span></span>
+							</button>
+							<!-- end Toggle Menu Button -->
+						</div>
+					</div><!-- end col -->
+					<div class="col-12 col-lg-8 order-lg-1 col-xl-9">
+						<div class="py-4">
+							<h1 class="display-2 fw-semi-bold m-0">Imade <span class="stroke-text">Bouftini</span></h1>
+						</div>
+					</div><!-- end col -->
+				</div><!-- end row -->
+			</div>
+			
+			<div class="row g-4 g-lg-5">
+
+				<div class="col-12 col-lg-4 col-xl-3">
+					<div class="blog-sidebar">
+						<!-- Index bar, phones and tablets (generated by _dev/build_blog.py) -->
+						<div class="nav-wrapper blog-bar">
+							<div class="section-nav" data-index>
+								<ul class="nav">
+									<li class="nav-item">
+										<a class="nav-link" href="#course-generative-models-for-images" aria-label="Generative Models for Images">
+											<span class="nav-link-mobile"><i class="bi bi-stars"></i><span class="nav-link-label">Generative Models</span></span>
+										</a>
+									</li>
+								</ul>
+							</div>
+						</div>
+						<!-- Index box, desktop (generated by _dev/build_blog.py) -->
+						<nav class="series-nav" aria-label="Courses" data-index>
+							<h6 class="mono-heading mb-3">Courses</h6>
+							<ul class="archive-index">
+								<li><a href="#course-generative-models-for-images">Generative Models for Images</a></li>
+							</ul>
+						</nav>
+					</div><!-- end blog-sidebar -->
+				</div><!-- end col -->
+
+				<div class="col-12 col-lg-8 col-xl-9">
+					<div class="sections-wrapper listing">
+						<div class="section-box">
+							<div class="row">
+								<div class="col-12 col-md-10 col-xl-8">
+									<h6 class="title-heading mb-3" data-backdrop-text="Courses">Courses</h6>
+									<h1>Course Notes</h1>
+								</div>
+							</div>
+						</div><!-- end section-box -->
+						<!-- Course: Generative Models for Images -->
+						<div class="course-hero mt-4" id="course-generative-models-for-images" style="--banner-lg: url(/assets/images/banners/generative-models-for-images-1600.webp); --banner-sm: url(/assets/images/banners/generative-models-for-images-800.webp);">
+							<span class="teaser-pill"><i class="bi bi-stars" aria-hidden="true"></i> Course</span>
+							<div class="course-card">
+								<div class="course-card-main">
+									<p class="course-facts">9 chapters · 1 published · 37 min of reading so far</p>
+									<h2 class="course-card-title">Generative Models for Images</h2>
+								</div>
+								<div class="course-card-body">
+									<p class="mb-0">How models learn to create new images, explained step by step, from the basic idea to the methods behind today’s image generators.</p>
+									<div class="course-actions">
+										<a class="action-button" href="/courses/generative-models-for-images/learning-a-distribution/">
+											<span class="action-button-text">Start with Chapter 1</span>
+											<i class="bi bi-arrow-right" aria-hidden="true"></i>
+										</a>
+										<a class="paper-button" href="/courses/generative-models-for-images/"><i class="bi bi-list-ol" aria-hidden="true"></i> All chapters</a>
+									</div>
+								</div>
+							</div>
+						</div><!-- end course-hero -->
+					</div>
+					<footer class="site-footer">
+						<p>© 2026 Imade Bouftini</p>
+						<ul>
+							<li><a href="https://github.com/ibouftini" target="_blank" rel="noopener me"><i class="bi bi-github" aria-hidden="true"></i>GitHub</a></li>
+							<li><a href="https://www.linkedin.com/in/imade-bouftini" target="_blank" rel="noopener me"><i class="bi bi-linkedin" aria-hidden="true"></i>LinkedIn</a></li>
+						</ul>
+					</footer>
+				</div><!-- end col -->
+			</div><!-- end main row -->
+
+		</div><!-- end main container -->
+
+		<!-- JavaScripts -->
+		<script src="assets/js/custom.js"></script>
+	</body>
+</html>
